@@ -1,0 +1,44 @@
+@startuml vue-implementation
+title "Vue d'Implémentation - Architecture avec Services et API"
+
+skinparam linetype ortho
+skinparam packageStyle rectangle
+
+package "Application 'magasin'" {
+
+    package "1. Couche Présentation (Web)" {
+        component [views]
+        component [templates]
+        component [urls.py] as WebUrls
+    }
+
+    package "2. Couche API" {
+        component [api/controllers] as ApiControllers
+        component [api/serializers] as ApiSerializers
+        component [api/auth] as ApiAuth
+        component [api/urls.py] as ApiUrls
+    }
+
+    package "3. Couche Services (Logique Métier)" {
+        component [services]
+    }
+
+    package "4. Couche Domaine (Modèles)" {
+        component [models]
+    }
+
+    ' Dépendances
+    WebUrls --> [views]
+    ApiUrls --> ApiControllers
+
+    [views] --> [services] : appelle
+    ApiControllers --> [services] : appelle
+
+    ApiControllers ..> ApiSerializers : utilise
+    ApiControllers ..> ApiAuth : sécurisé par
+
+    [services] --> [models] : accède
+
+    [views] ..> [templates] : rend
+}
+@enduml

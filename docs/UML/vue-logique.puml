@@ -1,0 +1,60 @@
+@startuml Vue-logique-corrigee
+
+title Vue Logique - Modèles de l'application Magasin
+
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+hide empty members
+
+class Produit {
+  +nom: CharField
+  +categorie: CharField
+  +prix: DecimalField
+  +quantite_stock: IntegerField
+  +description: TextField
+}
+
+class Magasin {
+  +nom: CharField
+  +adresse: CharField
+}
+
+class StockCentral {
+  +quantite: IntegerField
+}
+
+class StockLocal {
+  +quantite: IntegerField
+}
+
+class DemandeReapprovisionnement {
+  +quantite: PositiveIntegerField
+  +date: DateTimeField
+  +statut: CharField
+}
+
+class Vente {
+  +date_vente: DateTimeField
+  +total: DecimalField
+}
+
+class LigneVente {
+  +quantite: IntegerField
+  +prix_unitaire: DecimalField
+}
+
+' --- Relations ---
+
+StockCentral "1..*" -- "1" Produit
+StockLocal "1..*" -- "1" Produit
+StockLocal "1..*" -- "1" Magasin
+
+DemandeReapprovisionnement "*" -- "1" Produit
+DemandeReapprovisionnement "*" -- "1" Magasin
+
+Vente "*" -- "1" Magasin
+Vente "1" -- "*" LigneVente
+LigneVente "*" -- "1" Produit
+
+
+@enduml
