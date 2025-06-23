@@ -94,7 +94,7 @@ LOG430-Labo4/
   5. Tests dans `magasin/api/tests/`
 
 ## Pipeline CI
-- Exemple de pipeline : 
+- Exemple de pipeline : https://github.com/TalipKoyluoglu/LOG430-Labo4/actions/runs/15835861765
 
 ## Auteur
 Projet réalisé par Talip Koyluoglu.
