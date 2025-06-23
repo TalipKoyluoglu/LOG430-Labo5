@@ -67,7 +67,9 @@ class TestPerformanceMagasinsAPI:
         assert len(data) > 0
 
         # Vérification des données du magasin de test
-        magasin_data = next((m for m in data if m["magasin"] == "Magasin Test UC3"), None)
+        magasin_data = next(
+            (m for m in data if m["magasin"] == "Magasin Test UC3"), None
+        )
         assert magasin_data is not None
 
         # Vérification des indicateurs de performance
