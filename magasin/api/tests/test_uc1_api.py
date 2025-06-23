@@ -2,11 +2,13 @@ import pytest
 from django.urls import reverse
 from rest_framework.test import APIClient
 from rest_framework import status
+from django.core.cache import cache
 
 
 @pytest.mark.django_db
 class TestRapportVentesAPI:
     def setup_method(self):
+        cache.clear()
         self.client = APIClient()
         self.url = reverse("api_v1_reports")
 

@@ -2,27 +2,37 @@ import pytest
 from django.urls import reverse
 from rest_framework.test import APIClient
 from rest_framework import status
+from django.core.cache import cache
+
+# Import explicite des modèles pour éviter les erreurs d'accès à 'objects'
+from magasin.models.magasin import Magasin
+from magasin.models.produit import Produit
+from magasin.models.vente import Vente
+from magasin.models.ligneVente import LigneVente
+from magasin.models.stock import StockLocal
 
 
 @pytest.mark.django_db
 class TestPerformanceMagasinsAPI:
     def setup_method(self):
+        cache.clear()
         self.client = APIClient()
         self.url = reverse("api_v1_dashboard")
 
         # Création des données de test
-        from magasin.models.magasin import Magasin
-        from magasin.models.produit import Produit
-        from magasin.models.vente import Vente
-        from magasin.models.ligneVente import LigneVente
-        from magasin.models.stock import StockLocal
+        Magasin.objects.all().delete()
+        Produit.objects.all().delete()
+        Vente.objects.all().delete()
+        LigneVente.objects.all().delete()
+        StockLocal.objects.all().delete()
 
+        # Utilisation de noms uniques pour éviter tout conflit
         self.magasin = Magasin.objects.create(
-            nom="Magasin Test", adresse="123 rue Test"
+            nom="Magasin Test UC3", adresse="123 rue Test"
         )
 
         self.produit = Produit.objects.create(
-            nom="Produit Test",
+            nom="Produit Test UC3",
             categorie="Test",
             prix=10.00,
             quantite_stock=100,
@@ -57,7 +67,7 @@ class TestPerformanceMagasinsAPI:
         assert len(data) > 0
 
         # Vérification des données du magasin de test
-        magasin_data = next((m for m in data if m["magasin"] == "Magasin Test"), None)
+        magasin_data = next((m for m in data if m["magasin"] == "Magasin Test UC3"), None)
         assert magasin_data is not None
 
         # Vérification des indicateurs de performance
@@ -67,4 +77,4 @@ class TestPerformanceMagasinsAPI:
         assert "tendances" in magasin_data
 
         # Vérification des tendances
-        assert magasin_data["tendances"] == "Produit Test (5)"
+        assert magasin_data["tendances"] == "Produit Test UC3 (5)"

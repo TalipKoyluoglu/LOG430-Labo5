@@ -1,12 +1,14 @@
 import pytest
 from django.test import Client  # type: ignore
 from django.urls import reverse  # type: ignore
+from django.core.cache import cache
 
 
 @pytest.mark.django_db
 class TestIntegration:
 
     def setup_method(self):
+        cache.clear()
         from magasin.models.magasin import Magasin
         from magasin.models.produit import Produit
         from magasin.models.stock import StockCentral
