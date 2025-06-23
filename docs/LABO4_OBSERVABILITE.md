@@ -127,7 +127,7 @@ LOG430-Labo4/
 - Le dashboard Grafana est automatiquement provisionné
 - Les tests k6 génèrent des rapports JSON et CSV détaillés
 
-## Étape 1 - Analyse de la Base de Référence (Stress Test)
+## Étape 2 - Analyse de la Base de Référence (Stress Test)
 
 Cette section documente l'analyse des points faibles de l'architecture à instance unique, suite au test de stress initial.
 
