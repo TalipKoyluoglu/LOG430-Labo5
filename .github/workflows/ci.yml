@@ -1,4 +1,4 @@
-name: CI/CD Pipeline - LOG430 Labo3
+name: CI/CD Pipeline - LOG430 Labo4
 
 on:
   push:
@@ -14,19 +14,23 @@ jobs:
       postgres:
         image: postgres:15
         env:
-          POSTGRES_DB: lab3db
+          POSTGRES_DB: lab4db
           POSTGRES_USER: labuser
           POSTGRES_PASSWORD: labpass
         ports:
           - 5432:5432
         options: >-
-          --health-cmd="pg_isready -U labuser -d lab3db"
+          --health-cmd="pg_isready -U labuser -d lab4db"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
+      redis:
+        image: redis:7.2-alpine
+        ports:
+          - 6379:6379
 
     env:
-      POSTGRES_DB: lab3db
+      POSTGRES_DB: lab4db
       POSTGRES_USER: labuser
       POSTGRES_PASSWORD: labpass
       DB_HOST: localhost
@@ -54,6 +58,11 @@ jobs:
           echo "Waiting for PostgreSQL..."
           until pg_isready -h localhost -p 5432 -U $POSTGRES_USER; do sleep 1; done
 
+      - name:  Wait for Redis to be ready
+        run: |
+          echo "Waiting for Redis..."
+          until nc -z localhost 6379; do sleep 1; done
+
       - name:  Run migrations
         run: |
           python manage.py migrate
@@ -80,7 +89,7 @@ jobs:
 
       - name:  Build Docker image
         run: |
-          docker build -t talipkoyluoglu/log430-labo3:latest .
+          docker build -t talipkoyluoglu/log430-labo4:latest .
 
       - name:  Login to Docker Hub
         run: |
@@ -88,7 +97,7 @@ jobs:
 
       - name:  Push Docker image
         run: |
-          docker push talipkoyluoglu/log430-labo3:latest
+          docker push talipkoyluoglu/log430-labo4:latest
 
   deploy:
       name: Deploy to VM via SSH
@@ -107,10 +116,10 @@ jobs:
               set -e
 
                 # clone once, then on every run reset to main
-                if [ ! -d ~/magasin-mere-api ]; then
-                  git clone https://github.com/TalipKoyluoglu/LOG430-Labo3 ~/magasin-mere-api
+                if [ ! -d ~/magasin-mere-test-charge ]; then
+                  git clone https://github.com/TalipKoyluoglu/LOG430-Labo4 ~/magasin-mere-test-charge
                 fi
-                cd ~/magasin-mere-api
+                cd ~/magasin-mere-test-charge
                 git fetch --all
                 git reset --hard origin/main
 

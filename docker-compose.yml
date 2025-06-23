@@ -7,10 +7,10 @@ services:
     volumes:
       - ./config/nginx.conf:/etc/nginx/conf.d/default.conf
     depends_on:
-      - web-labo3
+      - app
     restart: always
 
-  web-labo3:
+  app:
     build: .
     command: sh /app/entrypoint.sh
     # Le port 8000 n'est plus exposé à l'extérieur, seul NGINX y a accès.
@@ -20,15 +20,15 @@ services:
       PYTHONPATH: /app
       DJANGO_SETTINGS_MODULE: config.settings
     depends_on:
-      db-labo3:
+      db:
         condition: service_healthy
     volumes:
       - .:/app
 
-  db-labo3:
+  db:
     image: postgres:15
     environment:
-      POSTGRES_DB: lab3db
+      POSTGRES_DB: lab4db
       POSTGRES_USER: labuser
       POSTGRES_PASSWORD: labpass
     ports:
@@ -36,7 +36,7 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "labuser", "-d", "lab3db"]
+      test: ["CMD", "pg_isready", "-U", "labuser", "-d", "lab4db"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -55,7 +55,7 @@ services:
       - '--web.enable-lifecycle'
     restart: unless-stopped
     depends_on:
-      - web-labo3
+      - app
 
   grafana:
     image: grafana/grafana:9.5.3

@@ -46,7 +46,7 @@ Pour l'analyse détaillée, voir [`docs/LABO4_OBSERVABILITE.md`](docs/LABO4_OBSE
 ```bash
 git clone https://github.com/TalipKoyluoglu/LOG430-LabO4
 cd LOG430-Labo4
-docker-compose up --build --scale web-labo3=3 -d
+docker-compose up --build --scale app=3 -d
 ```
 
 ### Accès aux outils
@@ -84,7 +84,7 @@ LOG430-Labo4/
 ## Tests et développement
 - **Tests unitaires, intégration, API** :
   ```bash
-  docker-compose run --rm web-labo3 pytest
+  docker-compose run --rm app pytest
   ```
 - **Ajout d'un nouvel endpoint** :
   1. Service dans `magasin/services/`

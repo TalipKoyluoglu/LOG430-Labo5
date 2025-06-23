@@ -2,13 +2,13 @@
 
 # Script automatisé de test de tolérance aux pannes avec load balancer (NGINX)
 # - Lance un test de charge k6
-# - Arrête une instance web-labo3 en cours de test
+# - Arrête une instance app en cours de test
 # - Attend, puis redémarre l'instance
 # - Observe l'impact sur la continuité du service
 
 # Paramètres personnalisables
 K6_SCRIPT="scripts/load_test_baseline.js"   # Chemin du script k6
-INSTANCE_TO_KILL="web-labo3_2"             # Nom du conteneur à arrêter (adapter si besoin)
+INSTANCE_TO_KILL="app_2"             # Nom du conteneur à arrêter (adapter si besoin)
 DURATION_BEFORE_KILL=45                     # Secondes avant d'arrêter l'instance
 DURATION_AFTER_KILL=90                     # Secondes à attendre après l'arrêt avant de relancer
 
