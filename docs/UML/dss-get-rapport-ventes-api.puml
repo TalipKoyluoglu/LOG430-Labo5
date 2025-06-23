@@ -1,0 +1,19 @@
+@startuml
+title DSS - Get Rapport Ventes API
+
+actor Utilisateur
+participant "Browser" as Browser
+participant "RapportVentesAPI" as API
+participant "UC1_Service" as Service
+participant "Magasin, Vente, LigneVente, StockLocal" as Model
+
+Utilisateur -> Browser : GET /api/v1/reports/
+Browser -> API : GET /api/v1/reports/
+API -> Service : generer_rapport_consolide()
+Service -> Model : requêtes ORM (Magasin, Vente, LigneVente, StockLocal)
+Service <-- Model : données rapport
+API <-- Service : rapport consolidé
+Browser <-- API : 200 OK (JSON rapport)
+Utilisateur <-- Browser
+
+@enduml

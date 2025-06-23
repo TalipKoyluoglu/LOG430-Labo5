@@ -1,0 +1,20 @@
+@startuml
+title DSS - Update Produit API (PUT /api/v1/products/<id>/)
+
+actor Utilisateur
+participant "Browser" as Browser
+participant "ProduitUpdateAPI" as API
+participant "UC4_Service" as Service
+participant "Produit" as Model
+
+Utilisateur -> Browser : PUT /api/v1/products/<id>/ (données JSON)
+Browser -> API : PUT /api/v1/products/<id>/ (payload)
+API -> Service : modifier_produitAPI(produit_id, data)
+Service -> Model : Produit.objects.get(id=produit_id)
+Service -> Model : produit.save() (mise à jour)
+Service <-- Model : produit mis à jour
+API <-- Service : produit (JSON)
+Browser <-- API : 200 OK (JSON produit)
+Utilisateur <-- Browser
+
+@enduml

@@ -1,60 +1,180 @@
-@startuml Vue-logique-corrigee
+@startuml
+title Vue Logique - LOG430-Labo4 (Complet & Pro)
 
-title Vue Logique - Modèles de l'application Magasin
-
-skinparam classAttributeIconSize 0
-skinparam linetype ortho
-hide empty members
-
-class Produit {
-  +nom: CharField
-  +categorie: CharField
-  +prix: DecimalField
-  +quantite_stock: IntegerField
-  +description: TextField
+' Présentation
+package "Présentation" {
+  package "API REST" {
+    class RapportVentesAPI <<APIController>> {
+      +get(request)
+    }
+    class StockMagasinAPI <<APIController>> {
+      +get(request, store_id)
+    }
+    class PerformanceMagasinsAPI <<APIController>> {
+      +get(request)
+    }
+    class ProduitUpdateAPI <<APIController>> {
+      +get(request, produit_id)
+      +put(request, produit_id)
+    }
+    class UC1Serializer {
+      +magasin
+      +total
+      +produits_vendus
+      +stock_local
+    }
+    class UC2Serializer {
+      +produit
+      +magasin
+      +quantite
+    }
+    class UC3Serializer {
+      +magasin
+      +chiffre_affaires
+      +ruptures
+      +surstock
+      +tendances
+    }
+    class UC4Serializer {
+      +nom
+      +categorie
+      +prix
+      +description
+    }
+    class UC6Serializer {
+      +demande
+      +statut
+    }
+  }
+  package "MVC Web" {
+    class UC1_rapport_ventes <<Controller>> {
+      +rapport_ventes(request)
+    }
+    class UC2_StockControleur <<Controller>> {
+      +uc2_stock(request)
+      +uc2_reapprovisionner(request)
+    }
+    class UC3_PerformanceControleur <<Controller>> {
+      +uc3_dashboard(request)
+    }
+    class UC4_ProduitControleur <<Controller>> {
+      +uc4_lister_produits(request)
+      +uc4_modifier_produit(request, produit_id)
+    }
+    class UC6_ValidationControleur <<Controller>> {
+      +uc6_demandes(request)
+      +uc6_valider(request, demande_id)
+      +uc6_rejeter(request, demande_id)
+    }
+    class uc1_rapport_html <<Template>>
+    class uc2_stock_html <<Template>>
+    class uc3_dashboard_html <<Template>>
+    class uc4_liste_html <<Template>>
+    class uc4_modifProduit_html <<Template>>
+    class uc6_demandes_html <<Template>>
+    UC1_rapport_ventes --> uc1_rapport_html
+    UC2_StockControleur --> uc2_stock_html
+    UC3_PerformanceControleur --> uc3_dashboard_html
+    UC4_ProduitControleur --> uc4_liste_html
+    UC4_ProduitControleur --> uc4_modifProduit_html
+    UC6_ValidationControleur --> uc6_demandes_html
+  }
 }
 
-class Magasin {
-  +nom: CharField
-  +adresse: CharField
+' Services
+package "Services" {
+  class UC1_Service {
+    +generer_rapport_consolide()
+  }
+  class UC2_Service {
+    +obtenir_stock_central()
+    +creer_demande_reapprovisionnement(produit_id, magasin_id, quantite)
+    +obtenir_stock_magasin(magasin_id)
+  }
+  class UC3_Service {
+    +get_indicateurs_par_magasin()
+  }
+  class UC4_Service {
+    +get_produit(produit_id)
+    +modifier_produit(produit_id, nom, prix, description)
+    +modifier_produitAPI(produit_id, data)
+  }
+  class UC6_Service {
+    +get_demandes_en_attente()
+    +valider_demande(demande_id)
+    +rejeter_demande(demande_id)
+  }
 }
 
-class StockCentral {
-  +quantite: IntegerField
+' Modèle/Domaine
+package "Modèle" {
+  class Magasin {
+    +id: int
+    +nom: str
+    +adresse: str
+  }
+  class Produit {
+    +id: int
+    +nom: str
+    +categorie: str
+    +prix: decimal
+    +quantite_stock: int
+    +description: str
+  }
+  class Vente {
+    +id: int
+    +magasin: Magasin
+    +date_vente: datetime
+    +total: decimal
+  }
+  class LigneVente {
+    +id: int
+    +vente: Vente
+    +produit: Produit
+    +quantite: int
+    +prix_unitaire: decimal
+  }
+  class StockCentral {
+    +id: int
+    +produit: Produit
+    +quantite: int
+  }
+  class StockLocal {
+    +id: int
+    +produit: Produit
+    +magasin: Magasin
+    +quantite: int
+  }
+  class DemandeReapprovisionnement {
+    +id: int
+    +produit: Produit
+    +magasin: Magasin
+    +quantite: int
+    +date: datetime
+    +statut: str
+  }
+
+  ' Relations entités
+  Magasin "1" -- "0..*" Vente : ventes
+  Vente "1" -- "1..*" LigneVente : lignes
+  Produit "1" -- "0..*" LigneVente : lignes
+  Produit "1" -- "0..*" StockCentral
+  Produit "1" -- "0..*" StockLocal
+  Magasin "1" -- "0..*" StockLocal
+  Produit "1" -- "0..*" DemandeReapprovisionnement
+  Magasin "1" -- "0..*" DemandeReapprovisionnement
 }
 
-class StockLocal {
-  +quantite: IntegerField
-}
-
-class DemandeReapprovisionnement {
-  +quantite: PositiveIntegerField
-  +date: DateTimeField
-  +statut: CharField
-}
-
-class Vente {
-  +date_vente: DateTimeField
-  +total: DecimalField
-}
-
-class LigneVente {
-  +quantite: IntegerField
-  +prix_unitaire: DecimalField
-}
-
-' --- Relations ---
-
-StockCentral "1..*" -- "1" Produit
-StockLocal "1..*" -- "1" Produit
-StockLocal "1..*" -- "1" Magasin
-
-DemandeReapprovisionnement "*" -- "1" Produit
-DemandeReapprovisionnement "*" -- "1" Magasin
-
-Vente "*" -- "1" Magasin
-Vente "1" -- "*" LigneVente
-LigneVente "*" -- "1" Produit
-
+' Liens Présentation -> Services
+RapportVentesAPI -down-> UC1_Service
+StockMagasinAPI -down-> UC2_Service
+PerformanceMagasinsAPI -down-> UC3_Service
+ProduitUpdateAPI -down-> UC4_Service
+Services -down-> Modèle
+UC1_rapport_ventes -down-> UC1_Service
+UC2_StockControleur -down-> UC2_Service
+UC3_PerformanceControleur -down-> UC3_Service
+UC4_ProduitControleur -down-> UC4_Service
+UC6_ValidationControleur -down-> UC6_Service
 
 @enduml

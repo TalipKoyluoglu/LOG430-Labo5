@@ -1,44 +1,85 @@
-@startuml vue-implementation
-title "Vue d'Implémentation - Architecture avec Services et API"
+@startuml
+allowmixing
+title Vue Logique - LOG430-Labo4 (Lisibilité & Pro)
 
-skinparam linetype ortho
-skinparam packageStyle rectangle
-
-package "Application 'magasin'" {
-
-    package "1. Couche Présentation (Web)" {
-        component [views]
-        component [templates]
-        component [urls.py] as WebUrls
-    }
-
-    package "2. Couche API" {
-        component [api/controllers] as ApiControllers
-        component [api/serializers] as ApiSerializers
-        component [api/auth] as ApiAuth
-        component [api/urls.py] as ApiUrls
-    }
-
-    package "3. Couche Services (Logique Métier)" {
-        component [services]
-    }
-
-    package "4. Couche Domaine (Modèles)" {
-        component [models]
-    }
-
-    ' Dépendances
-    WebUrls --> [views]
-    ApiUrls --> ApiControllers
-
-    [views] --> [services] : appelle
-    ApiControllers --> [services] : appelle
-
-    ApiControllers ..> ApiSerializers : utilise
-    ApiControllers ..> ApiAuth : sécurisé par
-
-    [services] --> [models] : accède
-
-    [views] ..> [templates] : rend
+' Présentation
+package "Présentation" {
+  package "API REST" {
+    class RapportVentesAPI <<APIController>>
+    class StockMagasinAPI <<APIController>>
+    class PerformanceMagasinsAPI <<APIController>>
+    class ProduitUpdateAPI <<APIController>>
+  }
+  package "MVC Web" {
+    class UC1_rapport_ventes <<Controller>>
+    class UC2_StockControleur <<Controller>>
+    class UC3_PerformanceControleur <<Controller>>
+    class UC4_ProduitControleur <<Controller>>
+    class UC6_ValidationControleur <<Controller>>
+  }
 }
+
+' Services
+package "Services" as ServicesPkg {
+  class UC1_Service
+  class UC2_Service
+  class UC3_Service
+  class UC4_Service
+  class UC6_Service
+}
+
+' Modèle/Domaine
+package "Modèle" as ModelePkg {
+  class Magasin
+  class Produit
+  class Vente
+  class LigneVente
+  class StockCentral
+  class StockLocal
+  class DemandeReapprovisionnement
+
+  ' Relations entités
+  Magasin "1" -- "0..*" Vente : ventes
+  Vente "1" -- "1..*" LigneVente : lignes
+  Produit "1" -- "0..*" LigneVente : lignes
+  Produit "1" -- "0..*" StockCentral
+  Produit "1" -- "0..*" StockLocal
+  Magasin "1" -- "0..*" StockLocal
+  Produit "1" -- "0..*" DemandeReapprovisionnement
+  Magasin "1" -- "0..*" DemandeReapprovisionnement
+}
+
+' Liens principaux entre couches
+RapportVentesAPI -down-> UC1_Service
+StockMagasinAPI -down-> UC2_Service
+PerformanceMagasinsAPI -down-> UC3_Service
+ProduitUpdateAPI -down-> UC4_Service
+
+UC1_rapport_ventes -down-> UC1_Service
+UC2_StockControleur -down-> UC2_Service
+UC3_PerformanceControleur -down-> UC3_Service
+UC4_ProduitControleur -down-> UC4_Service
+UC6_ValidationControleur -down-> UC6_Service
+
+' Flèche unique : Services utilise Modèle
+ServicesPkg -down-> ModelePkg : utilise
+
+UC1_Service -down-> Magasin
+UC1_Service -down-> Produit
+UC1_Service -down-> Vente
+UC1_Service -down-> LigneVente
+UC1_Service -down-> StockLocal
+UC2_Service -down-> Magasin
+UC2_Service -down-> Produit
+UC2_Service -down-> StockCentral
+UC2_Service -down-> StockLocal
+UC3_Service -down-> Magasin
+UC3_Service -down-> Vente
+UC3_Service -down-> LigneVente
+UC4_Service -down-> Produit
+UC4_Service -down-> StockLocal
+UC6_Service -down-> DemandeReapprovisionnement
+UC6_Service -down-> Magasin
+UC6_Service -down-> Produit
+
 @enduml

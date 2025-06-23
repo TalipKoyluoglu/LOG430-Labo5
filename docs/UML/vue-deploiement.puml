@@ -1,36 +1,46 @@
 @startuml vue-deploiement
-title Vue de Déploiement - Architecture avec API REST
-
+' Vue de Déploiement - LOG430-Labo4 après Labo 4 (1 seule app Django)
 skinparam linetype ortho
 skinparam componentStyle rectangle
 skinparam defaultTextAlignment center
+
+title Vue de Déploiement - LOG430-Labo4 (Labo 4, 1 seule app Django)
 
 node "Clients" {
   node "Navigateur Web" as browser {
     component user as "Utilisateur Web"
   }
-  node "Client Applicatif" as api_client {
-    component external_system as "Système Externe / Mobile"
-  }
 }
 
 node "Serveur d'Application (Docker Host)" as docker_host {
-  node "Conteneur Web (Django)" as container_web {
-    artifact "Application Django" as app_django {
-        component web_ui as "Interface Web (Vues/Templates)"
-        component rest_api as "API REST (DRF)"
-    }
+  node "Conteneur NGINX (Load Balancer)" as nginx {
+    component nginx_proxy as "NGINX"
   }
 
-  node "Conteneur Base de données" as container_db {
+  node "Conteneur Django App" as django_app {
+    component app as "Django App"
+  }
+
+  node "Conteneur Redis (Cache)" as redis {
+    component redis_srv as "Redis"
+  }
+  node "Conteneur PostgreSQL (DB)" as pg {
     component db_postgres as "PostgreSQL"
   }
+  node "Conteneur Prometheus" as prometheus {
+    component prometheus_srv as "Prometheus"
+  }
+  node "Conteneur Grafana" as grafana {
+    component grafana_srv as "Grafana"
+  }
 
-  rest_api -- db_postgres : ORM
-  web_ui -- db_postgres : ORM
+  ' Liens réseau
+  user -right-> nginx_proxy : HTTP
+  nginx_proxy -down-> app : HTTP
+  app -down-> redis_srv : TCP (cache)
+  app -down-> db_postgres : TCP (ORM)
+  prometheus_srv -down-> app : scrape /metrics
+  grafana_srv -down-> prometheus_srv : requêtes dashboards
 }
-
-user -right-> web_ui : HTTP/HTML
-external_system -down-> rest_api : HTTP/JSON
 
 @enduml
