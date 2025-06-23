@@ -1,9 +1,12 @@
-# Étape 1 : Utiliser une image officielle Python légère
-FROM python:3.12-slim
+# Étape 1 : Utiliser une image officielle Python plus complète
+FROM python:3.12
 
-# Étape 2 : Définir le répertoire de travail
+# Étape 2 : Créer les répertoires nécessaires et définir le répertoire de travail
+RUN mkdir -p /tmp /var/tmp /usr/tmp
 WORKDIR /app
 ENV PYTHONPATH=/app
+ENV TMPDIR=/tmp
+
 # Étape 3 : Copier les fichiers nécessaires
 COPY requirements.txt .
 
@@ -13,6 +16,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Étape 5 : Copier le projet complet
 COPY . .
 RUN chmod +x /app/entrypoint.sh
+
 # Étape 6 : Définir la variable d'environnement Django (optionnel si non géré dans .env)
 # ENV DJANGO_SETTINGS_MODULE=magasin.settings
 

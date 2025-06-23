@@ -5,9 +5,14 @@ from magasin.models.ligneVente import LigneVente
 from django.db.models import Sum, F
 from datetime import timedelta
 from django.utils import timezone
+from django.core.cache import cache
 
 
 def get_indicateurs_par_magasin():
+    cache_key = "indicateurs_par_magasin"
+    data = cache.get(cache_key)
+    if data is not None:
+        return data
     resultats = []
     magasins = Magasin.objects.all()
     maintenant = timezone.now()
@@ -49,4 +54,5 @@ def get_indicateurs_par_magasin():
             }
         )
 
+    cache.set(cache_key, resultats, timeout=60)
     return resultats

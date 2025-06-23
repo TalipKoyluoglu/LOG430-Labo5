@@ -7,7 +7,6 @@ def get_produit(produit_id):
     except Produit.DoesNotExist:
         return None
 
-
 def modifier_produit(produit_id, nouveau_nom, nouveau_prix, nouvelle_description):
     try:
         produit = Produit.objects.get(id=produit_id)

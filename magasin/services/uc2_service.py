@@ -1,6 +1,7 @@
 from magasin.models.stock import StockCentral, DemandeReapprovisionnement
 from magasin.models.stock import StockLocal
 from magasin.models.produit import Produit
+from django.core.cache import cache
 
 
 def obtenir_stock_central():
@@ -19,13 +20,16 @@ def creer_demande_reapprovisionnement(produit_id, magasin_id, quantite):
 
 
 def obtenir_stock_magasin(magasin_id):
+    cache_key = f"stock_magasin_{magasin_id}"
+    data = cache.get(cache_key)
+    if data is not None:
+        return data
     try:
         stock_entries = StockLocal.objects.filter(magasin_id=magasin_id).select_related(
             "produit"
         )
     except StockLocal.DoesNotExist:
         return []
-
     reponse = []
     for stock in stock_entries:
         reponse.append(
@@ -35,5 +39,5 @@ def obtenir_stock_magasin(magasin_id):
                 "quantite": stock.quantite,
             }
         )
-
+    cache.set(cache_key, reponse, timeout=60)
     return reponse

@@ -1,7 +1,12 @@
 from magasin.models import Vente, LigneVente, Magasin, StockLocal
+from django.core.cache import cache
 
 
 def generer_rapport_consolide():
+    cache_key = "rapport_consolide"
+    data = cache.get(cache_key)
+    if data is not None:
+        return data
     rapports = []
     magasins = Magasin.objects.all()
 
@@ -34,5 +39,5 @@ def generer_rapport_consolide():
                 "stock_local": stock_local,
             }
         )
-
+    cache.set(cache_key, rapports, timeout=60)
     return rapports
