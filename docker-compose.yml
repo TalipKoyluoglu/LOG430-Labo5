@@ -82,8 +82,82 @@ services:
       - redis_data:/data
     restart: unless-stopped
 
+  produits-db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: produits_db
+      POSTGRES_USER: produits_user
+      POSTGRES_PASSWORD: produits_pass
+    ports:
+      - "5434:5432"
+    volumes:
+      - produits_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "produits_user", "-d", "produits_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  produits-service:
+    build: ./service-produits
+    ports:
+      - "8001:8000"
+    environment:
+      POSTGRES_DB: produits_db
+      POSTGRES_USER: produits_user
+      POSTGRES_PASSWORD: produits_pass
+      POSTGRES_HOST: produits-db
+      POSTGRES_PORT: 5432
+    depends_on:
+      produits-db:
+        condition: service_healthy
+    volumes:
+      - ./service-produits:/app
+    command: >
+      sh -c "python manage.py migrate &&
+             python load_data.py &&
+             python manage.py runserver 0.0.0.0:8000"
+
+  stock-db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: stock_db
+      POSTGRES_USER: stock_user
+      POSTGRES_PASSWORD: stock_pass
+    ports:
+      - "5435:5432"
+    volumes:
+      - stock_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "stock_user", "-d", "stock_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  stock-service:
+    build: ./service-stock
+    ports:
+      - "8002:8000"
+    environment:
+      POSTGRES_DB: stock_db
+      POSTGRES_USER: stock_user
+      POSTGRES_PASSWORD: stock_pass
+      POSTGRES_HOST: stock-db
+      POSTGRES_PORT: 5432
+    depends_on:
+      stock-db:
+        condition: service_healthy
+    volumes:
+      - ./service-stock:/app
+    command: >
+      sh -c "python manage.py migrate &&
+             python load_data.py &&
+             python manage.py runserver 0.0.0.0:8000"
+
 volumes:
   pgdata:
   prometheus_data:
   grafana_data:
   redis_data:
+  produits_data:
+  stock_data:
