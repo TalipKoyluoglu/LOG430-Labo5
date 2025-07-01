@@ -98,8 +98,8 @@ services:
       timeout: 5s
       retries: 5
 
-  produits-service:
-    build: ./service-produits
+  catalogue-service:
+    build: ./service-catalogue
     ports:
       - "8001:8000"
     environment:
@@ -112,46 +112,126 @@ services:
       produits-db:
         condition: service_healthy
     volumes:
-      - ./service-produits:/app
+      - ./service-catalogue:/app
     command: >
       sh -c "python manage.py migrate &&
              python load_data.py &&
              python manage.py runserver 0.0.0.0:8000"
 
-  stock-db:
+  inventaire-db:
     image: postgres:15
     environment:
-      POSTGRES_DB: stock_db
-      POSTGRES_USER: stock_user
-      POSTGRES_PASSWORD: stock_pass
+      POSTGRES_DB: inventaire_db
+      POSTGRES_USER: inventaire_user
+      POSTGRES_PASSWORD: inventaire_pass
     ports:
       - "5435:5432"
     volumes:
-      - stock_data:/var/lib/postgresql/data
+      - inventaire_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "stock_user", "-d", "stock_db"]
+      test: ["CMD", "pg_isready", "-U", "inventaire_user", "-d", "inventaire_db"]
       interval: 5s
       timeout: 5s
       retries: 5
 
-  stock-service:
-    build: ./service-stock
+  inventaire-service:
+    build: ./service-inventaire
     ports:
       - "8002:8000"
     environment:
-      POSTGRES_DB: stock_db
-      POSTGRES_USER: stock_user
-      POSTGRES_PASSWORD: stock_pass
-      POSTGRES_HOST: stock-db
+      POSTGRES_DB: inventaire_db
+      POSTGRES_USER: inventaire_user
+      POSTGRES_PASSWORD: inventaire_pass
+      POSTGRES_HOST: inventaire-db
       POSTGRES_PORT: 5432
     depends_on:
-      stock-db:
+      inventaire-db:
         condition: service_healthy
     volumes:
-      - ./service-stock:/app
+      - ./service-inventaire:/app
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py loaddata initial_data.json &&
+             python manage.py runserver 0.0.0.0:8000"
+
+  commandes-db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: commandes_db
+      POSTGRES_USER: commandes_user
+      POSTGRES_PASSWORD: commandes_pass
+    ports:
+      - "5436:5432"
+    volumes:
+      - commandes_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "commandes_user", "-d", "commandes_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  commandes-service:
+    build: ./service-commandes
+    ports:
+      - "8003:8000"
+    environment:
+      POSTGRES_DB: commandes_db
+      POSTGRES_USER: commandes_user
+      POSTGRES_PASSWORD: commandes_pass
+      POSTGRES_HOST: commandes-db
+      POSTGRES_PORT: 5432
+      PRODUCT_SERVICE_URL: http://catalogue-service:8000
+      STOCK_SERVICE_URL: http://inventaire-service:8000
+    depends_on:
+      commandes-db:
+        condition: service_healthy
+      catalogue-service:
+        condition: service_started
+      inventaire-service:
+        condition: service_started
+    volumes:
+      - ./service-commandes:/app
     command: >
       sh -c "python manage.py migrate &&
              python load_data.py &&
+             python manage.py runserver 0.0.0.0:8000"
+
+  supply-chain-db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: supply_chain_db
+      POSTGRES_USER: supply_chain_user
+      POSTGRES_PASSWORD: supply_chain_pass
+    ports:
+      - "5437:5432"
+    volumes:
+      - supply_chain_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "supply_chain_user", "-d", "supply_chain_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  supply-chain-service:
+    build: ./service-supply-chain
+    ports:
+      - "8004:8000"
+    environment:
+      POSTGRES_DB: supply_chain_db
+      POSTGRES_USER: supply_chain_user
+      POSTGRES_PASSWORD: supply_chain_pass
+      POSTGRES_HOST: supply-chain-db
+      POSTGRES_PORT: 5432
+      STOCK_SERVICE_URL: http://inventaire-service:8000
+    depends_on:
+      supply-chain-db:
+        condition: service_healthy
+      inventaire-service:
+        condition: service_started
+    volumes:
+      - ./service-supply-chain:/app
+    command: >
+      sh -c "python manage.py migrate &&
              python manage.py runserver 0.0.0.0:8000"
 
 volumes:
@@ -160,4 +240,6 @@ volumes:
   grafana_data:
   redis_data:
   produits_data:
-  stock_data:
+  commandes_data:
+  supply_chain_data:
+  inventaire_data:

@@ -2,7 +2,7 @@ import requests
 
 class UC4_ProduitControleur:
     # Utilise le nom du service Docker pour la communication inter-containers
-    BASE_URL = "http://produits-service:8000/api/v1/products/"
+    BASE_URL = "http://catalogue-service:8000/api/v1/products/"
     # En local (hors Docker), utiliser : "http://localhost:8001/api/v1/products/"
 
     def lister_produits(self):
