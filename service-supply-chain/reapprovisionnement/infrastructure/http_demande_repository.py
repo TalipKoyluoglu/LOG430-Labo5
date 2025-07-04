@@ -181,4 +181,11 @@ class HttpDemandeRepository(DemandeRepository):
             justification=data.get("justification"),
             date_creation=datetime.fromisoformat(data["date_creation"]),
             date_traitement=datetime.fromisoformat(data["date_traitement"]) if data.get("date_traitement") else None
-        ) 
+        )
+
+    def mettre_a_jour_statut(self, demande_id, nouveau_statut):
+        """
+        Implémentation temporaire pour satisfaire l'interface abstraite.
+        """
+        logger.warning("Appel de mettre_a_jour_statut (dummy) : à implémenter selon la logique métier.")
+        return True 

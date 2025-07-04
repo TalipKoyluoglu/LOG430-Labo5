@@ -234,6 +234,52 @@ services:
       sh -c "python manage.py migrate &&
              python manage.py runserver 0.0.0.0:8000"
 
+  ecommerce-db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: ecommerce_db
+      POSTGRES_USER: ecommerce_user
+      POSTGRES_PASSWORD: ecommerce_pass
+    ports:
+      - "5438:5432"
+    volumes:
+      - ecommerce_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "ecommerce_user", "-d", "ecommerce_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  ecommerce-service:
+    build: ./service-ecommerce
+    ports:
+      - "8005:8005"
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings
+      POSTGRES_DB: ecommerce_db
+      POSTGRES_USER: ecommerce_user
+      POSTGRES_PASSWORD: ecommerce_pass
+      POSTGRES_HOST: ecommerce-db
+      POSTGRES_PORT: 5432
+      CATALOGUE_SERVICE_URL: http://catalogue-service:8000
+      INVENTAIRE_SERVICE_URL: http://inventaire-service:8000
+      COMMANDES_SERVICE_URL: http://commandes-service:8000
+    depends_on:
+      ecommerce-db:
+        condition: service_healthy
+      catalogue-service:
+        condition: service_started
+      inventaire-service:
+        condition: service_started
+      commandes-service:
+        condition: service_started
+    volumes:
+      - ./service-ecommerce:/app
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py loaddata initial_data.json &&
+             python manage.py runserver 0.0.0.0:8005"
+
 volumes:
   pgdata:
   prometheus_data:
@@ -243,3 +289,4 @@ volumes:
   commandes_data:
   supply_chain_data:
   inventaire_data:
+  ecommerce_data:

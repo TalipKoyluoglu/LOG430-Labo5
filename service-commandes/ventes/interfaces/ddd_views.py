@@ -30,48 +30,6 @@ from ..infrastructure.django_magasin_repository import DjangoMagasinRepository
 from ..infrastructure.http_produit_service import HttpProduitService
 from ..infrastructure.http_stock_service import HttpStockService
 
-# Classe temporaire pour contourner le problème stock service (DEPRECATED)
-class MockStockService:
-    """Service mock temporaire pour les tests"""
-    def verifier_stock_disponible(self, produit_id, magasin_id, quantite):
-        # Retourne toujours True pour permettre les tests
-        return True
-    
-    def get_stock_local(self, produit_id, magasin_id):
-        # Retourne un stock fictif suffisant
-        return StockInfo(
-            produit_id=ProduitId(produit_id),
-            magasin_id=MagasinId(magasin_id),
-            quantite_disponible=100  # Stock fictif
-        )
-    
-    def get_all_stock_local(self, magasin_id):
-        # Retourne une liste fictive de stocks
-        return [
-            StockInfo(
-                produit_id=ProduitId(uuid.UUID("550e8400-e29b-41d4-a716-446655440001")),
-                magasin_id=MagasinId(magasin_id),
-                quantite_disponible=0  # Rupture
-            ),
-            StockInfo(
-                produit_id=ProduitId(uuid.UUID("550e8400-e29b-41d4-a716-446655440002")),
-                magasin_id=MagasinId(magasin_id),
-                quantite_disponible=15  # Surstock
-            )
-        ]
-    
-    def reduire_stock(self, produit_id, magasin_id, quantite):
-        # Ne fait rien pour l'instant
-        pass
-    
-    def decrease_stock(self, produit_id, magasin_id, quantite):
-        # Alias pour reduire_stock
-        pass
-    
-    def restaurer_stock(self, produit_id, magasin_id, quantite):
-        # Ne fait rien pour l'instant
-        pass
-
 
 class DDDVenteViewSet(viewsets.GenericViewSet):
     """

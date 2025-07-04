@@ -1,34 +1,35 @@
 from django.urls import path
 from django.views.generic.base import RedirectView
-from magasin.views.uc1 import rapport_ventes
-from magasin.views.uc2 import uc2_stock, uc2_reapprovisionner
-from magasin.views.uc1 import afficher_formulaire_vente
-from magasin.views.uc1 import enregistrer_vente
-from magasin.views.uc3 import uc3_dashboard
-from magasin.views.uc4 import uc4_lister_produits, uc4_modifier_produit
-from magasin.views.uc6 import uc6_demandes, uc6_rejeter, uc6_valider
-from magasin.api import urls as api_urls
-from magasin.api import swagger_urls
+
+# Imports avec nouveaux noms de fichiers
+from magasin.views.rapport_consolide import rapport_ventes, afficher_formulaire_vente, enregistrer_vente
+from magasin.views.gestion_stock import uc2_stock, uc2_reapprovisionner
+from magasin.views.indicateurs_performance import uc3_dashboard
+from magasin.views.gestion_produits import uc4_lister_produits, uc4_modifier_produit
+from magasin.views.workflow_demandes import uc6_demandes, uc6_rejeter, uc6_valider
 
 urlpatterns = [
-    # Redirection de la page d'accueil vers Swagger
-    path("", RedirectView.as_view(url="/swagger/", permanent=False), name="home"),
-    path("uc1/rapport/", rapport_ventes, name="uc1_rapport"),
-    path("uc2/stock/", uc2_stock, name="uc2_stock"),
-    path("uc2/reapprovisionner/", uc2_reapprovisionner, name="uc2_reapprovisionner"),
-    path("uc1/ajouter_vente/", afficher_formulaire_vente, name="ajouter_vente"),
-    path("uc1/enregistrer/", enregistrer_vente, name="uc1_enregistrer_vente"),
-    path("uc3/dashboard/", uc3_dashboard, name="uc3_dashboard"),
-    path(
-        "uc4/modifier/<int:produit_id>/",
-        uc4_modifier_produit,
-        name="uc4_modifier_produit",
-    ),
-    path("uc4/produits/", uc4_lister_produits, name="uc4_lister_produits"),
-    path("uc6/demandes/", uc6_demandes, name="uc6_demandes"),
-    path("uc6/valider/<int:demande_id>/", uc6_valider, name="uc6_valider"),
-    path("uc6/rejeter/<int:demande_id>/", uc6_rejeter, name="uc6_rejeter"),
+    # Page d'accueil - Dashboard principal (indicateurs de performance)
+    path("", uc3_dashboard, name="home"),
+    
+    # Rapport consolidé des ventes (ex-UC1)
+    path("rapport-consolide/", rapport_ventes, name="rapport_consolide"),
+    path("ventes/ajouter/", afficher_formulaire_vente, name="ajouter_vente"),
+    path("ventes/enregistrer/", enregistrer_vente, name="enregistrer_vente"),
+    
+    # Gestion des stocks et réapprovisionnement (ex-UC2)
+    path("stocks/", uc2_stock, name="gestion_stocks"),
+    path("stocks/reapprovisionner/", uc2_reapprovisionner, name="uc2_reapprovisionner"),
+    
+    # Indicateurs de performance (ex-UC3)
+    path("indicateurs/", uc3_dashboard, name="indicateurs_performance"),
+    
+    # Gestion des produits (ex-UC4)
+    path("produits/", uc4_lister_produits, name="lister_produits"),
+    path("produits/modifier/<str:produit_id>/", uc4_modifier_produit, name="modifier_produit"),
+    
+    # Workflow de validation des demandes (ex-UC6)
+    path("demandes/", uc6_demandes, name="workflow_demandes"),
+    path("demandes/valider/<int:demande_id>/", uc6_valider, name="valider_demande"),
+    path("demandes/rejeter/<int:demande_id>/", uc6_rejeter, name="rejeter_demande"),
 ]
-
-urlpatterns += api_urls.urlpatterns
-urlpatterns += swagger_urls.urlpatterns

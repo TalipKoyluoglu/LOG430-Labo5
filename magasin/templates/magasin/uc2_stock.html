@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>UC2 — Stock central et demande de réapprovisionnement</h1>
+<h1>Stock central et demande de réapprovisionnement</h1>
 
 {% if messages %}
   <div>
@@ -27,7 +27,7 @@
   <tbody>
     {% for stock in stocks %}
     <tr>
-      <td style="border: 1px solid #dee2e6; padding: 10px;">{{ stock.produit.nom }}</td>
+      <td style="border: 1px solid #dee2e6; padding: 10px;">{{ stock.nom_produit }}</td>
       <td style="border: 1px solid #dee2e6; padding: 10px;">{{ stock.quantite }}</td>
       <form method="post" action="{% url 'uc2_reapprovisionner' %}">
         {% csrf_token %}

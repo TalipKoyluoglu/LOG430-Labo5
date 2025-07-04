@@ -20,27 +20,56 @@
 {% endif %}
 
 
-  <form method="POST" action="{% url 'uc1_enregistrer_vente' %}" style="margin-bottom: 30px;">
-    {% csrf_token %}
+  <form method="GET" action="" style="margin-bottom: 30px;">
     <label for="magasin">Magasin :</label>
-    <select name="magasin_id" required>
+    <select name="magasin_id" required onchange="this.form.submit()">
+      <option value="">-- Sélectionner un magasin --</option>
       {% for magasin in magasins %}
-        <option value="{{ magasin.id }}">{{ magasin.nom }}</option>
+        <option value="{{ magasin.id }}" {% if magasin_id == magasin.id|stringformat:'s' %}selected{% endif %}>{{ magasin.nom }}</option>
       {% endfor %}
     </select>
+  </form>
+
+  <form method="POST" action="{% url 'enregistrer_vente' %}">
+    {% csrf_token %}
+    <input type="hidden" name="magasin_id" value="{{ magasin_id }}">
 
     <label for="produit">Produit :</label>
-    <select name="produit_id" required>
+    <select name="produit_id" id="produit_id" required onchange="updateMaxQuantite()">
+      <option value="">-- Sélectionner un produit --</option>
       {% for produit in produits %}
         <option value="{{ produit.id }}">{{ produit.nom }}</option>
       {% endfor %}
     </select>
 
     <label for="quantite">Quantité vendue :</label>
-    <input type="number" name="quantite" min="1" required>
+    <input type="number" name="quantite" id="quantite" min="1" required>
 
     <button type="submit">Enregistrer la vente</button>
   </form>
+
+  <script>
+    // Mapping produit_id -> quantité max (injecté depuis Django)
+    const quantites = {{ quantites|safe }};
+    function updateMaxQuantite() {
+      const select = document.getElementById('produit_id');
+      const input = document.getElementById('quantite');
+      const produitId = select.value;
+      if (quantites[produitId]) {
+        input.max = quantites[produitId];
+      } else {
+        input.removeAttribute('max');
+      }
+    }
+    // Appel initial au chargement
+    document.addEventListener('DOMContentLoaded', updateMaxQuantite);
+  </script>
+
+  {% if not magasin_id %}
+    <p style="color: #888;">Veuillez d'abord sélectionner un magasin pour voir les produits disponibles.</p>
+  {% endif %}
+
+  <pre>magasin_id={{ magasin_id }} produits={{ produits|safe }}</pre>
 
   {% for rapport in rapports %}
     <h2>Magasin : {{ rapport.magasin }}</h2>
