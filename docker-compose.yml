@@ -389,11 +389,7 @@ services:
     depends_on:
       - kong
     command: >
-      sh -c "
-        apk add --no-cache jq bash &&
-        chmod +x /setup-kong.sh &&
-        /setup-kong.sh
-      "
+      sh /setup-kong.sh
     restart: "no"
 
 volumes:

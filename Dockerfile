@@ -12,7 +12,6 @@ COPY requirements.txt .
 
 # Étape 4 : Installer les dépendances
 RUN pip install --no-cache-dir -r requirements.txt
-image.png
 # Étape 5 : Copier le projet complet
 COPY . .
 RUN chmod +x /app/entrypoint.sh

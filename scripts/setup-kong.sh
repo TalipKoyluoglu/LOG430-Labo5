@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Activer le mode debug pour voir toutes les commandes exécutées
+set -x
+
 # Script de configuration automatique Kong
 # Vérifie si les services existent déjà avant de les créer
 # Inclut la configuration du load balancing
@@ -8,7 +11,7 @@ echo "🚀 Configuration Kong API Gateway avec Load Balancing..."
 
 # Attendre que Kong soit prêt
 echo "⏳ Attente de Kong..."
-until curl -s http://localhost:8081 > /dev/null 2>&1; do
+until curl -s http://kong:8001 > /dev/null 2>&1; do
     echo "   Kong pas encore prêt, attente 2s..."
     sleep 2
 done
@@ -19,19 +22,34 @@ create_upstream_if_not_exists() {
     local upstream_name=$1
     local algorithm=$2
     
-    # Vérifier si l'upstream existe déjà
-    if curl -s "http://localhost:8081/upstreams/$upstream_name" > /dev/null 2>&1; then
+    echo "🔍 Vérification de l'upstream '$upstream_name'..."
+    
+    # Vérifier si l'upstream existe déjà avec debug
+    local check_response=$(curl -s -w "%{http_code}" "http://kong:8001/upstreams/$upstream_name")
+    local http_code="${check_response: -3}"
+    local response_body="${check_response%???}"
+    
+    echo "   Code HTTP: $http_code"
+    echo "   Réponse: $response_body"
+    
+    if [ "$http_code" = "200" ]; then
         echo "   ⚠️  Upstream '$upstream_name' existe déjà, ignoré"
     else
         echo "   ➕ Création de l'upstream '$upstream_name' avec algorithme '$algorithm'"
-        curl -s -X POST http://localhost:8081/upstreams/ \
+        local create_response=$(curl -s -w "%{http_code}" -X POST http://kong:8001/upstreams/ \
             --data "name=$upstream_name" \
-            --data "algorithm=$algorithm" > /dev/null
+            --data "algorithm=$algorithm")
+        local create_code="${create_response: -3}"
+        local create_body="${create_response%???}"
         
-        if [ $? -eq 0 ]; then
+        echo "   Code création: $create_code"
+        echo "   Réponse création: $create_body"
+        
+        if [ "$create_code" = "201" ] || [ "$create_code" = "200" ]; then
             echo "   ✅ Upstream '$upstream_name' créé"
         else
-            echo "   ❌ Erreur création upstream '$upstream_name'"
+            echo "   ❌ Erreur création upstream '$upstream_name' (code: $create_code)"
+            echo "   Réponse: $create_body"
         fi
     fi
 }
@@ -42,19 +60,34 @@ create_target_if_not_exists() {
     local target_url=$2
     local weight=$3
     
+    echo "🔍 Vérification du target '$target_url' dans '$upstream_name'..."
+    
     # Vérifier si le target existe déjà
-    if curl -s "http://localhost:8081/upstreams/$upstream_name/targets" | jq -e ".data[] | select(.target == \"$target_url\")" > /dev/null 2>&1; then
+    local targets_response=$(curl -s -w "%{http_code}" "http://kong:8001/upstreams/$upstream_name/targets")
+    local targets_code="${targets_response: -3}"
+    local targets_body="${targets_response%???}"
+    
+    echo "   Code vérification targets: $targets_code"
+    echo "   Réponse targets: $targets_body"
+    
+    if [ "$targets_code" = "200" ] && echo "$targets_body" | grep -q "$target_url"; then
         echo "   ⚠️  Target '$target_url' existe déjà dans '$upstream_name', ignoré"
     else
         echo "   ➕ Ajout du target '$target_url' à l'upstream '$upstream_name'"
-        curl -s -X POST "http://localhost:8081/upstreams/$upstream_name/targets" \
+        local add_response=$(curl -s -w "%{http_code}" -X POST "http://kong:8001/upstreams/$upstream_name/targets" \
             --data "target=$target_url" \
-            --data "weight=$weight" > /dev/null
+            --data "weight=$weight")
+        local add_code="${add_response: -3}"
+        local add_body="${add_response%???}"
         
-        if [ $? -eq 0 ]; then
+        echo "   Code ajout: $add_code"
+        echo "   Réponse ajout: $add_body"
+        
+        if [ "$add_code" = "201" ] || [ "$add_code" = "200" ]; then
             echo "   ✅ Target '$target_url' ajouté"
         else
-            echo "   ❌ Erreur ajout target '$target_url'"
+            echo "   ❌ Erreur ajout target '$target_url' (code: $add_code)"
+            echo "   Réponse: $add_body"
         fi
     fi
 }
@@ -64,19 +97,34 @@ create_service_if_not_exists() {
     local service_name=$1
     local service_url=$2
     
-    # Vérifier si le service existe déjà
-    if curl -s "http://localhost:8081/services/$service_name" > /dev/null 2>&1; then
+    echo "🔍 Vérification du service '$service_name'..."
+    
+    # Vérifier si le service existe déjà avec debug
+    local check_response=$(curl -s -w "%{http_code}" "http://kong:8001/services/$service_name")
+    local http_code="${check_response: -3}"
+    local response_body="${check_response%???}"
+    
+    echo "   Code HTTP: $http_code"
+    echo "   Réponse: $response_body"
+    
+    if [ "$http_code" = "200" ]; then
         echo "   ⚠️  Service '$service_name' existe déjà, ignoré"
     else
-        echo "   ➕ Création du service '$service_name'"
-        curl -s -X POST http://localhost:8081/services/ \
+        echo "   ➕ Création du service '$service_name' avec URL '$service_url'"
+        local create_response=$(curl -s -w "%{http_code}" -X POST http://kong:8001/services/ \
             --data "name=$service_name" \
-            --data "url=$service_url" > /dev/null
+            --data "url=$service_url")
+        local create_code="${create_response: -3}"
+        local create_body="${create_response%???}"
         
-        if [ $? -eq 0 ]; then
+        echo "   Code création: $create_code"
+        echo "   Réponse création: $create_body"
+        
+        if [ "$create_code" = "201" ] || [ "$create_code" = "200" ]; then
             echo "   ✅ Service '$service_name' créé"
         else
-            echo "   ❌ Erreur création service '$service_name'"
+            echo "   ❌ Erreur création service '$service_name' (code: $create_code)"
+            echo "   Réponse: $create_body"
         fi
     fi
 }
@@ -86,20 +134,35 @@ create_route_if_not_exists() {
     local service_name=$1
     local route_name=$2
     local route_path=$3
+
+    echo "🔍 Vérification de la route '$route_name'..."
     
     # Vérifier si la route existe déjà
-    if curl -s "http://localhost:8081/routes/$route_name" > /dev/null 2>&1; then
+    local check_response=$(curl -s -w "%{http_code}" "http://kong:8001/routes/$route_name")
+    local http_code="${check_response: -3}"
+    local response_body="${check_response%???}"
+    
+    echo "   Code HTTP: $http_code"
+    echo "   Réponse: $response_body"
+    
+    if [ "$http_code" = "200" ]; then
         echo "   ⚠️  Route '$route_name' existe déjà, ignorée"
     else
-        echo "   ➕ Création de la route '$route_name' -> '$route_path'"
-        curl -s -X POST "http://localhost:8081/services/$service_name/routes" \
+        echo "   ➕ Création de la route '$route_name' -> '$route_path' pour service '$service_name'"
+        local create_response=$(curl -s -w "%{http_code}" -X POST "http://kong:8001/services/$service_name/routes" \
             --data "name=$route_name" \
-            --data "paths[]=$route_path" > /dev/null
+            --data "paths[]=$route_path")
+        local create_code="${create_response: -3}"
+        local create_body="${create_response%???}"
         
-        if [ $? -eq 0 ]; then
+        echo "   Code création: $create_code"
+        echo "   Réponse création: $create_body"
+        
+        if [ "$create_code" = "201" ] || [ "$create_code" = "200" ]; then
             echo "   ✅ Route '$route_name' créée"
         else
-            echo "   ❌ Erreur création route '$route_name'"
+            echo "   ❌ Erreur création route '$route_name' (code: $create_code)"
+            echo "   Réponse: $create_body"
         fi
     fi
 }
@@ -109,19 +172,34 @@ create_plugin_if_not_exists() {
     local plugin_name=$1
     local plugin_config=$2
     
+    echo "🔍 Vérification du plugin '$plugin_name'..."
+    
     # Vérifier si le plugin existe déjà (recherche par nom)
-    if curl -s "http://localhost:8081/plugins/" | jq -e ".data[] | select(.name == \"$plugin_name\")" > /dev/null 2>&1; then
+    local plugins_response=$(curl -s -w "%{http_code}" "http://kong:8001/plugins/")
+    local plugins_code="${plugins_response: -3}"
+    local plugins_body="${plugins_response%???}"
+    
+    echo "   Code plugins: $plugins_code"
+    echo "   Réponse plugins: $plugins_body"
+    
+    if [ "$plugins_code" = "200" ] && echo "$plugins_body" | grep -q "\"name\":\"$plugin_name\""; then
         echo "   ⚠️  Plugin '$plugin_name' existe déjà, ignoré"
     else
         echo "   ➕ Activation du plugin '$plugin_name'"
-        curl -s -X POST http://localhost:8081/plugins/ \
+        local create_response=$(curl -s -w "%{http_code}" -X POST http://kong:8001/plugins/ \
             --data "name=$plugin_name" \
-            $plugin_config > /dev/null
+            $plugin_config)
+        local create_code="${create_response: -3}"
+        local create_body="${create_response%???}"
         
-        if [ $? -eq 0 ]; then
+        echo "   Code création: $create_code"
+        echo "   Réponse création: $create_body"
+        
+        if [ "$create_code" = "201" ] || [ "$create_code" = "200" ]; then
             echo "   ✅ Plugin '$plugin_name' activé"
         else
-            echo "   ❌ Erreur activation plugin '$plugin_name'"
+            echo "   ❌ Erreur activation plugin '$plugin_name' (code: $create_code)"
+            echo "   Réponse: $create_body"
         fi
     fi
 }
@@ -131,19 +209,34 @@ create_consumer_if_not_exists() {
     local consumer_name=$1
     local custom_id=$2
     
+    echo "🔍 Vérification du consommateur '$consumer_name'..."
+    
     # Vérifier si le consommateur existe déjà
-    if curl -s "http://localhost:8081/consumers/$consumer_name" > /dev/null 2>&1; then
+    local check_response=$(curl -s -w "%{http_code}" "http://kong:8001/consumers/$consumer_name")
+    local http_code="${check_response: -3}"
+    local response_body="${check_response%???}"
+    
+    echo "   Code HTTP: $http_code"
+    echo "   Réponse: $response_body"
+    
+    if [ "$http_code" = "200" ]; then
         echo "   ⚠️  Consommateur '$consumer_name' existe déjà, ignoré"
     else
         echo "   ➕ Création du consommateur '$consumer_name'"
-        curl -s -X POST http://localhost:8081/consumers/ \
+        local create_response=$(curl -s -w "%{http_code}" -X POST http://kong:8001/consumers/ \
             --data "username=$consumer_name" \
-            --data "custom_id=$custom_id" > /dev/null
+            --data "custom_id=$custom_id")
+        local create_code="${create_response: -3}"
+        local create_body="${create_response%???}"
         
-        if [ $? -eq 0 ]; then
+        echo "   Code création: $create_code"
+        echo "   Réponse création: $create_body"
+        
+        if [ "$create_code" = "201" ] || [ "$create_code" = "200" ]; then
             echo "   ✅ Consommateur '$consumer_name' créé"
         else
-            echo "   ❌ Erreur création consommateur '$consumer_name'"
+            echo "   ❌ Erreur création consommateur '$consumer_name' (code: $create_code)"
+            echo "   Réponse: $create_body"
         fi
     fi
 }
@@ -153,18 +246,33 @@ create_api_key_if_not_exists() {
     local consumer_name=$1
     local api_key=$2
     
+    echo "🔍 Vérification de la clé API pour '$consumer_name'..."
+    
     # Vérifier si la clé existe déjà pour ce consommateur
-    if curl -s "http://localhost:8081/consumers/$consumer_name/key-auth" | jq -e ".data[] | select(.key == \"$api_key\")" > /dev/null 2>&1; then
+    local keys_response=$(curl -s -w "%{http_code}" "http://kong:8001/consumers/$consumer_name/key-auth")
+    local keys_code="${keys_response: -3}"
+    local keys_body="${keys_response%???}"
+    
+    echo "   Code clés: $keys_code"
+    echo "   Réponse clés: $keys_body"
+    
+    if [ "$keys_code" = "200" ] && echo "$keys_body" | grep -q "$api_key"; then
         echo "   ⚠️  Clé API '$api_key' existe déjà pour '$consumer_name', ignorée"
     else
         echo "   ➕ Création de la clé API pour '$consumer_name'"
-        curl -s -X POST "http://localhost:8081/consumers/$consumer_name/key-auth" \
-            --data "key=$api_key" > /dev/null
+        local create_response=$(curl -s -w "%{http_code}" -X POST "http://kong:8001/consumers/$consumer_name/key-auth" \
+            --data "key=$api_key")
+        local create_code="${create_response: -3}"
+        local create_body="${create_response%???}"
         
-        if [ $? -eq 0 ]; then
+        echo "   Code création: $create_code"
+        echo "   Réponse création: $create_body"
+        
+        if [ "$create_code" = "201" ] || [ "$create_code" = "200" ]; then
             echo "   ✅ Clé API créée pour '$consumer_name'"
         else
-            echo "   ❌ Erreur création clé API pour '$consumer_name'"
+            echo "   ❌ Erreur création clé API pour '$consumer_name' (code: $create_code)"
+            echo "   Réponse: $create_body"
         fi
     fi
 }
@@ -211,16 +319,16 @@ create_consumer_if_not_exists "magasin-app" "magasin-frontend"
 create_api_key_if_not_exists "magasin-app" "magasin-secret-key-2025"
 
 echo "📊 Résumé de la configuration Kong:"
-echo "   Upstreams: $(curl -s http://localhost:8081/upstreams/ | jq '.data | length') configurés"
-echo "   Services: $(curl -s http://localhost:8081/services/ | jq '.data | length') configurés"
-echo "   Routes: $(curl -s http://localhost:8081/routes/ | jq '.data | length') configurées"
-echo "   Plugins: $(curl -s http://localhost:8081/plugins/ | jq '.data | length') activés"
-echo "   Consommateurs: $(curl -s http://localhost:8081/consumers/ | jq '.data | length') créés"
+echo "   Upstreams: $(curl -s http://kong:8001/upstreams/ | jq '.data | length') configurés"
+echo "   Services: $(curl -s http://kong:8001/services/ | jq '.data | length') configurés"
+echo "   Routes: $(curl -s http://kong:8001/routes/ | jq '.data | length') configurées"
+echo "   Plugins: $(curl -s http://kong:8001/plugins/ | jq '.data | length') activés"
+echo "   Consommateurs: $(curl -s http://kong:8001/consumers/ | jq '.data | length') créés"
 
 echo ""
 echo "⚖️  Configuration Load Balancing:"
 echo "   Upstream: catalogue-upstream (round-robin)"
-echo "   Targets: $(curl -s http://localhost:8081/upstreams/catalogue-upstream/targets | jq '.data | length') instances"
+echo "   Targets: $(curl -s http://kong:8001/upstreams/catalogue-upstream/targets | jq '.data | length') instances"
 
 echo ""
 echo "🔑 Clé API pour ton application:"

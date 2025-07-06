@@ -9,6 +9,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+import os
 
 from ..application.use_cases.rechercher_produits_use_case import RechercherProduitsUseCase
 from ..application.use_cases.ajouter_produit_use_case import AjouterProduitUseCase
@@ -81,7 +82,8 @@ class DDDCatalogueAPI(APIView):
             # 3. Retour direct des résultats simplifiés
             return Response({
                 'success': True,
-                'data': resultats
+                'data': resultats,
+                'instance_id': os.environ.get('INSTANCE_ID', 'unknown')
             }, status=status.HTTP_200_OK)
             
         except CriteresRechercheInvalidesError as e:
