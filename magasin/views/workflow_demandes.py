@@ -25,11 +25,11 @@ def uc6_demandes(request):
         demandes_data = supply_chain_client.lister_demandes_en_attente()
         
         if not demandes_data.get('success', False):
-            # En cas d'erreur API, afficher un message et des données vides
-            messages.error(request, f"Erreur lors de la récupération des demandes: {demandes_data.get('error', 'Erreur inconnue')}")
+            # En cas d'erreur API, afficher un message explicite pour l'utilisateur
+            messages.info(request, "Aucune demande en attente ou service temporairement indisponible.")
             return render(request, "magasin/uc6_demandes.html", {
                 "demandes": [],
-                "error_message": demandes_data.get('error', 'Service indisponible')
+                "error_message": demandes_data.get('error', 'Aucune demande en attente ou service temporairement indisponible.')
             })
         
         # Extraction des demandes
@@ -118,20 +118,17 @@ def uc6_rejeter(request, demande_id):
         supply_chain_client = SupplyChainClient()
         
         # Appel à l'API DDD pour rejeter la demande
-        rejet_result = supply_chain_client.rejeter_demande(demande_id)
-        
+        rejet_result = supply_chain_client.rejeter_demande(demande_id, motif="Rejeté par l'utilisateur")
+        logger.info(f"RÉPONSE REJET DEMANDE: {rejet_result}")
         if rejet_result.get('success', False):
             messages.success(request, f"Demande {demande_id} rejetée avec succès")
             logger.info(f"Demande {demande_id} rejetée avec succès")
         else:
             error_msg = rejet_result.get('error', 'Erreur inconnue lors du rejet')
-            
-            # Messages d'erreur spécifiques
             if 'demande introuvable' in error_msg.lower():
                 messages.error(request, f"Demande {demande_id} introuvable ou déjà traitée")
             else:
                 messages.error(request, f"Échec du rejet de la demande {demande_id}: {error_msg}")
-                
             logger.warning(f"Échec rejet demande {demande_id}: {error_msg}")
             
         return redirect("workflow_demandes")

@@ -98,7 +98,7 @@ services:
       timeout: 5s
       retries: 5
 
-  catalogue-service:
+  catalogue-service-1:
     build: ./service-catalogue
     ports:
       - "8001:8000"
@@ -108,6 +108,49 @@ services:
       POSTGRES_PASSWORD: produits_pass
       POSTGRES_HOST: produits-db
       POSTGRES_PORT: 5432
+      INSTANCE_ID: catalogue-1
+    depends_on:
+      produits-db:
+        condition: service_healthy
+    volumes:
+      - ./service-catalogue:/app
+    command: >
+      sh -c "python manage.py migrate &&
+             python load_data.py &&
+             python manage.py runserver 0.0.0.0:8000"
+
+  catalogue-service-2:
+    build: ./service-catalogue
+    ports:
+      - "8006:8000"
+    environment:
+      POSTGRES_DB: produits_db
+      POSTGRES_USER: produits_user
+      POSTGRES_PASSWORD: produits_pass
+      POSTGRES_HOST: produits-db
+      POSTGRES_PORT: 5432
+      INSTANCE_ID: catalogue-2
+    depends_on:
+      produits-db:
+        condition: service_healthy
+    volumes:
+      - ./service-catalogue:/app
+    command: >
+      sh -c "python manage.py migrate &&
+             python load_data.py &&
+             python manage.py runserver 0.0.0.0:8000"
+
+  catalogue-service-3:
+    build: ./service-catalogue
+    ports:
+      - "8007:8000"
+    environment:
+      POSTGRES_DB: produits_db
+      POSTGRES_USER: produits_user
+      POSTGRES_PASSWORD: produits_pass
+      POSTGRES_HOST: produits-db
+      POSTGRES_PORT: 5432
+      INSTANCE_ID: catalogue-3
     depends_on:
       produits-db:
         condition: service_healthy
@@ -180,12 +223,12 @@ services:
       POSTGRES_PASSWORD: commandes_pass
       POSTGRES_HOST: commandes-db
       POSTGRES_PORT: 5432
-      PRODUCT_SERVICE_URL: http://catalogue-service:8000
+      PRODUCT_SERVICE_URL: http://catalogue-service-1:8000
       STOCK_SERVICE_URL: http://inventaire-service:8000
     depends_on:
       commandes-db:
         condition: service_healthy
-      catalogue-service:
+      catalogue-service-1:
         condition: service_started
       inventaire-service:
         condition: service_started
@@ -261,13 +304,13 @@ services:
       POSTGRES_PASSWORD: ecommerce_pass
       POSTGRES_HOST: ecommerce-db
       POSTGRES_PORT: 5432
-      CATALOGUE_SERVICE_URL: http://catalogue-service:8000
+      CATALOGUE_SERVICE_URL: http://catalogue-service-1:8000
       INVENTAIRE_SERVICE_URL: http://inventaire-service:8000
       COMMANDES_SERVICE_URL: http://commandes-service:8000
     depends_on:
       ecommerce-db:
         condition: service_healthy
-      catalogue-service:
+      catalogue-service-1:
         condition: service_started
       inventaire-service:
         condition: service_started
@@ -280,6 +323,79 @@ services:
              python manage.py loaddata initial_data.json &&
              python manage.py runserver 0.0.0.0:8005"
 
+  # Kong API Gateway
+  kong-database:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: kong
+      POSTGRES_DB: kong
+      POSTGRES_PASSWORD: kong_pass
+    ports:
+      - "5433:5432"
+    volumes:
+      - kong_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "kong", "-d", "kong"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  kong-migration:
+    image: kong:3.6
+    command: kong migrations bootstrap
+    environment:
+      KONG_DATABASE: postgres
+      KONG_PG_HOST: kong-database
+      KONG_PG_USER: kong
+      KONG_PG_PASSWORD: kong_pass
+      KONG_PG_DATABASE: kong
+    depends_on:
+      kong-database:
+        condition: service_healthy
+    restart: "no"
+
+  kong:
+    image: kong:3.6
+    environment:
+      KONG_DATABASE: postgres
+      KONG_PG_HOST: kong-database
+      KONG_PG_USER: kong
+      KONG_PG_PASSWORD: kong_pass
+      KONG_PG_DATABASE: kong
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_LISTEN: 0.0.0.0:8001, 0.0.0.0:8444 ssl
+      KONG_PROXY_LISTEN: 0.0.0.0:8000, 0.0.0.0:8443 ssl
+    ports:
+      - "8080:8000"   # Kong Gateway (proxy)
+      - "8081:8001"   # Kong Admin API
+      - "8444:8444"   # Kong Admin SSL
+      - "8443:8443"   # Kong Proxy SSL
+    volumes:
+      - kong_logs:/tmp   # Logs Kong accessibles depuis l'hôte
+    depends_on:
+      kong-migration:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+  # Configuration automatique Kong
+  kong-setup:
+    image: curlimages/curl:latest
+    volumes:
+      - ./scripts/setup-kong.sh:/setup-kong.sh
+    depends_on:
+      - kong
+    command: >
+      sh -c "
+        apk add --no-cache jq bash &&
+        chmod +x /setup-kong.sh &&
+        /setup-kong.sh
+      "
+    restart: "no"
+
 volumes:
   pgdata:
   prometheus_data:
@@ -290,3 +406,5 @@ volumes:
   supply_chain_data:
   inventaire_data:
   ecommerce_data:
+  kong_data:
+  kong_logs:

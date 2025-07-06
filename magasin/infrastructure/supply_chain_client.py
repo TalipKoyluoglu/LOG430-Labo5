@@ -1,5 +1,5 @@
 """
-Client HTTP pour le Service Supply Chain (port 8004)
+Client HTTP pour le Service Supply Chain via Kong API Gateway
 Communication avec les endpoints DDD du service-supply-chain
 """
 import requests
@@ -8,7 +8,7 @@ from typing import Dict, List, Optional, Any
 
 logger = logging.getLogger(__name__)
 
-BASE_URL = "http://supply-chain-service:8000"
+BASE_URL = "http://log430-labo5-kong-1:8000/api/supply-chain"
 
 class SupplyChainClient:
     """
@@ -21,7 +21,8 @@ class SupplyChainClient:
         self.session = requests.Session()
         self.session.headers.update({
             'Content-Type': 'application/json',
-            'Accept': 'application/json'
+            'Accept': 'application/json',
+            'X-API-Key': 'magasin-secret-key-2025'  # Clé API Kong
         })
     
     def lister_demandes_en_attente(self) -> Dict[str, Any]:

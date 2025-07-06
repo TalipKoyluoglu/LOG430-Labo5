@@ -96,6 +96,7 @@ def uc2_reapprovisionner(request):
         produit_id = request.POST.get("produit_id")
         magasin_id = request.POST.get("magasin_id")
         quantite = int(request.POST.get("quantite", 0))
+        logger.info(f"DEMANDE REAPPRO: produit_id={produit_id}, magasin_id={magasin_id}, quantite={quantite}")
         
         # Validation des données
         if not all([produit_id, magasin_id, quantite > 0]):
@@ -112,12 +113,17 @@ def uc2_reapprovisionner(request):
             quantite=quantite
         )
         
-        if demande_result.get('success', False):
-            messages.success(request, f"Demande de réapprovisionnement créée avec succès (ID: {demande_result.get('demande_id', 'N/A')})")
+        logger.info(f"RÉPONSE CRÉATION DEMANDE: {demande_result}")
+        if demande_result.get('success', False) or demande_result.get('id') or demande_result.get('demande_id'):
+            demande_id = demande_result.get('id') or demande_result.get('demande_id', 'N/A')
+            messages.success(request, f"Demande de réapprovisionnement créée avec succès (ID: {demande_id})")
             logger.info(f"Demande de réapprovisionnement créée: produit={produit_id}, magasin={magasin_id}, quantité={quantite}")
         else:
             error_msg = demande_result.get('error', 'Erreur inconnue lors de la création')
-            messages.error(request, f"Échec de la création de la demande: {error_msg}")
+            if 'déjà en attente' in error_msg or 'déja en attente' in error_msg:
+                messages.info(request, "Une demande de réapprovisionnement pour ce produit et ce magasin est déjà en attente. Veuillez la traiter avant d'en créer une nouvelle.")
+            else:
+                messages.error(request, f"Échec de la création de la demande: {error_msg}")
             logger.warning(f"Échec création demande réapprovisionnement: {error_msg}")
             
         return redirect("gestion_stocks")

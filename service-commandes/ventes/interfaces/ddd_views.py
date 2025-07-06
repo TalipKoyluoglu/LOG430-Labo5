@@ -30,6 +30,9 @@ from ..infrastructure.django_magasin_repository import DjangoMagasinRepository
 from ..infrastructure.http_produit_service import HttpProduitService
 from ..infrastructure.http_stock_service import HttpStockService
 
+# Models
+from ..models import Magasin
+
 
 class DDDVenteViewSet(viewsets.GenericViewSet):
     """
@@ -513,5 +516,33 @@ def rapport_consolide(request):
     except Exception as e:
         return Response(
             {"error": f"Erreur lors de la génération du rapport: {str(e)}"},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+
+@api_view(['GET'])
+def lister_magasins(request):
+    """
+    Endpoint: GET /api/v1/magasins/
+    Retourne la liste des magasins avec UUID, nom, adresse.
+    """
+    try:
+        magasins = Magasin.objects.all()
+        magasins_data = [
+            {
+                "id": str(magasin.id),
+                "nom": magasin.nom,
+                "adresse": magasin.adresse
+            }
+            for magasin in magasins
+        ]
+        return Response({
+            "success": True,
+            "magasins": magasins_data,
+            "total": len(magasins_data)
+        }, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response(
+            {"success": False, "error": f"Erreur lors de la récupération des magasins: {str(e)}"},
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         ) 

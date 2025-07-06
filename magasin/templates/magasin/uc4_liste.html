@@ -3,13 +3,14 @@
 {% block content %}
 <h1>Liste des produits</h1>
 
+<a href="{% url 'ajouter_produit' %}" style="display: inline-block; margin-bottom: 20px; padding: 8px 16px; background-color: #007bff; color: white; border-radius: 4px; text-decoration: none;">Ajouter un produit</a>
+
 <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
   <thead>
     <tr style="background-color: #f2f2f2;">
       <th style="border: 1px solid #ccc; padding: 10px;">Nom</th>
       <th style="border: 1px solid #ccc; padding: 10px;">Prix ($)</th>
       <th style="border: 1px solid #ccc; padding: 10px;">Description</th>
-      <th style="border: 1px solid #ccc; padding: 10px;">Action</th>
     </tr>
   </thead>
   <tbody>
@@ -18,8 +19,6 @@
       <td style="border: 1px solid #ccc; padding: 10px;">{{ produit.nom }}</td>
       <td style="border: 1px solid #ccc; padding: 10px;">{{ produit.prix|floatformat:2 }}</td>
       <td style="border: 1px solid #ccc; padding: 10px;">{{ produit.description }}</td>
-      <td style="border: 1px solid #ccc; padding: 10px;">
-        <a href="{% url 'modifier_produit' produit.id %}"> Modifier</a>
       </td>
     </tr>
     {% endfor %}

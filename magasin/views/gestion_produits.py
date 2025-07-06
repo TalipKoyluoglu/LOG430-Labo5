@@ -98,9 +98,6 @@ def uc4_lister_produits(request):
         if produits:
             logger.info(f"Premier produit: {produits[0]}")
         
-        # Ajout d'un message pour confirmer l'appel de la vue
-        messages.info(request, f"DEBUG: vue uc4_lister_produits appelée, produits extraits: {len(produits)}")
-        
         # Statistiques pour l'affichage
         stats = {
             'total_produits': len(produits),
@@ -187,3 +184,44 @@ def rechercher_produits(request):
             "criteres": {},
             "error_message": "Erreur interne du serveur"
         })
+
+
+def uc4_ajouter_produit(request):
+    """
+    Ajoute un nouveau produit via l'API DDD du service-catalogue
+    """
+    try:
+        if request.method == "POST":
+            nom = request.POST.get("nom")
+            prix = request.POST.get("prix")
+            description = request.POST.get("description")
+            categorie = request.POST.get("categorie")
+            if not all([nom, prix, description, categorie]):
+                messages.error(request, "Tous les champs sont obligatoires")
+                return render(request, "magasin/uc4_ajoutProduit.html")
+            try:
+                prix_float = float(prix)
+                if prix_float <= 0:
+                    raise ValueError("Le prix doit être positif")
+            except ValueError:
+                messages.error(request, "Le prix doit être un nombre positif")
+                return render(request, "magasin/uc4_ajoutProduit.html")
+            # Appel à l'API DDD pour ajouter le produit
+            catalogue_client = CatalogueClient()
+            # LOG: afficher le payload envoyé
+            logger.error(f"Payload envoyé à ajouter_produit: nom={nom}, categorie={categorie}, prix={prix_float}, description={description}")
+            result = catalogue_client.ajouter_produit(nom, categorie, prix_float, description)
+            # LOG: afficher la réponse d'erreur si échec
+            if not result.get('success', False):
+                logger.error(f"Réponse erreur du service catalogue: {result}")
+            if result.get('success', False):
+                messages.success(request, "Produit ajouté avec succès")
+                return redirect("lister_produits")
+            else:
+                messages.error(request, f"Erreur lors de l'ajout du produit: {result.get('error', 'Erreur inconnue')}")
+                return render(request, "magasin/uc4_ajoutProduit.html")
+        return render(request, "magasin/uc4_ajoutProduit.html")
+    except Exception as e:
+        logger.error(f"Erreur lors de l'ajout du produit: {e}")
+        messages.error(request, "Erreur interne lors de l'ajout du produit")
+        return render(request, "magasin/uc4_ajoutProduit.html")

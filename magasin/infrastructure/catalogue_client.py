@@ -1,5 +1,5 @@
 """
-Client HTTP pour le Service Catalogue (port 8001)
+Client HTTP pour le Service Catalogue via Kong API Gateway
 Communication avec les endpoints DDD du service-catalogue
 """
 import requests
@@ -8,7 +8,7 @@ from typing import Dict, List, Optional, Any
 
 logger = logging.getLogger(__name__)
 
-BASE_URL = "http://catalogue-service:8000"
+BASE_URL = "http://log430-labo5-kong-1:8000/api/catalogue"
 
 class CatalogueClient:
     """
@@ -21,7 +21,8 @@ class CatalogueClient:
         self.session = requests.Session()
         self.session.headers.update({
             'Content-Type': 'application/json',
-            'Accept': 'application/json'
+            'Accept': 'application/json',
+            'X-API-Key': 'magasin-secret-key-2025'  # Clé API Kong
         })
     
     def health_check(self) -> Dict[str, Any]:

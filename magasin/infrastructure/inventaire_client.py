@@ -1,5 +1,5 @@
 """
-Client HTTP pour le Service Inventaire (port 8002)
+Client HTTP pour le Service Inventaire via Kong API Gateway
 Communication avec les endpoints DDD du service-inventaire
 """
 import requests
@@ -8,7 +8,7 @@ from typing import Dict, List, Optional, Any
 
 logger = logging.getLogger(__name__)
 
-BASE_URL = "http://inventaire-service:8000"
+BASE_URL = "http://log430-labo5-kong-1:8000/api/inventaire"
 
 class InventaireClient:
     """
@@ -21,7 +21,8 @@ class InventaireClient:
         self.session = requests.Session()
         self.session.headers.update({
             'Content-Type': 'application/json',
-            'Accept': 'application/json'
+            'Accept': 'application/json',
+            'X-API-Key': 'magasin-secret-key-2025'  # Clé API Kong
         })
     
     def health_check(self) -> Dict[str, Any]:
@@ -167,7 +168,7 @@ class InventaireClient:
     
     def creer_demande_reapprovisionnement(self, produit_id: str, magasin_id: str, quantite: int) -> Dict[str, Any]:
         """
-        POST /api/ddd/inventaire/demandes/creer/
+        POST /api/ddd/inventaire/demandes/
         Crée une nouvelle demande de réapprovisionnement
         """
         try:
@@ -178,14 +179,17 @@ class InventaireClient:
             }
             
             response = self.session.post(
-                f"{self.base_url}/api/ddd/inventaire/demandes/creer/",
+                f"{self.base_url}/api/ddd/inventaire/demandes/",
                 json=data
             )
             response.raise_for_status()
             return response.json()
             
         except requests.exceptions.RequestException as e:
-            logger.error(f"Erreur création demande: {e}")
+            if hasattr(e, 'response') and e.response is not None:
+                logger.error(f"Erreur création demande: {e} | Réponse: {e.response.text}")
+            else:
+                logger.error(f"Erreur création demande: {e}")
             return {"success": False, "error": str(e)}
     
     def lister_demandes_en_attente(self) -> Dict[str, Any]:

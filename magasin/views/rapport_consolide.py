@@ -105,13 +105,13 @@ def afficher_formulaire_vente(request):
             # Récupérer les produits en stock pour ce magasin
             inventaire_client = InventaireClient()
             stocks_data = inventaire_client.lister_stocks_locaux_magasin(magasin_id)
-            if stocks_data.get('success'):
-                for stock in stocks_data.get('stocks', []):
-                    produits.append({
-                        'id': stock.get('produit_id'),
-                        'nom': stock.get('nom_produit'),
-                    })
-                    quantites[stock.get('produit_id')] = stock.get('quantite', 0)
+            logger.info(f"STOCKS LOCAUX POUR {magasin_id}: {stocks_data}")
+            for stock in stocks_data.get('stocks', []):
+                produits.append({
+                    'id': stock.get('produit_id'),
+                    'nom': stock.get('nom_produit'),
+                })
+                quantites[stock.get('produit_id')] = stock.get('quantite', 0)
         # Si aucun magasin sélectionné, pas de produits
 
         # Récupérer aussi les rapports pour l'affichage (comme attendu par le template)
@@ -141,6 +141,16 @@ def afficher_formulaire_vente(request):
                         "performance": magasin_data.get('performance', 'N/A')
                     })
 
+        # Section informative : liste des stocks par magasin (pour affichage, toujours alimentée)
+        magasins_avec_stocks = []
+        for magasin in magasins:
+            stocks_data = InventaireClient().lister_stocks_locaux_magasin(magasin['id'])
+            produits_stock = stocks_data.get('stocks', [])
+            magasins_avec_stocks.append({
+                'nom': magasin['nom'],
+                'produits': produits_stock
+            })
+
         context = {
             "produits": produits,
             "magasins": magasins,
@@ -148,7 +158,9 @@ def afficher_formulaire_vente(request):
             "form_available": bool(produits and magasins),
             "magasin_id": magasin_id,
             "quantites": quantites,
+            "magasins_avec_stocks": magasins_avec_stocks,
         }
+        logger.info(f"MAGASINS POUR TEMPLATE: {magasins}")
         logger.info(f"DEBUG VENTE: magasin_id={magasin_id}, produits={produits}, quantites={quantites}")
         return render(request, "magasin/effectuerVente.html", context)
     except Exception as e:
@@ -172,11 +184,14 @@ def enregistrer_vente(request):
         magasin_id = request.POST.get("magasin_id")
         produit_id = request.POST.get("produit_id") 
         quantite = int(request.POST.get("quantite", 0))
-        client_id = request.POST.get("client_id")  # Nouveau: obligatoire pour le service DDD
+        client_id = request.POST.get("client_id")  # Optionnel désormais
+        # Si aucun client_id n'est fourni, utiliser un UUID bidon
+        if not client_id:
+            client_id = "00000000-0000-0000-0000-000000000000"
         
-        # Validation des données
-        if not all([magasin_id, produit_id, quantite > 0, client_id]):
-            messages.error(request, "Tous les champs sont obligatoires (magasin, produit, quantité, client)")
+        # Validation des données (client_id non requis)
+        if not all([magasin_id, produit_id, quantite > 0]):
+            messages.error(request, "Tous les champs sont obligatoires (magasin, produit, quantité)")
             return redirect("ajouter_vente")
         
         # Initialisation du client HTTP
@@ -187,7 +202,7 @@ def enregistrer_vente(request):
             magasin_id=magasin_id,
             produit_id=produit_id,
             quantite=quantite,
-            client_id=client_id
+            client_id=client_id  # Peut être None ou vide
         )
         
         if vente_result.get('success', False):

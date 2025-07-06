@@ -30,4 +30,24 @@ scrape_configs:
       - source_labels: [__address__]
         target_label: service
         regex: '(.*)'
-        replacement: 'django-app' 
+        replacement: 'django-app'
+
+  # Kong API Gateway
+  - job_name: 'kong'
+    static_configs:
+      - targets: ['kong:8001']
+    metrics_path: '/metrics'
+    scrape_interval: 5s
+    scrape_timeout: 3s
+    
+    # Relabels pour Kong
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        regex: '(.*)'
+        replacement: 'kong-gateway-${1}'
+      
+      - source_labels: [__address__]
+        target_label: service
+        regex: '(.*)'
+        replacement: 'kong-gateway' 

@@ -1,5 +1,5 @@
 """
-Client HTTP pour le Service Commandes (port 8003)
+Client HTTP pour le Service Commandes via Kong API Gateway
 Communication avec les endpoints DDD du service-commandes
 """
 import requests
@@ -9,7 +9,7 @@ import uuid
 
 logger = logging.getLogger(__name__)
 
-BASE_URL = "http://commandes-service:8000"
+BASE_URL = "http://log430-labo5-kong-1:8000/api/commandes"
 
 class CommandesClient:
     """
@@ -22,7 +22,8 @@ class CommandesClient:
         self.session = requests.Session()
         self.session.headers.update({
             'Content-Type': 'application/json',
-            'Accept': 'application/json'
+            'Accept': 'application/json',
+            'X-API-Key': 'magasin-secret-key-2025'  # Clé API Kong
         })
     
     def enregistrer_vente(self, 
@@ -244,15 +245,13 @@ class CommandesClient:
     
     def lister_magasins(self) -> Dict[str, Any]:
         """
-        Retourne la liste des magasins (statique pour démo)
+        GET /api/v1/magasins/
+        Récupère la liste des magasins avec leurs vrais UUIDs depuis le service-commandes
         """
         try:
-            # À remplacer par un appel API réel si disponible
-            magasins = [
-                {"id": 1, "nom": "Magasin Central"},
-                {"id": 2, "nom": "Magasin Nord"}
-            ]
-            return {"success": True, "magasins": magasins}
-        except Exception as e:
+            response = self.session.get(f"{self.base_url}/api/v1/magasins/")
+            response.raise_for_status()
+            return response.json()
+        except requests.exceptions.RequestException as e:
             logger.error(f"Erreur lors de la récupération des magasins: {e}")
             return {"success": False, "magasins": [], "error": str(e)} 

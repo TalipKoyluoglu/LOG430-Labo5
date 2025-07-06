@@ -12,8 +12,10 @@
     <h3>Produits vendus :</h3>
     {% if rapport.produits_vendus %}
       <ul>
-        {% for produit, quantite in rapport.produits_vendus.items %}
-          <li>{{ produit }} : {{ quantite }}</li>
+        {% for produit in rapport.produits_vendus %}
+          <li>
+            {{ produit.nom }} : {{ produit.quantite_totale }} (CA: {{ produit.chiffre_affaires }} $)
+          </li>
         {% endfor %}
       </ul>
     {% else %}

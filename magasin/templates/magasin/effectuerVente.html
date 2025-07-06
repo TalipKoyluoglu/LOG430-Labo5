@@ -3,7 +3,7 @@
 {% block title %}UC1 - Rapport Consolidé des Ventes{% endblock %}
 
 {% block content %}
-  <h1>Rapport Consolidé des Ventes</h1>
+  <h1>Ajout de vente</h1>
 
  {% if messages %}
   <div style="margin-bottom: 15px;">
@@ -69,33 +69,21 @@
     <p style="color: #888;">Veuillez d'abord sélectionner un magasin pour voir les produits disponibles.</p>
   {% endif %}
 
-  <pre>magasin_id={{ magasin_id }} produits={{ produits|safe }}</pre>
-
-  {% for rapport in rapports %}
-    <h2>Magasin : {{ rapport.magasin }}</h2>
-    <p><strong>Total des ventes :</strong> {{ rapport.total }} $</p>
-
-    <h3>Produits vendus :</h3>
-    {% if rapport.produits_vendus %}
-      <ul>
-        {% for produit, quantite in rapport.produits_vendus.items %}
-          <li>{{ produit }} : {{ quantite }}</li>
-        {% endfor %}
-      </ul>
-    {% else %}
-      <p><em>Aucun produit vendu</em></p>
-    {% endif %}
-
-    <h3>Stock local :</h3>
-    {% if rapport.stock_local %}
-      <ul>
-        {% for produit, quantite in rapport.stock_local.items %}
-          <li>{{ produit }} : {{ quantite }}</li>
-        {% endfor %}
-      </ul>
-    {% else %}
-      <p><em>Aucun stock local</em></p>
-    {% endif %}
-    <hr>
-  {% endfor %}
+  <h2>Stocks locaux par magasin</h2>
+  <div style="margin-top: 20px;">
+    {% for magasin in magasins_avec_stocks %}
+      <div style="margin-bottom: 25px;">
+        <h3 style="margin-bottom: 8px;">{{ magasin.nom }}</h3>
+        {% if magasin.produits %}
+          <ul>
+            {% for produit in magasin.produits %}
+              <li>{{ produit.nom_produit }} : {{ produit.quantite }} en stock</li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p><em>Aucun produit en stock</em></p>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
 {% endblock %}

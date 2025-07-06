@@ -4,7 +4,7 @@ Nouvelles routes basées sur les fonctionnalités métier plutôt que sur les en
 """
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .interfaces.ddd_views import DDDVenteViewSet, DDDIndicateursAPI, DDDRapportConsolideAPI
+from .interfaces.ddd_views import DDDVenteViewSet, DDDIndicateursAPI, DDDRapportConsolideAPI, lister_magasins
 
 # Router pour les ViewSets DDD
 router = DefaultRouter()
@@ -17,6 +17,8 @@ urlpatterns = [
     # Endpoints spécifiques DDD
     path('indicateurs/', DDDIndicateursAPI.as_view(), name='indicateurs-ddd'),
     path('rapport-consolide/', DDDRapportConsolideAPI.as_view(), name='rapport-consolide-ddd'),
+    # Endpoint pour lister les magasins
+    path('magasins/', lister_magasins, name='lister-magasins-ddd'),
 ]
 
 """

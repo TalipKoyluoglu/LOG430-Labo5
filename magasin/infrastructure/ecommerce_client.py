@@ -1,5 +1,5 @@
 """
-Client HTTP pour le Service E-commerce (port 8005)
+Client HTTP pour le Service E-commerce via Kong API Gateway
 Communication avec les endpoints DDD du service-ecommerce
 """
 import requests
@@ -8,7 +8,7 @@ from typing import Dict, List, Optional, Any
 
 logger = logging.getLogger(__name__)
 
-BASE_URL = "http://ecommerce-service:8005"
+BASE_URL = "http://log430-labo5-kong-1:8000/api/ecommerce"
 
 class EcommerceClient:
     """
@@ -21,7 +21,8 @@ class EcommerceClient:
         self.session = requests.Session()
         self.session.headers.update({
             'Content-Type': 'application/json',
-            'Accept': 'application/json'
+            'Accept': 'application/json',
+            'X-API-Key': 'magasin-secret-key-2025'  # Clé API Kong
         })
     
     # === GESTION DES CLIENTS ===
