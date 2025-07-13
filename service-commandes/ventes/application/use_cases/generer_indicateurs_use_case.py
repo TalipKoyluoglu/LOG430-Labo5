@@ -54,8 +54,8 @@ class GenererIndicateursUseCase:
         indicateurs = []
         
         for magasin in magasins:
-            # 3. Calcul du chiffre d'affaires (métier: seulement ventes actives)
-            chiffre_affaires = self._calculer_chiffre_affaires(magasin)
+            # 3. Calcul du chiffre d'affaires (ventes actives sur la même période que tendances)
+            chiffre_affaires = self._calculer_chiffre_affaires(magasin, debut_periode, fin_periode)
             
             # 4. Analyse du stock (métier: ruptures et surstock)
             ruptures, surstock = self._analyser_stock(magasin)
@@ -74,17 +74,16 @@ class GenererIndicateursUseCase:
         
         return indicateurs
     
-    def _calculer_chiffre_affaires(self, magasin: Magasin) -> float:
+    def _calculer_chiffre_affaires(self, magasin: Magasin, debut_periode: datetime, fin_periode: datetime) -> float:
         """
-        Calcule le chiffre d'affaires total du magasin
-        Règle métier: Seules les ventes actives comptent
+        Calcule le chiffre d'affaires du magasin sur une période (ventes actives uniquement)
         """
-        ventes_actives = self._vente_repo.get_ventes_actives_by_magasin(magasin.id)
-        
+        ventes_periode = self._vente_repo.get_ventes_actives_by_magasin_and_period(
+            magasin.id, debut_periode, fin_periode
+        )
         total = 0.0
-        for vente in ventes_actives:
-            total += float(vente.calculer_total())  # Logique métier dans l'entité
-        
+        for vente in ventes_periode:
+            total += float(vente.calculer_total())
         return total
     
     def _analyser_stock(self, magasin: Magasin) -> tuple[int, int]:

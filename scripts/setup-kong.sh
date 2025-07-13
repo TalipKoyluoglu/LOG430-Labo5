@@ -296,6 +296,19 @@ create_service_if_not_exists "commandes-service" "http://commandes-service:8000"
 create_service_if_not_exists "supply-chain-service" "http://supply-chain-service:8000"
 create_service_if_not_exists "ecommerce-service" "http://ecommerce-service:8005"
 
+# === Configuration CORS sur chaque service ===
+echo "🔒 Configuration CORS sur les services..."
+for service in catalogue-service inventaire-service commandes-service supply-chain-service ecommerce-service; do
+  echo "   ➕ Ajout du plugin CORS sur $service"
+  curl -s -X POST http://localhost:8081/services/$service/plugins \
+    --data "name=cors" \
+    --data "config.origins=*" \
+    --data "config.methods=GET,POST,PUT,DELETE,OPTIONS" \
+    --data "config.headers=Accept,Authorization,Content-Type,X-API-Key" \
+    --data "config.credentials=true" > /dev/null
+
+done
+
 echo "🛤️  Configuration des routes..."
 
 # Créer les routes

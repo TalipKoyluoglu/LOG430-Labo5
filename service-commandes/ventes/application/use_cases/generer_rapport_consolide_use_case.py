@@ -46,14 +46,18 @@ class GenererRapportConsolideUseCase:
         # Récupération de tous les magasins
         magasins = self._magasin_repo.get_all()
         
+        # Définir la période d'analyse (7 derniers jours)
+        fin_periode = datetime.now()
+        debut_periode = fin_periode - timedelta(days=7)
+        
         rapports = []
         
         for magasin in magasins:
-            # Calcul du total (chiffre d'affaires)
-            total = self._calculer_chiffre_affaires(magasin)
+            # Calcul du total (chiffre d'affaires sur la même période que produits_vendus)
+            total = self._calculer_chiffre_affaires(magasin, debut_periode, fin_periode)
             
             # Liste des produits vendus
-            produits_vendus = self._calculer_produits_vendus(magasin)
+            produits_vendus = self._calculer_produits_vendus(magasin, debut_periode, fin_periode)
             
             # Informations stock local
             stock_local = self._calculer_stock_local(magasin)
@@ -67,34 +71,29 @@ class GenererRapportConsolideUseCase:
         
         return rapports
     
-    def _calculer_chiffre_affaires(self, magasin: Magasin) -> Decimal:
-        """Calcule le CA d'un magasin (ventes actives uniquement)"""
-        ventes_actives = self._vente_repo.get_ventes_actives_by_magasin(magasin.id)
-        total = sum(vente.calculer_total() for vente in ventes_actives)
-        return Decimal(str(total)) if total else Decimal('0')
-    
-    def _calculer_produits_vendus(self, magasin: Magasin) -> List[Dict[str, Any]]:
-        """Calcule la liste des produits vendus par ce magasin"""
-        fin_periode = datetime.now()
-        debut_periode = fin_periode - timedelta(days=7)
-        
+    def _calculer_chiffre_affaires(self, magasin: Magasin, debut_periode: datetime, fin_periode: datetime) -> Decimal:
+        """Calcule le CA d'un magasin sur une période (ventes actives uniquement)"""
         ventes_periode = self._vente_repo.get_ventes_actives_by_magasin_and_period(
             magasin.id, debut_periode, fin_periode
         )
-        
+        total = sum(vente.calculer_total() for vente in ventes_periode)
+        return Decimal(str(total)) if total else Decimal('0')
+    
+    def _calculer_produits_vendus(self, magasin: Magasin, debut_periode: datetime, fin_periode: datetime) -> List[Dict[str, Any]]:
+        """Calcule la liste des produits vendus par ce magasin sur une période"""
+        ventes_periode = self._vente_repo.get_ventes_actives_by_magasin_and_period(
+            magasin.id, debut_periode, fin_periode
+        )
         produits_vendus = {}
-        
         for vente in ventes_periode:
             for ligne in vente.lignes:
                 produit_id = str(ligne.produit_id)
-                
                 # Récupération du nom du produit
                 try:
                     produit_info = self._produit_service.get_produit_details(ligne.produit_id)
                     nom_produit = produit_info.nom if produit_info else f"Produit {produit_id}"
                 except:
                     nom_produit = f"Produit {produit_id}"
-                
                 if produit_id not in produits_vendus:
                     produits_vendus[produit_id] = {
                         "produit_id": produit_id,
@@ -102,10 +101,8 @@ class GenererRapportConsolideUseCase:
                         "quantite_totale": 0,
                         "chiffre_affaires": 0.0
                     }
-                
                 produits_vendus[produit_id]["quantite_totale"] += ligne.quantite
                 produits_vendus[produit_id]["chiffre_affaires"] += float(ligne.sous_total)
-        
         return list(produits_vendus.values())
     
     def _calculer_stock_local(self, magasin: Magasin) -> Dict[str, Any]:
