@@ -102,6 +102,10 @@ services:
     build: ./service-catalogue
     ports:
       - "8001:8000"
+    networks:
+      default:
+        aliases:
+          - catalogue-service
     environment:
       POSTGRES_DB: produits_db
       POSTGRES_USER: produits_user
@@ -181,6 +185,8 @@ services:
     build: ./service-inventaire
     ports:
       - "8002:8000"
+    networks:
+      - default
     environment:
       POSTGRES_DB: inventaire_db
       POSTGRES_USER: inventaire_user
