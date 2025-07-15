@@ -7,3 +7,6 @@ k6.exe
 bin/
 *.exe
 k6.zip
+
+# GitHub Actions runner (should be installed outside the repository)
+actions-runner/
