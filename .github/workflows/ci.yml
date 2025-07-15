@@ -278,8 +278,4 @@ jobs:
             # Wait for services
             sleep 60
 
-            # Configure Kong Gateway
-            chmod +x ./scripts/setup-kong.sh
-            ./scripts/setup-kong.sh
-
             echo "Microservices deployment completed"
