@@ -1,100 +1,204 @@
-# LOG430 – Laboratoire 4 : Observabilité, Scalabilité et Optimisation
+# LOG430 – Laboratoire 5 : Architecture Microservices DDD
 
 ## Présentation
-Ce laboratoire vise à transformer une application multi-magasins Django en un système **observable, scalable et robuste**. L'objectif est d'instrumenter l'application, d'identifier les goulets d'étranglement sous charge, puis d'optimiser l'architecture avec un load balancer (NGINX) et un cache Redis.
+Ce laboratoire transforme une application multi-magasins monolithique en une architecture microservices basée sur les principes du Domain-Driven Design (DDD). Le système distribué met en œuvre 5 microservices autonomes avec des bounded contexts distincts, orchestrés par une API Gateway Kong et supportés par une infrastructure complète d'observabilité.
 
 ## Architecture globale
-- **Backend** : Django 4.x + Django REST Framework
-- **Base de données** : PostgreSQL
-- **Load Balancer** : NGINX (scalabilité horizontale)
-- **Cache** : Redis (backend Django)
-- **Observabilité** : Prometheus (scraping métriques), Grafana (visualisation), logging structuré JSON
-- **Tests de charge** : k6 (scripts JS)
 
-## Démarche et étapes réalisées
-1. **Observabilité & base de référence**
-   - Intégration Prometheus, Grafana, logging JSON, métriques personnalisées
-   - Tests de charge avec k6, analyse des goulets d'étranglement
-2. **Scalabilité horizontale**
-   - Ajout d'un load balancer NGINX, scaling à 3 instances Django
-   - Tests de charge "après" load balancer, analyse comparative
-3. **Cache Redis**
-   - Ajout du service Redis, configuration du cache dans Django
-   - Mise en cache des endpoints GET critiques (rapports, stock, indicateurs)
-   - Nouveau test de charge, analyse comparative avant/après cache
+### Microservices DDD
+- **service-catalogue** : Gestion des produits et du catalogue (3 instances load-balancées)
+- **service-inventaire** : Gestion des stocks et demandes de réapprovisionnement  
+- **service-commandes** : Gestion des ventes et rapports commerciaux
+- **service-supply-chain** : Validation des processus de réapprovisionnement
+- **service-ecommerce** : Interface e-commerce et processus de checkout
 
-## Résultats clés
-| Test                        | Latence p95 | Taux d'erreur | Débit max (req/s) |
-|-----------------------------|-------------|---------------|-------------------|
-| Avant LB, 1 instance        | 11s         | 19.7%         | 30                |
-| Après LB, 3 instances       | 6.7s        | 19%           | 37                |
-| Après cache Redis           | 4.99s       | 10.95%        | 100 (moy) / 1 000+ (pic) |
+### Infrastructure
+- **API Gateway** : Kong (routage, load balancing, authentification par clé API)
+- **Frontend** : Django avec clients HTTP dédiés pour chaque microservice
+- **Bases de données** : 7 instances PostgreSQL dédiées par bounded context
+- **Cache** : Redis pour optimisation des performances
+- **Observabilité** : Prometheus (métriques), Grafana (dashboards), logging distribué
 
-- **Latence p95** divisée par 2 à 3 selon les endpoints
-- **Débit maximal** multiplié par 3 à 30 (pic > 1 000 req/s observé)
-- **Taux d'erreur** divisé par deux après cache Redis
-- **Stabilité** : plus d'effondrement sous forte charge, saturation absorbée
+## Bounded Contexts et Domaines
 
-Pour l'analyse détaillée, voir [`docs/LABO4_OBSERVABILITE.md`](docs/LABO4_OBSERVABILITE.md).
+### 1. Catalogue (service-catalogue)
+- **Entités** : Produit, Catégorie, Fournisseur
+- **Ports** : 8001, 8006, 8007 (load balancing)
+- **Responsabilités** : CRUD produits, gestion catalogue, recherche
+
+### 2. Inventaire (service-inventaire) 
+- **Entités** : Stock, DemandeReappro, Mouvement
+- **Port** : 8002
+- **Responsabilités** : Suivi stocks, alertes, demandes réapprovisionnement
+
+### 3. Commandes (service-commandes)
+- **Entités** : Vente, LigneVente, Rapport
+- **Port** : 8003  
+- **Responsabilités** : Enregistrement ventes, rapports commerciaux
+
+### 4. Supply Chain (service-supply-chain)
+- **Entités** : ValidationReappro, ProcessusValidation
+- **Port** : 8004
+- **Responsabilités** : Workflow validation réapprovisionnement (3 étapes)
+
+### 5. E-commerce (service-ecommerce)
+- **Entités** : Panier, Commande, Paiement
+- **Port** : 8005
+- **Responsabilités** : Processus checkout e-commerce (4 phases)
+
+## Workflows Inter-Services
+
+### 1. Enregistrement de Vente
+```
+Employé → Frontend Django → CommandesClient → Kong → service-commandes → service-inventaire
+```
+Communication synchrone HTTP pour mise à jour immédiate des stocks.
+
+### 2. Validation Réapprovisionnement  
+```
+Manager → Frontend → SupplyChainClient → Kong → service-supply-chain
+```
+Workflow atomique en 3 étapes : validation produit, stock, fournisseur.
+
+### 3. Checkout E-commerce
+```
+Client → Frontend → EcommerceClient → service-ecommerce → service-catalogue + service-commandes
+```
+Processus en 4 phases : validation panier, réservation stock, paiement, confirmation.
+
+## Résultats de Performance
+
+| Métrique                    | Lab 4 (Monolithe) | Lab 5 (Microservices) | Amélioration |
+|-----------------------------|--------------------|-----------------------|--------------|
+| Latence moyenne             | 70.16ms            | 18.26ms               | -74%         |
+| Latence p95                 | 4.99s              | 45ms                  | -99%         |
+| Taux d'erreur               | 10.95%             | 0%                    | -100%        |
+| Débit maximal               | 100 req/s          | 500+ req/s            | +400%        |
+| Temps de réponse stable     | Non                | Oui                   | Stable       |
 
 ## Utilisation rapide
+
 ### Prérequis
 - Docker et Docker Compose installés
-- Ports 80, 5432, 6379, 9090, 3000 disponibles
+- Ports 8001-8007, 8080-8081, 5432, 6379, 9090, 3000 disponibles
 
-### Lancement de l'application et de l'observabilité
+### Lancement de l'architecture complète
 ```bash
-git clone https://github.com/TalipKoyluoglu/LOG430-LabO4
-cd LOG430-Labo4
-docker-compose up --build --scale app=3 -d
+git clone https://github.com/TalipKoyluoglu/LOG430-Labo5
+cd LOG430-Labo5
+docker-compose up --build -d
 ```
 
-### Accès aux outils
-- **API Documentation (Swagger)** : http://localhost:8000/swagger/
-- **Interface Web** : http://localhost:8000/
-- **Prometheus** : http://localhost:9090
-- **Grafana** : http://localhost:3000 (admin/admin)
+### Accès aux services
+- **Frontend Django** : http://localhost:8000/
+- **Kong API Gateway** : http://localhost:8080/ (proxy), http://localhost:8081/ (admin)
+- **Service Catalogue** : http://localhost:8001/, 8006/, 8007/ (load-balanced)
+- **Service Inventaire** : http://localhost:8002/
+- **Service Commandes** : http://localhost:8003/
+- **Service Supply Chain** : http://localhost:8004/
+- **Service E-commerce** : http://localhost:8005/
+- **Prometheus** : http://localhost:9090/
+- **Grafana** : http://localhost:3000/ (admin/admin)
 
-### Lancer un test de charge
+### Tests des workflows
 ```bash
-k6 run scripts/stress_test.js
+# Tests d'intégration Kong Gateway
+python -m pytest tests/integration/test_kong_gateway.py -v
+
+# Tests E2E orchestration frontend  
+python -m pytest tests/e2e/test_frontend_orchestration.py -v
+
+# Tests de charge
+k6 run scripts/load_test_microservices.js
 ```
 
 ## Structure du projet
 ```plaintext
-LOG430-Labo4/
-├── config/           # Config Django, Prometheus, Grafana, NGINX
-├── magasin/          # App principale (API, services, modèles, vues)
-├── scripts/          # Scripts de test de charge (k6)
-├── results/          # Résultats des tests (JSON, CSV)
-├── docs/             # Documentation, captures d'écran
-├── docker-compose.yml
-├── requirements.txt
+LOG430-Labo5/
+├── services/
+│   ├── service-catalogue/    # Microservice catalogue (DDD)
+│   ├── service-inventaire/   # Microservice inventaire
+│   ├── service-commandes/    # Microservice commandes
+│   ├── service-supply-chain/ # Microservice supply chain
+│   └── service-ecommerce/    # Microservice e-commerce
+├── frontend-magasin/         # Django frontend avec clients HTTP
+├── kong/                     # Configuration Kong Gateway
+├── tests/
+│   ├── integration/          # Tests Kong, workflows inter-services
+│   └── e2e/                  # Tests orchestration frontend
+├── docs/
+│   ├── UML/                  # Diagrammes architecture (PlantUML)
+│   └── arc42.md              # Documentation architecture Arc42
+├── scripts/                  # Scripts de test de charge k6
+├── docker-compose.yml        # Orchestration complète
 └── README.md
 ```
 
-## Fonctionnalités principales
-- **API REST complète** (gestion produits, stocks, ventes, réapprovisionnement)
-- **Interface Web Django** (rapports, stock, dashboard, produits)
-- **Observabilité avancée** (métriques Prometheus, logs JSON, dashboards Grafana)
-- **Scalabilité horizontale** (NGINX + multi-instances)
-- **Cache Redis** (optimisation des endpoints GET critiques)
-- **Tests de charge automatisés** (k6)
+## Communication Inter-Services
 
-## Tests et développement
-- **Tests unitaires, intégration, API** :
-  ```bash
-  docker-compose run --rm app pytest
-  ```
-- **Ajout d'un nouvel endpoint** :
-  1. Service dans `magasin/services/`
-  2. Contrôleur dans `magasin/api/controllers/`
-  3. Sérialiseur dans `magasin/api/serializers/`
-  4. Route dans `magasin/api/urls.py`
-  5. Tests dans `magasin/api/tests/`
+### Protocole HTTP Synchrone
+- **Gateway** : Kong avec routage par préfixes (`/catalogue/`, `/inventaire/`, etc.)
+- **Authentification** : Clés API Kong pour sécurisation
+- **Load Balancing** : Round-robin automatique sur service-catalogue
+- **Format** : JSON REST standardisé entre tous les services
 
-## Pipeline CI
-- Exemple de pipeline : https://github.com/TalipKoyluoglu/LOG430-Labo4/actions/runs/15835861765
+### Clients HTTP Dédiés (Frontend)
+```python
+# Exemple d'utilisation
+catalogue_client = CatalogueClient()
+produits = catalogue_client.get_produits()
+
+commandes_client = CommandesClient()  
+commandes_client.enregistrer_vente(vente_data)
+```
+
+## Observabilité Distribuée
+
+### Métriques Prometheus
+- Latence par microservice et endpoint
+- Débit de requêtes inter-services  
+- Statuts de santé des services
+- Métriques métier (stocks, ventes, validations)
+
+### Dashboards Grafana
+- Vue d'ensemble architecture microservices
+- Performance par bounded context
+- Workflows inter-services en temps réel
+- Alertes sur indisponibilité services
+
+### Logging Distribué
+- Correlation IDs pour traçage inter-services
+- Logs JSON structurés par service
+- Centralisation pour debugging workflows
+
+## Tests et Qualité
+
+### Tests d'Intégration
+- Communication Kong Gateway ↔ Microservices
+- Workflows inter-services complets
+- Load balancing et failover
+
+### Tests End-to-End  
+- Orchestration frontend Django
+- Scenarios métier complets
+- Validation bounded contexts
+
+### Tests de Charge
+- Performance sous charge distribué
+- Scalabilité horizontale
+- Resilience aux pannes
+
+## Pipeline CI/CD
+Configuration GitHub Actions pour :
+- Build et tests de tous les microservices
+- Tests d'intégration Kong Gateway  
+- Tests E2E orchestration frontend
+- Déploiement containerisé coordonné
+
+## Documentation Architecture
+- **Arc42** : [`docs/arc42.md`](docs/arc42.md) - Architecture complète
+- **UML** : [`docs/UML/`](docs/UML/) - Diagrammes PlantUML (déploiement, logique, cas d'utilisation)
+- **API** : Documentation Swagger par microservice
 
 ## Auteur
-Projet réalisé par Talip Koyluoglu.
+Projet réalisé par Talip Koyluoglu dans le cadre du cours LOG430.
