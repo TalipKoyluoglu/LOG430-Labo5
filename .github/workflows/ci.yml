@@ -245,7 +245,7 @@ jobs:
 
     steps:
       - name: SSH & deploy to VM
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v1.1.0
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
