@@ -254,11 +254,11 @@ jobs:
           script: |
             set -e
 
-            # Clone or update repository
-            if [ ! -d ~/log430-labo5-microservices ]; then
-              git clone https://github.com/TalipKoyluoglu/LOG430-Labo5 ~/log430-labo5-microservices
+            # Clone or update repository in separate deployment directory
+            if [ ! -d ~/log430-labo5-deployment ]; then
+              git clone https://github.com/TalipKoyluoglu/LOG430-Labo5 ~/log430-labo5-deployment
             fi
-            cd ~/log430-labo5-microservices
+            cd ~/log430-labo5-deployment
             git fetch --all
             git reset --hard origin/main
 
