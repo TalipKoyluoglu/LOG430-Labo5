@@ -1,1 +1,1 @@
-# Infrastructure Layer - Implémentations concrètes 
+# Infrastructure Layer - Implémentations concrètes

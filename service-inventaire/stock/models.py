@@ -3,6 +3,7 @@ from django.db import models
 
 # Create your models here.
 
+
 class StockCentral(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     produit_id = models.UUIDField()
@@ -12,6 +13,7 @@ class StockCentral(models.Model):
 
     def __str__(self):
         return f"StockCentral {self.produit_id} - {self.quantite}"
+
 
 class StockLocal(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -23,6 +25,7 @@ class StockLocal(models.Model):
 
     def __str__(self):
         return f"StockLocal {self.produit_id} - {self.magasin_id} - {self.quantite}"
+
 
 class DemandeReapprovisionnement(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

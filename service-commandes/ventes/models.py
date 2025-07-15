@@ -3,22 +3,23 @@ from django.db import models
 
 # Create your models here.
 
+
 class Magasin(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     nom = models.CharField(max_length=100)
     adresse = models.TextField()
-    
+
     def __str__(self):
         return self.nom
 
 
 class Vente(models.Model):
     STATUT_CHOICES = [
-        ('active', 'Active'),
-        ('annulee', 'Annulée'),
-        ('remboursee', 'Remboursée'),
+        ("active", "Active"),
+        ("annulee", "Annulée"),
+        ("remboursee", "Remboursée"),
     ]
-    
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     magasin = models.ForeignKey(
         Magasin, on_delete=models.CASCADE, related_name="ventes"
@@ -26,7 +27,7 @@ class Vente(models.Model):
     date_vente = models.DateTimeField(auto_now_add=True)
     total = models.DecimalField(max_digits=10, decimal_places=2)
     client_id = models.UUIDField(null=True, blank=True)  # Référence au service client
-    statut = models.CharField(max_length=20, choices=STATUT_CHOICES, default='active')
+    statut = models.CharField(max_length=20, choices=STATUT_CHOICES, default="active")
     date_annulation = models.DateTimeField(null=True, blank=True)
     motif_annulation = models.TextField(null=True, blank=True)
 

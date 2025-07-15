@@ -21,12 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-commandes-service-key-2024'
+SECRET_KEY = "django-insecure-commandes-service-key-2024"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -82,11 +82,11 @@ WSGI_APPLICATION = "config.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get('POSTGRES_DB', 'commandes_db'),
-        "USER": os.environ.get('POSTGRES_USER', 'commandes_user'),
-        "PASSWORD": os.environ.get('POSTGRES_PASSWORD', 'commandes_pass'),
-        "HOST": os.environ.get('POSTGRES_HOST', 'localhost'),
-        "PORT": os.environ.get('POSTGRES_PORT', '5432'),
+        "NAME": os.environ.get("POSTGRES_DB", "commandes_db"),
+        "USER": os.environ.get("POSTGRES_USER", "commandes_user"),
+        "PASSWORD": os.environ.get("POSTGRES_PASSWORD", "commandes_pass"),
+        "HOST": os.environ.get("POSTGRES_HOST", "localhost"),
+        "PORT": os.environ.get("POSTGRES_PORT", "5432"),
     }
 }
 
@@ -133,43 +133,35 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10,
-    'DEFAULT_RENDERER_CLASSES': [
-        'rest_framework.renderers.JSONRenderer',
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 10,
+    "DEFAULT_RENDERER_CLASSES": [
+        "rest_framework.renderers.JSONRenderer",
     ],
-    'DEFAULT_PARSER_CLASSES': [
-        'rest_framework.parsers.JSONParser',
+    "DEFAULT_PARSER_CLASSES": [
+        "rest_framework.parsers.JSONParser",
     ],
 }
 
 CORS_ALLOW_ALL_ORIGINS = True
 
 # Configuration des services externes
-PRODUCT_SERVICE_URL = os.environ.get('PRODUCT_SERVICE_URL', 'http://catalogue-service:8000')
-STOCK_SERVICE_URL = os.environ.get('STOCK_SERVICE_URL', 'http://stock-service:8000')
+PRODUCT_SERVICE_URL = os.environ.get(
+    "PRODUCT_SERVICE_URL", "http://catalogue-service:8000"
+)
+STOCK_SERVICE_URL = os.environ.get("STOCK_SERVICE_URL", "http://stock-service:8000")
 
 SWAGGER_SETTINGS = {
-    'SECURITY_DEFINITIONS': {
-        'Bearer': {
-            'type': 'apiKey',
-            'name': 'Authorization',
-            'in': 'header'
-        }
+    "SECURITY_DEFINITIONS": {
+        "Bearer": {"type": "apiKey", "name": "Authorization", "in": "header"}
     },
-    'USE_SESSION_AUTH': False,
-    'JSON_EDITOR': True,
-    'SUPPORTED_SUBMIT_METHODS': [
-        'get',
-        'post',
-        'put',
-        'delete',
-        'patch'
-    ],
-    'OPERATIONS_SORTER': 'alpha',
-    'TAGS_SORTER': 'alpha',
-    'DOC_EXPANSION': 'none',
-    'DEEP_LINKING': True,
-    'SHOW_EXTENSIONS': True,
-    'DEFAULT_MODEL_RENDERING': 'example'
+    "USE_SESSION_AUTH": False,
+    "JSON_EDITOR": True,
+    "SUPPORTED_SUBMIT_METHODS": ["get", "post", "put", "delete", "patch"],
+    "OPERATIONS_SORTER": "alpha",
+    "TAGS_SORTER": "alpha",
+    "DOC_EXPANSION": "none",
+    "DEEP_LINKING": True,
+    "SHOW_EXTENSIONS": True,
+    "DEFAULT_MODEL_RENDERING": "example",
 }

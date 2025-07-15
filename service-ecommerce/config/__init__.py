@@ -1,1 +1,1 @@
-# Configuration du service e-commerce DDD 
+# Configuration du service e-commerce DDD

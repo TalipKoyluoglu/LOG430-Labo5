@@ -1,1 +1,1 @@
-# Services d'infrastructure - Communication avec les services externes 
+# Services d'infrastructure - Communication avec les services externes

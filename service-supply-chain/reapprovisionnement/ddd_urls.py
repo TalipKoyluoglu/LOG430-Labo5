@@ -2,22 +2,33 @@
 URLs DDD - Routes pour les Use Cases Réapprovisionnement
 Routes orientées métier plutôt que CRUD.
 """
+
 from django.urls import path
 from .interfaces.ddd_views import (
     DDDDemandesEnAttenteAPI,
-    DDDValiderDemandeAPI, 
-    DDDRejeterDemandeAPI
+    DDDValiderDemandeAPI,
+    DDDRejeterDemandeAPI,
 )
 
 urlpatterns = [
     # Use Case : Lister les demandes en attente
-    path('demandes-en-attente/', DDDDemandesEnAttenteAPI.as_view(), name='ddd-demandes-en-attente'),
-    
+    path(
+        "demandes-en-attente/",
+        DDDDemandesEnAttenteAPI.as_view(),
+        name="ddd-demandes-en-attente",
+    ),
     # Use Case : Valider une demande
-    path('valider-demande/<str:demande_id>/', DDDValiderDemandeAPI.as_view(), name='ddd-valider-demande'),
-    
+    path(
+        "valider-demande/<str:demande_id>/",
+        DDDValiderDemandeAPI.as_view(),
+        name="ddd-valider-demande",
+    ),
     # Use Case : Rejeter une demande
-    path('rejeter-demande/<str:demande_id>/', DDDRejeterDemandeAPI.as_view(), name='ddd-rejeter-demande'),
+    path(
+        "rejeter-demande/<str:demande_id>/",
+        DDDRejeterDemandeAPI.as_view(),
+        name="ddd-rejeter-demande",
+    ),
 ]
 
 """
@@ -40,4 +51,4 @@ Avantages DDD:
  Value Objects avec validation intégrée
  Gestion d'erreurs spécifique au domaine
  Testabilité améliorée (injection de dépendances)
-""" 
+"""

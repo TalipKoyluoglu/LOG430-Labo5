@@ -2,23 +2,32 @@
 URLs DDD - Routes pour les Use Cases
 Nouvelles routes basées sur les fonctionnalités métier plutôt que sur les entités
 """
+
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .interfaces.ddd_views import DDDVenteViewSet, DDDIndicateursAPI, DDDRapportConsolideAPI, lister_magasins
+from .interfaces.ddd_views import (
+    DDDVenteViewSet,
+    DDDIndicateursAPI,
+    DDDRapportConsolideAPI,
+    lister_magasins,
+)
 
 # Router pour les ViewSets DDD
 router = DefaultRouter()
-router.register(r'ventes-ddd', DDDVenteViewSet, basename='ventes-ddd')
+router.register(r"ventes-ddd", DDDVenteViewSet, basename="ventes-ddd")
 
 urlpatterns = [
     # Routes des Use Cases DDD
-    path('', include(router.urls)),
-    
+    path("", include(router.urls)),
     # Endpoints spécifiques DDD
-    path('indicateurs/', DDDIndicateursAPI.as_view(), name='indicateurs-ddd'),
-    path('rapport-consolide/', DDDRapportConsolideAPI.as_view(), name='rapport-consolide-ddd'),
+    path("indicateurs/", DDDIndicateursAPI.as_view(), name="indicateurs-ddd"),
+    path(
+        "rapport-consolide/",
+        DDDRapportConsolideAPI.as_view(),
+        name="rapport-consolide-ddd",
+    ),
     # Endpoint pour lister les magasins
-    path('magasins/', lister_magasins, name='lister-magasins-ddd'),
+    path("magasins/", lister_magasins, name="lister-magasins-ddd"),
 ]
 
 """
@@ -41,4 +50,4 @@ Avantages DDD:
 ✅ Séparation claire domain/infrastructure
 ✅ Testabilité améliorée (mocking des services)
 ✅ Évolutivité (ajout facile de nouveaux use cases)
-""" 
+"""

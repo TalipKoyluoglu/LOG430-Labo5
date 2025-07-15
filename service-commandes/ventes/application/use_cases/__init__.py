@@ -1,1 +1,1 @@
-# Use Cases - Fonctionnalités métier du domaine Ventes 
+# Use Cases - Fonctionnalités métier du domaine Ventes
