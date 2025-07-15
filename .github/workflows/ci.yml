@@ -99,12 +99,12 @@ jobs:
       - name: Build Docker images
         run: |
           echo "Building all microservices Docker images..."
-          docker-compose build
+          docker compose build
 
       - name: Start microservices environment
         run: |
           echo "Starting complete microservices environment..."
-          docker-compose up -d
+          docker compose up -d
           echo "Waiting for services to be ready..."
           sleep 60
 
@@ -133,22 +133,22 @@ jobs:
           echo "=== Docker Container Status ==="
           docker ps
           echo "=== Services Running Check ==="
-          docker-compose ps
+          docker compose ps
 
       - name: Show service logs on failure
         if: failure()
         run: |
           echo "=== Kong Gateway Logs ==="
-          docker-compose logs kong || echo "No Kong logs"
+          docker compose logs kong || echo "No Kong logs"
           echo "=== Catalogue Service Logs ==="
-          docker-compose logs catalogue-service-1
+          docker compose logs catalogue-service-1
           echo "=== E-commerce Service Logs ==="
-          docker-compose logs ecommerce-service
+          docker compose logs ecommerce-service
 
       - name: Cleanup
         if: always()
         run: |
-          docker-compose down --remove-orphans
+          docker compose down --remove-orphans
 
   test-load-balancing:
     name: Test Load Balancing Kong
@@ -169,7 +169,7 @@ jobs:
 
       - name: Start microservices for load testing
         run: |
-          docker-compose up -d
+          docker compose up -d
           sleep 60
           chmod +x ./scripts/setup-kong.sh
           timeout 60 ./scripts/setup-kong.sh || echo "Kong setup failed - testing direct services"
@@ -211,7 +211,7 @@ jobs:
       - name: Cleanup load test
         if: always()
         run: |
-          docker-compose down --remove-orphans
+          docker compose down --remove-orphans
 
   build-deploy:
     name: Build and Deploy
@@ -226,7 +226,7 @@ jobs:
         run: |
           echo "Building production Docker images..."
           docker build -t talipkoyluoglu/log430-labo5-frontend:latest .
-          docker-compose build
+          docker compose build
 
       - name:  Login to Docker Hub
         run: |
@@ -267,13 +267,13 @@ jobs:
               | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
             # Stop old containers
-            docker-compose down --remove-orphans
+            docker compose down --remove-orphans
 
             # Pull new images
-            docker-compose pull
+            docker compose pull
 
             # Start microservices environment
-            docker-compose up -d --build --remove-orphans
+            docker compose up -d --build --remove-orphans
 
             # Wait for services
             sleep 60
