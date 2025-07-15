@@ -1,0 +1,111 @@
+@startuml scenario-checkout-ecommerce
+title Scénario 3: Workflow E-commerce Complet - Panier à Commande Finale
+
+participant "Client Web" as Client
+participant "Frontend E-commerce" as Frontend
+participant "EcommerceClient" as EcoClient
+participant "Kong Gateway" as Kong
+participant "service-ecommerce:8005" as EcommerceService
+participant "CreerCompteClientUseCase" as ClientUC
+participant "AjouterProduitPanierUseCase" as PanierUC
+participant "CheckoutEcommerceUseCase" as CheckoutUC
+participant "HttpCatalogueService" as CatalogueHTTP
+participant "service-catalogue:8001" as CatalogueService
+participant "service-commandes:8003" as CommandesService
+participant "ecommerce_db" as EcoDB
+participant "produits_db" as ProdDB
+participant "commandes_db" as CmdDB
+
+== Phase 1: Création compte client ==
+Client -> Frontend : Inscription e-commerce\n/clients/creer-compte/
+Frontend -> EcoClient : creer_compte_client(prenom, nom, email, adresse)
+EcoClient -> Kong : POST /api/ecommerce/api/clients/\n{prenom, nom, email, adresse_complete}
+Kong -> EcommerceService : Route vers service-ecommerce
+
+EcommerceService -> ClientUC : execute(donnees_client)
+note right of ClientUC : **Validation DDD:**\n• Value Object: EmailClient\n• Value Object: AdresseLivraison\n• Entité: Client avec règles métier
+
+ClientUC -> EcoDB : INSERT INTO client (prenom, nom, email, adresse_rue, adresse_ville)\nVALUES (?, ?, ?, ?, ?)
+EcoDB -> ClientUC : client_id = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
+ClientUC -> EcommerceService : {"success": true, "client_id": "aaaaaaaa-..."}
+EcommerceService -> Frontend : Compte créé avec succès
+Frontend -> Client : "Compte créé ! Vous pouvez maintenant commander"
+
+== Phase 2: Ajout produits au panier ==
+Client -> Frontend : Recherche produit "Écran Gaming"
+Frontend -> EcoClient : rechercher_produits(nom="Écran Gaming")
+EcoClient -> Kong : GET /api/catalogue/api/ddd/catalogue/rechercher/?nom=Écran Gaming
+Kong -> CatalogueService : Route vers catalogue (load balancé)
+
+CatalogueService -> ProdDB : SELECT * FROM produit WHERE nom ILIKE '%Écran Gaming%'
+ProdDB -> CatalogueService : [{"id": "11111111-...", "nom": "Écran Gaming 24\"", "prix": 299.99}]
+CatalogueService -> Frontend : Liste produits trouvés
+
+Client -> Frontend : Clic "Ajouter au panier"\nproduit_id="11111111-...", quantite=2
+Frontend -> EcoClient : ajouter_produit_panier(client_id, produit_id, quantite)
+EcoClient -> Kong : POST /api/ecommerce/api/panier/clients/aaaaaaaa.../panier/\n{produit_id, quantite: 2}
+Kong -> EcommerceService : Route vers service-ecommerce
+
+EcommerceService -> PanierUC : execute(client_id, produit_id, quantite)
+
+=== Validation produit existe ===
+PanierUC -> CatalogueHTTP : valider_produit_existe(produit_id)
+CatalogueHTTP -> CatalogueService : GET http://catalogue-service-1:8000/api/ddd/catalogue/produits/11111111.../
+CatalogueService -> ProdDB : SELECT * FROM produit WHERE id = ?
+ProdDB -> CatalogueService : {"id": "11111111-...", "nom": "Écran Gaming 24\"", "prix": 299.99, "actif": true}
+CatalogueService -> CatalogueHTTP : {"exists": true, "prix": 299.99}
+CatalogueHTTP -> PanierUC : Produit validé
+
+=== Ajout au panier ===
+PanierUC -> EcoDB : INSERT INTO panier_item (client_id, produit_id, quantite, prix_unitaire)\nVALUES (?, ?, 2, 299.99)\nON CONFLICT UPDATE quantite = quantite + 2
+EcoDB -> PanierUC : Produit ajouté au panier
+PanierUC -> EcommerceService : {"success": true, "total_panier": 599.98}
+EcommerceService -> Frontend : Produit ajouté au panier
+Frontend -> Client : "2x Écran Gaming ajoutés au panier (599.98€)"
+
+== Phase 3: Checkout e-commerce ==
+Client -> Frontend : Clic "Commander"\n/checkout/
+Frontend -> EcoClient : verifier_prerequis_checkout(client_id)
+EcoClient -> Kong : GET /api/ecommerce/api/commandes/clients/aaaaaaaa.../checkout/prerequis/
+Kong -> EcommerceService : Vérification prérequis
+
+EcommerceService -> EcoDB : SELECT COUNT(*) FROM panier_item WHERE client_id = ?
+EcoDB -> EcommerceService : count = 1 (panier non vide)
+EcommerceService -> Frontend : {"peut_commander": true, "total": 599.98}
+
+Client -> Frontend : Confirmation adresse et commande\nPOST /checkout/finaliser/
+Frontend -> EcoClient : checkout_ecommerce(client_id, adresse_livraison, notes)
+EcoClient -> Kong : POST /api/ecommerce/api/commandes/clients/aaaaaaaa.../checkout/\n{adresse_livraison, notes}
+Kong -> EcommerceService : Route checkout
+
+EcommerceService -> CheckoutUC : execute(client_id, adresse_livraison)
+
+=== Validation panier et calculs ===
+CheckoutUC -> EcoDB : SELECT pi.*, p.nom FROM panier_item pi\nJOIN produit p ON pi.produit_id = p.id\nWHERE pi.client_id = ?
+EcoDB -> CheckoutUC : [{"produit_id": "11111111-...", "quantite": 2, "prix": 299.99}]
+
+note right of CheckoutUC : **Entité ProcessusCheckout DDD:**\n• Validation prérequis métier\n• Calcul frais livraison\n• Value Objects: AdresseLivraison
+
+=== Création commande via service-commandes ===
+CheckoutUC -> CommandesService : POST http://commandes-service:8000/api/v1/ventes-ddd/enregistrer/\n{\n  "client_id": "aaaaaaaa-...",\n  "produit_id": "11111111-...",\n  "quantite": 2,\n  "magasin_id": "ecommerce-magasin-virtuel"\n}
+
+CommandesService -> CmdDB : INSERT INTO vente (client_id, magasin_id, total, statut)\nINSERT INTO ligne_vente (produit_id, quantite, prix_unitaire)
+CmdDB -> CommandesService : vente_id = "vvvvvvvv-wwww-xxxx-yyyy-zzzzzzzzzzzz"
+CommandesService -> CheckoutUC : {"success": true, "vente_id": "vvvvvvvv-...", "total": 599.98}
+
+=== Finalisation checkout ===
+CheckoutUC -> EcoDB : DELETE FROM panier_item WHERE client_id = ?\n-- Vider le panier après commande réussie
+CheckoutUC -> EcoDB : INSERT INTO commande_ecommerce (client_id, vente_id, statut, adresse_livraison)\nVALUES (?, ?, 'confirmee', ?)
+
+CheckoutUC -> EcommerceService : {\n  "success": true,\n  "commande_id": "cccccccc-...",\n  "vente_id": "vvvvvvvv-...",\n  "total": 599.98,\n  "statut": "confirmee"\n}
+
+== Phase 4: Confirmation client ==
+EcommerceService -> Kong : Résultat checkout
+Kong -> EcoClient : {"success": true, "commande_id": "...", "total": 599.98}
+EcoClient -> Frontend : Commande confirmée
+Frontend -> Client : "Commande confirmée !\nNuméro: cccccccc-...\nTotal: 599.98€\nLivraison sous 2-3 jours"
+
+== Annotations Techniques ==
+note over Client, CmdDB : **Workflow E-commerce DDD Complet:**\n• **3 microservices** collaborant (ecommerce, catalogue, commandes)\n• **Use Cases métier** orientés fonctionnalités\n• **Entités riches** avec validation métier\n• **Communication HTTP** via Kong Gateway\n• **Transaction distribuée** avec cohérence finale
+
+@enduml 

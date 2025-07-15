@@ -1,85 +1,214 @@
-@startuml
+@startuml vue-implementation
 allowmixing
-title Vue Logique - LOG430-Labo4 (Lisibilité & Pro)
+title Vue d'Implémentation - Architecture Microservices DDD
 
-' Présentation
-package "Présentation" {
-  package "API REST" {
-    class RapportVentesAPI <<APIController>>
-    class StockMagasinAPI <<APIController>>
-    class PerformanceMagasinsAPI <<APIController>>
-    class ProduitUpdateAPI <<APIController>>
+' === FRONTEND ORCHESTRATEUR ===
+package "Frontend Orchestrateur (Django)" {
+  package "Vues Orchestratrices" {
+    class "RapportConsolideView" <<View>>
+    class "GestionStockView" <<View>>
+    class "IndicateursView" <<View>>
+    class "GestionProduitsView" <<View>>
+    class "WorkflowDemandesView" <<View>>
   }
-  package "MVC Web" {
-    class UC1_rapport_ventes <<Controller>>
-    class UC2_StockControleur <<Controller>>
-    class UC3_PerformanceControleur <<Controller>>
-    class UC4_ProduitControleur <<Controller>>
-    class UC6_ValidationControleur <<Controller>>
+  
+  package "Clients HTTP Infrastructure" {
+    class "CatalogueClient" <<HTTPClient>>
+    class "InventaireClient" <<HTTPClient>>
+    class "CommandesClient" <<HTTPClient>>
+    class "SupplyChainClient" <<HTTPClient>>
+    class "EcommerceClient" <<HTTPClient>>
   }
 }
 
-' Services
-package "Services" as ServicesPkg {
-  class UC1_Service
-  class UC2_Service
-  class UC3_Service
-  class UC4_Service
-  class UC6_Service
+' === KONG API GATEWAY ===
+package "Kong API Gateway" <<Infrastructure>> {
+  component "Kong Router" {
+    class "CatalogueUpstream" <<LoadBalancer>>
+    class "InventaireRoute" <<Route>>
+    class "CommandesRoute" <<Route>>
+    class "SupplyChainRoute" <<Route>>
+    class "EcommerceRoute" <<Route>>
+  }
 }
 
-' Modèle/Domaine
-package "Modèle" as ModelePkg {
-  class Magasin
-  class Produit
-  class Vente
-  class LigneVente
-  class StockCentral
-  class StockLocal
-  class DemandeReapprovisionnement
-
-  ' Relations entités
-  Magasin "1" -- "0..*" Vente : ventes
-  Vente "1" -- "1..*" LigneVente : lignes
-  Produit "1" -- "0..*" LigneVente : lignes
-  Produit "1" -- "0..*" StockCentral
-  Produit "1" -- "0..*" StockLocal
-  Magasin "1" -- "0..*" StockLocal
-  Produit "1" -- "0..*" DemandeReapprovisionnement
-  Magasin "1" -- "0..*" DemandeReapprovisionnement
+' === SERVICE CATALOGUE (LOAD BALANCÉ) ===
+package "Service Catalogue - Port 8001" <<Microservice>> {
+  package "Interface Layer" {
+    class "DDDCatalogueAPI" <<RestAPI>>
+    class "ProduitViewSet" <<ViewSet>>
+  }
+  package "Application Layer" {
+    class "RechercherProduitsUseCase" <<UseCase>>
+    class "AjouterProduitUseCase" <<UseCase>>
+    class "ModifierPrixUseCase" <<UseCase>>
+  }
+  package "Domain Layer" {
+    class "Produit" <<Entity>> {
+      +archiver()
+      +valider_prix()
+      +est_actif()
+    }
+    class "PrixMonetaire" <<ValueObject>>
+    class "NomProduit" <<ValueObject>>
+  }
+  package "Infrastructure Layer" {
+    class "DjangoProduitRepository" <<Repository>>
+  }
 }
 
-' Liens principaux entre couches
-RapportVentesAPI -down-> UC1_Service
-StockMagasinAPI -down-> UC2_Service
-PerformanceMagasinsAPI -down-> UC3_Service
-ProduitUpdateAPI -down-> UC4_Service
+' === SERVICE INVENTAIRE ===
+package "Service Inventaire - Port 8002" <<Microservice>> {
+  package "Interface Layer" {
+    class "DDDInventaireAPI" <<RestAPI>>
+    class "StockViewSet" <<ViewSet>>
+  }
+  package "Application Layer" {
+    class "ConsulterStocksCentralUseCase" <<UseCase>>
+    class "CreerDemandeReapproUseCase" <<UseCase>>
+    class "TransfererStockUseCase" <<UseCase>>
+  }
+  package "Domain Layer" {
+    class "StockCentral" <<Entity>>
+    class "StockLocal" <<Entity>>
+    class "DemandeReapprovisionnement" <<Entity>>
+    class "Quantite" <<ValueObject>>
+  }
+  package "Infrastructure Layer" {
+    class "DjangoStockRepository" <<Repository>>
+    class "DjangoDemandeRepository" <<Repository>>
+  }
+}
 
-UC1_rapport_ventes -down-> UC1_Service
-UC2_StockControleur -down-> UC2_Service
-UC3_PerformanceControleur -down-> UC3_Service
-UC4_ProduitControleur -down-> UC4_Service
-UC6_ValidationControleur -down-> UC6_Service
+' === SERVICE COMMANDES ===
+package "Service Commandes - Port 8003" <<Microservice>> {
+  package "Interface Layer" {
+    class "DDDVenteViewSet" <<ViewSet>>
+    class "DDDIndicateursAPI" <<RestAPI>>
+    class "DDDRapportConsolideAPI" <<RestAPI>>
+  }
+  package "Application Layer" {
+    class "EnregistrerVenteUseCase" <<UseCase>>
+    class "GenererIndicateursUseCase" <<UseCase>>
+    class "GenererRapportConsolideUseCase" <<UseCase>>
+  }
+  package "Domain Layer" {
+    class "Vente" <<Entity>> {
+      +peut_etre_annulee()
+      +calculer_total()
+    }
+    class "Magasin" <<Entity>>
+    class "CommandeVente" <<ValueObject>>
+  }
+  package "Infrastructure Layer" {
+    class "DjangoVenteRepository" <<Repository>>
+    class "HttpStockService" <<ExternalService>>
+  }
+}
 
-' Flèche unique : Services utilise Modèle
-ServicesPkg -down-> ModelePkg : utilise
+' === SERVICE SUPPLY CHAIN ===
+package "Service Supply Chain - Port 8004" <<Microservice>> {
+  package "Interface Layer" {
+    class "DDDDemandesEnAttenteAPI" <<RestAPI>>
+    class "DDDValiderDemandeAPI" <<RestAPI>>
+    class "DDDRejeterDemandeAPI" <<RestAPI>>
+  }
+  package "Application Layer" {
+    class "ListerDemandesUseCase" <<UseCase>>
+    class "ValiderDemandeUseCase" <<UseCase>> {
+      +workflow_3_etapes()
+      +rollback_automatique()
+    }
+    class "RejeterDemandeUseCase" <<UseCase>>
+  }
+  package "Domain Layer" {
+    class "WorkflowValidation" <<Entity>>
+    class "DemandeReapprovisionnement" <<Entity>>
+    class "MotifRejet" <<ValueObject>>
+  }
+  package "Infrastructure Layer" {
+    class "HttpDemandeRepository" <<Repository>>
+    class "HttpInventaireService" <<ExternalService>>
+  }
+}
 
-UC1_Service -down-> Magasin
-UC1_Service -down-> Produit
-UC1_Service -down-> Vente
-UC1_Service -down-> LigneVente
-UC1_Service -down-> StockLocal
-UC2_Service -down-> Magasin
-UC2_Service -down-> Produit
-UC2_Service -down-> StockCentral
-UC2_Service -down-> StockLocal
-UC3_Service -down-> Magasin
-UC3_Service -down-> Vente
-UC3_Service -down-> LigneVente
-UC4_Service -down-> Produit
-UC4_Service -down-> StockLocal
-UC6_Service -down-> DemandeReapprovisionnement
-UC6_Service -down-> Magasin
-UC6_Service -down-> Produit
+' === SERVICE ECOMMERCE ===
+package "Service E-commerce - Port 8005" <<Microservice>> {
+  package "Interface Layer" {
+    class "DDDClientAPI" <<RestAPI>>
+    class "DDDPanierAPI" <<RestAPI>>
+    class "DDDCheckoutAPI" <<RestAPI>>
+  }
+  package "Application Layer" {
+    class "CreerCompteClientUseCase" <<UseCase>>
+    class "AjouterProduitPanierUseCase" <<UseCase>>
+    class "CheckoutEcommerceUseCase" <<UseCase>>
+  }
+  package "Domain Layer" {
+    class "Client" <<Entity>>
+    class "Panier" <<Entity>>
+    class "ProcessusCheckout" <<Entity>>
+    class "AdresseLivraison" <<ValueObject>>
+  }
+  package "Infrastructure Layer" {
+    class "DjangoClientRepository" <<Repository>>
+    class "DjangoPanierRepository" <<Repository>>
+    class "HttpCatalogueService" <<ExternalService>>
+  }
+}
+
+' === BASES DE DONNÉES ===
+package "Bases PostgreSQL Dédiées" <<Infrastructure>> {
+  database "produits_db" as ProdDB
+  database "inventaire_db" as InvDB
+  database "commandes_db" as CmdDB
+  database "supply_chain_db" as SupDB
+  database "ecommerce_db" as EcoDB
+}
+
+' === CONNEXIONS FRONTEND ===
+RapportConsolideView --> CommandesClient
+GestionStockView --> InventaireClient
+IndicateursView --> CommandesClient
+GestionProduitsView --> CatalogueClient
+WorkflowDemandesView --> SupplyChainClient
+
+' === CONNEXIONS HTTP VIA KONG ===
+CatalogueClient --> CatalogueUpstream : HTTP Kong
+InventaireClient --> InventaireRoute : HTTP Kong
+CommandesClient --> CommandesRoute : HTTP Kong
+SupplyChainClient --> SupplyChainRoute : HTTP Kong
+EcommerceClient --> EcommerceRoute : HTTP Kong
+
+' === CONNEXIONS KONG VERS SERVICES ===
+CatalogueUpstream --> DDDCatalogueAPI : Load Balanced
+InventaireRoute --> DDDInventaireAPI
+CommandesRoute --> DDDVenteViewSet
+SupplyChainRoute --> DDDDemandesEnAttenteAPI
+EcommerceRoute --> DDDClientAPI
+
+' === CONNEXIONS INTER-SERVICES HTTP ===
+HttpStockService --> DDDInventaireAPI : HTTP
+HttpInventaireService --> DDDInventaireAPI : HTTP
+HttpCatalogueService --> DDDCatalogueAPI : HTTP
+
+' === CONNEXIONS DDD INTERNES ===
+DDDCatalogueAPI --> RechercherProduitsUseCase
+RechercherProduitsUseCase --> Produit
+DDDInventaireAPI --> ConsulterStocksCentralUseCase
+ConsulterStocksCentralUseCase --> StockCentral
+DDDVenteViewSet --> EnregistrerVenteUseCase
+EnregistrerVenteUseCase --> Vente
+DDDValiderDemandeAPI --> ValiderDemandeUseCase
+ValiderDemandeUseCase --> WorkflowValidation
+DDDClientAPI --> CreerCompteClientUseCase
+CreerCompteClientUseCase --> Client
+
+' === CONNEXIONS REPOSITORIES ===
+DjangoProduitRepository --> ProdDB
+DjangoStockRepository --> InvDB
+DjangoVenteRepository --> CmdDB
+HttpDemandeRepository --> SupDB
+DjangoClientRepository --> EcoDB
 
 @enduml

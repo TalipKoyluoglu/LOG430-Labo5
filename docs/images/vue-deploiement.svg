@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="1276px" preserveAspectRatio="none" style="width:3949px;height:1276px;" version="1.1" viewBox="0 0 3949 1276" width="3949px" zoomAndPan="magnify"><defs><filter height="300%" id="f1wbkthtz09v3u" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><text fill="#000000" font-family="sans-serif" font-size="18" lengthAdjust="spacing" textLength="563" x="1686.5" y="16.708">Vue de Déploiement - Architecture Microservices DDD (Labo 5)</text><!--MD5=[a3a458535fdcfbbb6367078bc381dc55]
+cluster Clients--><polygon fill="#FFFFFF" filter="url(#f1wbkthtz09v3u)" points="16,36.9531,26,26.9531,750,26.9531,750,180.9531,740,190.9531,16,190.9531,16,36.9531" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="740" x2="750" y1="36.9531" y2="26.9531"/><line style="stroke:#000000;stroke-width:1.5;" x1="16" x2="740" y1="36.9531" y2="36.9531"/><line style="stroke:#000000;stroke-width:1.5;" x1="740" x2="740" y1="36.9531" y2="190.9531"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="54" x="352" y="52.9482">Clients</text><!--MD5=[2de28e47f9582cb6df153deeec479525]
+cluster browser--><polygon fill="#FFFFFF" filter="url(#f1wbkthtz09v3u)" points="40,84.9531,50,74.9531,542,74.9531,542,156.9531,532,166.9531,40,166.9531,40,84.9531" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="532" x2="542" y1="84.9531" y2="74.9531"/><line style="stroke:#000000;stroke-width:1.5;" x1="40" x2="532" y1="84.9531" y2="84.9531"/><line style="stroke:#000000;stroke-width:1.5;" x1="532" x2="532" y1="84.9531" y2="166.9531"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="125" x="224.5" y="100.9482">Navigateur Web</text><!--MD5=[af01bd7746ddc6f7fb15366893603fe5]
+cluster apiclient--><polygon fill="#FFFFFF" filter="url(#f1wbkthtz09v3u)" points="566,84.9531,576,74.9531,726,74.9531,726,156.9531,716,166.9531,566,166.9531,566,84.9531" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="716" x2="726" y1="84.9531" y2="74.9531"/><line style="stroke:#000000;stroke-width:1.5;" x1="566" x2="716" y1="84.9531" y2="84.9531"/><line style="stroke:#000000;stroke-width:1.5;" x1="716" x2="716" y1="84.9531" y2="166.9531"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="84" x="600" y="100.9482">API Clients</text><!--MD5=[2f1a1fb4c4e5b0d462c5474bb3644c3b]
+cluster docker_host--><polygon fill="#FFFFFF" filter="url(#f1wbkthtz09v3u)" points="17,249.9531,27,239.9531,3932,239.9531,3932,1259.4531,3922,1269.4531,17,1269.4531,17,249.9531" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="3922" x2="3932" y1="249.9531" y2="239.9531"/><line style="stroke:#000000;stroke-width:1.5;" x1="17" x2="3922" y1="249.9531" y2="249.9531"/><line style="stroke:#000000;stroke-width:1.5;" x1="3922" x2="3922" y1="249.9531" y2="1269.4531"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="327" x="1807" y="265.9482">Docker Host - Architecture Microservices</text><!--MD5=[23cbaadc18b1780d966e07254adaec4d]
+cluster frontend--><polygon fill="#FFFFFF" filter="url(#f1wbkthtz09v3u)" points="217,297.9531,227,287.9531,581,287.9531,581,373.9531,571,383.9531,217,383.9531,217,297.9531" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="571" x2="581" y1="297.9531" y2="287.9531"/><line style="stroke:#000000;stroke-width:1.5;" x1="217" x2="571" y1="297.9531" y2="297.9531"/><line style="stroke:#000000;stroke-width:1.5;" x1="571" x2="571" y1="297.9531" y2="383.9531"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="189" x="300.5" y="313.9482">Frontend Orchestrateur</text><!--MD5=[ba1a8555595a8fcb5831ccaef7901891]
+cluster kong_cluster--><polygon fill="#FFFFFF" filter="url(#f1wbkthtz09v3u)" points="2494,442.9531,2504,432.9531,2818,432.9531,2818,549.9531,2808,559.9531,2494,559.9531,2494,442.9531" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="2808" x2="2818" y1="442.9531" y2="432.9531"/><line style="stroke:#000000;stroke-width:1.5;" x1="2494" x2="2808" y1="442.9531" y2="442.9531"/><line style="stroke:#000000;stroke-width:1.5;" x1="2808" x2="2808" y1="442.9531" y2="559.9531"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="145" x="2579.5" y="458.9482">Kong API Gateway</text><!--MD5=[9bbeb67edb5dc6a844dae59fb9e0ded8]
+cluster catalogue_cluster--><polygon fill="#FFFFFF" filter="url(#f1wbkthtz09v3u)" points="3338,765.9531,3348,755.9531,3908,755.9531,3908,990.4531,3898,1000.4531,3338,1000.4531,3338,765.9531" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="3898" x2="3908" y1="765.9531" y2="755.9531"/><line style="stroke:#000000;stroke-width:1.5;" x1="3338" x2="3898" y1="765.9531" y2="765.9531"/><line style="stroke:#000000;stroke-width:1.5;" x1="3898" x2="3898" y1="765.9531" y2="1000.4531"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="264" x="3487" y="781.9482">Service Catalogue (Load Balancé)</text><!--MD5=[0a2376605244ef1fa4f2d827b821253e]
+cluster inventaire--><polygon fill="#FFFFFF" filter="url(#f1wbkthtz09v3u)" points="2328,765.9531,2338,755.9531,2547,755.9531,2547,997.9531,2537,1007.9531,2328,1007.9531,2328,765.9531" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="2537" x2="2547" y1="765.9531" y2="755.9531"/><line style="stroke:#000000;stroke-width:1.5;" x1="2328" x2="2537" y1="765.9531" y2="765.9531"/><line style="stroke:#000000;stroke-width:1.5;" x1="2537" x2="2537" y1="765.9531" y2="1007.9531"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="143" x="2362" y="781.9482">Service Inventaire</text><!--MD5=[8c8f684030a2d1324c3f857ba400c142]
+cluster commandes--><polygon fill="#FFFFFF" filter="url(#f1wbkthtz09v3u)" points="2590,765.9531,2600,755.9531,2827,755.9531,2827,997.9531,2817,1007.9531,2590,1007.9531,2590,765.9531" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="2817" x2="2827" y1="765.9531" y2="755.9531"/><line style="stroke:#000000;stroke-width:1.5;" x1="2590" x2="2817" y1="765.9531" y2="765.9531"/><line style="stroke:#000000;stroke-width:1.5;" x1="2817" x2="2817" y1="765.9531" y2="1007.9531"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="161" x="2624" y="781.9482">Service Commandes</text><!--MD5=[c065315f8ed503c9b9b1ca04436a69f5]
+cluster supply--><polygon fill="#FFFFFF" filter="url(#f1wbkthtz09v3u)" points="401,618.9531,411,608.9531,643,608.9531,643,847.4531,633,857.4531,401,857.4531,401,618.9531" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="633" x2="643" y1="618.9531" y2="608.9531"/><line style="stroke:#000000;stroke-width:1.5;" x1="401" x2="633" y1="618.9531" y2="618.9531"/><line style="stroke:#000000;stroke-width:1.5;" x1="633" x2="633" y1="618.9531" y2="857.4531"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="166" x="435" y="634.9482">Service Supply Chain</text><!--MD5=[27f165cea72b8958f3d2fcf36090c302]
+cluster ecommerce--><polygon fill="#FFFFFF" filter="url(#f1wbkthtz09v3u)" points="3060,618.9531,3070,608.9531,3298,608.9531,3298,847.4531,3288,857.4531,3060,857.4531,3060,618.9531" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="3288" x2="3298" y1="618.9531" y2="608.9531"/><line style="stroke:#000000;stroke-width:1.5;" x1="3060" x2="3288" y1="618.9531" y2="618.9531"/><line style="stroke:#000000;stroke-width:1.5;" x1="3288" x2="3288" y1="618.9531" y2="857.4531"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="162" x="3094" y="634.9482">Service E-commerce</text><!--MD5=[22db5bacc356209dab78b9f20087d182]
+cluster databases--><polygon fill="#FFFFFF" filter="url(#f1wbkthtz09v3u)" points="667,761.9531,677,751.9531,2011,751.9531,2011,1019.4531,2001,1029.4531,667,1029.4531,667,761.9531" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="2001" x2="2011" y1="761.9531" y2="751.9531"/><line style="stroke:#000000;stroke-width:1.5;" x1="667" x2="2001" y1="761.9531" y2="761.9531"/><line style="stroke:#000000;stroke-width:1.5;" x1="2001" x2="2001" y1="761.9531" y2="1029.4531"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="214" x="1228" y="777.9482">Bases PostgreSQL Dédiées</text><!--MD5=[9ed05750f711d11245af4d2bc715608f]
+cluster db_prod--><path d="M1829,823.9531 C1829,813.9531 1908,813.9531 1908,813.9531 C1908,813.9531 1987,813.9531 1987,823.9531 L1987,995.4531 C1987,1005.4531 1908,1005.4531 1908,1005.4531 C1908,1005.4531 1829,1005.4531 1829,995.4531 L1829,823.9531 " fill="#FFFFFF" filter="url(#f1wbkthtz09v3u)" style="stroke:#000000;stroke-width:1.5;"/><path d="M1829,823.9531 C1829,833.9531 1908,833.9531 1908,833.9531 C1908,833.9531 1987,833.9531 1987,823.9531 " fill="none" style="stroke:#000000;stroke-width:1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="93" x="1861.5" y="848.9482">produits_db</text><!--MD5=[a4aaf4bf008b8a5e14a5f66272b8aa68]
+cluster db_inv--><path d="M1635,823.9531 C1635,813.9531 1720,813.9531 1720,813.9531 C1720,813.9531 1805,813.9531 1805,823.9531 L1805,995.4531 C1805,1005.4531 1720,1005.4531 1720,1005.4531 C1720,1005.4531 1635,1005.4531 1635,995.4531 L1635,823.9531 " fill="#FFFFFF" filter="url(#f1wbkthtz09v3u)" style="stroke:#000000;stroke-width:1.5;"/><path d="M1635,823.9531 C1635,833.9531 1720,833.9531 1720,833.9531 C1720,833.9531 1805,833.9531 1805,823.9531 " fill="none" style="stroke:#000000;stroke-width:1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="106" x="1667" y="848.9482">inventaire_db</text><!--MD5=[9846ef848c29aea04b34ebc5e8592948]
+cluster db_cmd--><path d="M1425,823.9531 C1425,813.9531 1518,813.9531 1518,813.9531 C1518,813.9531 1611,813.9531 1611,823.9531 L1611,995.4531 C1611,1005.4531 1518,1005.4531 1518,1005.4531 C1518,1005.4531 1425,1005.4531 1425,995.4531 L1425,823.9531 " fill="#FFFFFF" filter="url(#f1wbkthtz09v3u)" style="stroke:#000000;stroke-width:1.5;"/><path d="M1425,823.9531 C1425,833.9531 1518,833.9531 1518,833.9531 C1518,833.9531 1611,833.9531 1611,823.9531 " fill="none" style="stroke:#000000;stroke-width:1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="122" x="1457" y="848.9482">commandes_db</text><!--MD5=[330daa9cd54e5f05737ce37c65773ae0]
+cluster db_sup--><path d="M833,823.9531 C833,813.9531 929,813.9531 929,813.9531 C929,813.9531 1025,813.9531 1025,823.9531 L1025,995.4531 C1025,1005.4531 929,1005.4531 929,1005.4531 C929,1005.4531 833,1005.4531 833,995.4531 L833,823.9531 " fill="#FFFFFF" filter="url(#f1wbkthtz09v3u)" style="stroke:#000000;stroke-width:1.5;"/><path d="M833,823.9531 C833,833.9531 929,833.9531 929,833.9531 C929,833.9531 1025,833.9531 1025,823.9531 " fill="none" style="stroke:#000000;stroke-width:1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="128" x="865" y="848.9482">supply_chain_db</text><!--MD5=[0df8f609b9fcb3df2ba1bc00fd808086]
+cluster db_eco--><path d="M1217,823.9531 C1217,813.9531 1309,813.9531 1309,813.9531 C1309,813.9531 1401,813.9531 1401,823.9531 L1401,995.4531 C1401,1005.4531 1309,1005.4531 1309,1005.4531 C1309,1005.4531 1217,1005.4531 1217,995.4531 L1217,823.9531 " fill="#FFFFFF" filter="url(#f1wbkthtz09v3u)" style="stroke:#000000;stroke-width:1.5;"/><path d="M1217,823.9531 C1217,833.9531 1309,833.9531 1309,833.9531 C1309,833.9531 1401,833.9531 1401,823.9531 " fill="none" style="stroke:#000000;stroke-width:1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="120" x="1249" y="848.9482">ecommerce_db</text><!--MD5=[e859b3e3ead73fbdc1b018d462c767f7]
+cluster db_kong--><path d="M1049,823.9531 C1049,813.9531 1121,813.9531 1121,813.9531 C1121,813.9531 1193,813.9531 1193,823.9531 L1193,995.4531 C1193,1005.4531 1121,1005.4531 1121,1005.4531 C1121,1005.4531 1049,1005.4531 1049,995.4531 L1049,823.9531 " fill="#FFFFFF" filter="url(#f1wbkthtz09v3u)" style="stroke:#000000;stroke-width:1.5;"/><path d="M1049,823.9531 C1049,833.9531 1121,833.9531 1121,833.9531 C1121,833.9531 1193,833.9531 1193,823.9531 " fill="none" style="stroke:#000000;stroke-width:1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="80" x="1081" y="848.9482">kong_data</text><!--MD5=[f97fecbfcc622fd6e76502b6def0fbe7]
+cluster db_main--><path d="M691,823.9531 C691,813.9531 750,813.9531 750,813.9531 C750,813.9531 809,813.9531 809,823.9531 L809,995.4531 C809,1005.4531 750,1005.4531 750,1005.4531 C750,1005.4531 691,1005.4531 691,995.4531 L691,823.9531 " fill="#FFFFFF" filter="url(#f1wbkthtz09v3u)" style="stroke:#000000;stroke-width:1.5;"/><path d="M691,823.9531 C691,833.9531 750,833.9531 750,833.9531 C750,833.9531 809,833.9531 809,823.9531 " fill="none" style="stroke:#000000;stroke-width:1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="53" x="723.5" y="848.9482">lab4db</text><!--MD5=[11e4ccc881db60eff8b15d16aceed072]
+cluster monitoring--><polygon fill="#FFFFFF" filter="url(#f1wbkthtz09v3u)" points="3134,916.4531,3144,906.4531,3314,906.4531,3314,1235.4531,3304,1245.4531,3134,1245.4531,3134,916.4531" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="3304" x2="3314" y1="916.4531" y2="906.4531"/><line style="stroke:#000000;stroke-width:1.5;" x1="3134" x2="3304" y1="916.4531" y2="916.4531"/><line style="stroke:#000000;stroke-width:1.5;" x1="3304" x2="3304" y1="916.4531" y2="1245.4531"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="104" x="3168" y="932.4482">Observabilité</text><!--MD5=[6e2bc53f2b489a463b0855903b315b97]
+cluster cache--><polygon fill="#FFFFFF" filter="url(#f1wbkthtz09v3u)" points="197,460.4531,207,450.4531,377,450.4531,377,692.9531,367,702.9531,197,702.9531,197,460.4531" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="367" x2="377" y1="460.4531" y2="450.4531"/><line style="stroke:#000000;stroke-width:1.5;" x1="197" x2="367" y1="460.4531" y2="460.4531"/><line style="stroke:#000000;stroke-width:1.5;" x1="367" x2="367" y1="460.4531" y2="702.9531"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="49" x="258.5" y="476.4482">Cache</text><!--MD5=[8fc3522a43f8c7199df5e09e5bb0188e]
+entity user--><rect fill="#FEFECE" filter="url(#f1wbkthtz09v3u)" height="36.2969" style="stroke:#000000;stroke-width:1.5;" width="140" x="243" y="114.9531"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="120" x="253" y="137.9482">Employé Magasin</text><!--MD5=[79a439086b036a57b90a01d7b2f8bbd1]
+entity admin--><rect fill="#FEFECE" filter="url(#f1wbkthtz09v3u)" height="36.2969" style="stroke:#000000;stroke-width:1.5;" width="108" x="418" y="114.9531"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="88" x="428" y="137.9482">Gestionnaire</text><!--MD5=[6cdd8d1af118066c88ae2216f712a512]
+entity webclient--><rect fill="#FEFECE" filter="url(#f1wbkthtz09v3u)" height="36.2969" style="stroke:#000000;stroke-width:1.5;" width="151" x="56.5" y="114.9531"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="131" x="66.5" y="137.9482">Client E-commerce</text><!--MD5=[8067df0b77b920bbcc7b35087a77301b]
+entity restclient--><rect fill="#FEFECE" filter="url(#f1wbkthtz09v3u)" height="36.2969" style="stroke:#000000;stroke-width:1.5;" width="100" x="610" y="114.9531"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="80" x="620" y="137.9482">Client REST</text><!--MD5=[4541fb81c80c07473fe4b07432ef0971]
+entity app--><rect fill="#FEFECE" filter="url(#f1wbkthtz09v3u)" height="36.2969" style="stroke:#000000;stroke-width:1.5;" width="130" x="233" y="329.9531"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="110" x="243" y="352.9482">Django Magasin</text><path d="M398.5,327.9531 L398.5,350.4531 L363.13,354.4531 L398.5,358.4531 L398.5,368.2188 A0,0 0 0 0 398.5,368.2188 L565.5,368.2188 A0,0 0 0 0 565.5,368.2188 L565.5,337.9531 L555.5,327.9531 L398.5,327.9531 A0,0 0 0 0 398.5,327.9531 " fill="#FBFB77" filter="url(#f1wbkthtz09v3u)" style="stroke:#A80036;stroke-width:1.0;"/><path d="M555.5,327.9531 L555.5,337.9531 L565.5,337.9531 L555.5,327.9531 " fill="#FBFB77" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="110" x="404.5" y="345.02">Clients HTTP vers</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="146" x="404.5" y="360.1528">microservices via Kong</text><!--MD5=[dfe889f66ca23400921aa1f5ae77eafa]
+entity kong--><rect fill="#FEFECE" filter="url(#f1wbkthtz09v3u)" height="36.2969" style="stroke:#000000;stroke-width:1.5;" width="119" x="2510.5" y="490.4531"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="99" x="2520.5" y="513.4482">Kong Gateway</text><path d="M2664.5,472.9531 L2664.5,498.4531 L2629.77,502.4531 L2664.5,506.4531 L2664.5,543.4844 A0,0 0 0 0 2664.5,543.4844 L2801.5,543.4844 A0,0 0 0 0 2801.5,543.4844 L2801.5,482.9531 L2791.5,472.9531 L2664.5,472.9531 A0,0 0 0 0 2664.5,472.9531 " fill="#FBFB77" filter="url(#f1wbkthtz09v3u)" style="stroke:#A80036;stroke-width:1.0;"/><path d="M2791.5,472.9531 L2791.5,482.9531 L2801.5,482.9531 L2791.5,472.9531 " fill="#FBFB77" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="111" x="2670.5" y="490.02">Port 8080 (proxy)</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="116" x="2670.5" y="505.1528">Port 8081 (admin)</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="97" x="2670.5" y="520.2856">Load Balancing</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="84" x="2670.5" y="535.4185">Routing HTTP</text><!--MD5=[c1ca8f670f1c6a173ee5ba95c96f9d17]
+entity cat1--><rect fill="#FEFECE" filter="url(#f1wbkthtz09v3u)" height="36.2969" style="stroke:#000000;stroke-width:1.5;" width="156" x="3545" y="795.9531"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="136" x="3555" y="818.9482">catalogue-service-1</text><!--MD5=[f0dc0854e334f52d787155a010917d01]
+entity cat2--><rect fill="#FEFECE" filter="url(#f1wbkthtz09v3u)" height="36.2969" style="stroke:#000000;stroke-width:1.5;" width="156" x="3354" y="795.9531"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="136" x="3364" y="818.9482">catalogue-service-2</text><!--MD5=[215bbdac1a46782245e83c0073247c28]
+entity cat3--><rect fill="#FEFECE" filter="url(#f1wbkthtz09v3u)" height="36.2969" style="stroke:#000000;stroke-width:1.5;" width="156" x="3736" y="795.9531"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="136" x="3746" y="818.9482">catalogue-service-3</text><path d="M3722,944.4531 L3722,984.7188 A0,0 0 0 0 3722,984.7188 L3892,984.7188 A0,0 0 0 0 3892,984.7188 L3892,954.4531 L3882,944.4531 L3844,944.4531 L3840,832.1031 L3836,944.4531 L3722,944.4531 A0,0 0 0 0 3722,944.4531 " fill="#FBFB77" filter="url(#f1wbkthtz09v3u)" style="stroke:#A80036;stroke-width:1.0;"/><path d="M3882,944.4531 L3882,954.4531 L3892,954.4531 L3882,944.4531 " fill="#FBFB77" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="149" x="3728" y="961.52">Ports 8001, 8006, 8007</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="135" x="3728" y="976.6528">Round-robin via Kong</text><!--MD5=[f9195ead6d4a7c05e2024494f14fc8cd]
+entity inv--><rect fill="#FEFECE" filter="url(#f1wbkthtz09v3u)" height="36.2969" style="stroke:#000000;stroke-width:1.5;" width="141" x="2344.5" y="795.9531"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="121" x="2354.5" y="818.9482">inventaire-service</text><path d="M2343.5,936.9531 L2343.5,992.3516 A0,0 0 0 0 2343.5,992.3516 L2512.5,992.3516 A0,0 0 0 0 2512.5,992.3516 L2512.5,946.9531 L2502.5,936.9531 L2395.5,936.9531 L2391.5,832.1031 L2387.5,936.9531 L2343.5,936.9531 A0,0 0 0 0 2343.5,936.9531 " fill="#FBFB77" filter="url(#f1wbkthtz09v3u)" style="stroke:#A80036;stroke-width:1.0;"/><path d="M2502.5,936.9531 L2502.5,946.9531 L2512.5,946.9531 L2502.5,936.9531 " fill="#FBFB77" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="62" x="2349.5" y="954.02">Port 8002</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="148" x="2349.5" y="969.1528">Stocks centraux/locaux</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="124" x="2349.5" y="984.2856">Demandes réappro</text><!--MD5=[f04bcface800b3498ac77214835b90cd]
+entity cmd--><rect fill="#FEFECE" filter="url(#f1wbkthtz09v3u)" height="36.2969" style="stroke:#000000;stroke-width:1.5;" width="160" x="2651" y="795.9531"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="140" x="2661" y="818.9482">commandes-service</text><path d="M2634.5,936.9531 L2634.5,992.3516 A0,0 0 0 0 2634.5,992.3516 L2811.5,992.3516 A0,0 0 0 0 2811.5,992.3516 L2811.5,946.9531 L2801.5,936.9531 L2735,936.9531 L2731,832.1031 L2727,936.9531 L2634.5,936.9531 A0,0 0 0 0 2634.5,936.9531 " fill="#FBFB77" filter="url(#f1wbkthtz09v3u)" style="stroke:#A80036;stroke-width:1.0;"/><path d="M2801.5,936.9531 L2801.5,946.9531 L2811.5,946.9531 L2801.5,936.9531 " fill="#FBFB77" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="62" x="2640.5" y="954.02">Port 8003</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="107" x="2640.5" y="969.1528">Ventes, rapports</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="156" x="2640.5" y="984.2856">Indicateurs performance</text><!--MD5=[0fb28ece384e01195e8ef8861e9e7ba6]
+entity sup--><rect fill="#FEFECE" filter="url(#f1wbkthtz09v3u)" height="36.2969" style="stroke:#000000;stroke-width:1.5;" width="161" x="465.5" y="648.9531"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="141" x="475.5" y="671.9482">supply-chain-service</text><path d="M485.5,786.4531 L485.5,841.8516 A0,0 0 0 0 485.5,841.8516 L626.5,841.8516 A0,0 0 0 0 626.5,841.8516 L626.5,796.4531 L616.5,786.4531 L560,786.4531 L556,684.9831 L552,786.4531 L485.5,786.4531 A0,0 0 0 0 485.5,786.4531 " fill="#FBFB77" filter="url(#f1wbkthtz09v3u)" style="stroke:#A80036;stroke-width:1.0;"/><path d="M616.5,786.4531 L616.5,796.4531 L626.5,796.4531 L616.5,786.4531 " fill="#FBFB77" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="62" x="491.5" y="803.52">Port 8004</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="120" x="491.5" y="818.6528">Workflow validation</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="102" x="491.5" y="833.7856">Transferts stock</text><!--MD5=[79c813e87a7463ad583a2b24e22bf536]
+entity eco--><rect fill="#FEFECE" filter="url(#f1wbkthtz09v3u)" height="36.2969" style="stroke:#000000;stroke-width:1.5;" width="157" x="3124.5" y="648.9531"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="137" x="3134.5" y="671.9482">ecommerce-service</text><path d="M3170,786.4531 L3170,841.8516 A0,0 0 0 0 3170,841.8516 L3282,841.8516 A0,0 0 0 0 3282,841.8516 L3282,796.4531 L3272,786.4531 L3229.75,786.4531 L3225.75,684.9831 L3221.75,786.4531 L3170,786.4531 A0,0 0 0 0 3170,786.4531 " fill="#FBFB77" filter="url(#f1wbkthtz09v3u)" style="stroke:#A80036;stroke-width:1.0;"/><path d="M3272,786.4531 L3272,796.4531 L3282,796.4531 L3272,786.4531 " fill="#FBFB77" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="62" x="3176" y="803.52">Port 8005</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="91" x="3176" y="818.6528">Clients, panier</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="60" x="3176" y="833.7856">Checkout</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="36" x="1890" y="792.6514">5434</text><rect fill="#A80036" height="12" style="stroke:#FEFECE;stroke-width:1.5;" width="12" x="1902" y="807.9531"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="36" x="1702" y="792.6514">5435</text><rect fill="#A80036" height="12" style="stroke:#FEFECE;stroke-width:1.5;" width="12" x="1714" y="807.9531"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="36" x="1500" y="792.6514">5436</text><rect fill="#A80036" height="12" style="stroke:#FEFECE;stroke-width:1.5;" width="12" x="1512" y="807.9531"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="36" x="911" y="792.6514">5437</text><rect fill="#A80036" height="12" style="stroke:#FEFECE;stroke-width:1.5;" width="12" x="923" y="807.9531"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="36" x="1291" y="792.6514">5438</text><rect fill="#A80036" height="12" style="stroke:#FEFECE;stroke-width:1.5;" width="12" x="1303" y="807.9531"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="36" x="1103" y="792.6514">5433</text><rect fill="#A80036" height="12" style="stroke:#FEFECE;stroke-width:1.5;" width="12" x="1115" y="807.9531"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="36" x="732" y="792.6514">5432</text><rect fill="#A80036" height="12" style="stroke:#FEFECE;stroke-width:1.5;" width="12" x="744" y="807.9531"/><!--MD5=[76c72a0d0666ffe20c687699125b4b7c]
+entity prometheus--><rect fill="#FEFECE" filter="url(#f1wbkthtz09v3u)" height="36.2969" style="stroke:#000000;stroke-width:1.5;" width="105" x="3192.5" y="946.4531"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="85" x="3202.5" y="969.4482">Prometheus</text><!--MD5=[97029dda41c7f1332efacff3a5502fd8]
+entity grafana--><rect fill="#FEFECE" filter="url(#f1wbkthtz09v3u)" height="36.2969" style="stroke:#000000;stroke-width:1.5;" width="73" x="3198.5" y="1092.4531"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="53" x="3208.5" y="1115.4482">Grafana</text><path d="M3191.5,1189.4531 L3191.5,1229.7188 A0,0 0 0 0 3191.5,1229.7188 L3292.5,1229.7188 A0,0 0 0 0 3292.5,1229.7188 L3292.5,1199.4531 L3282.5,1189.4531 L3239,1189.4531 L3235,1128.6131 L3231,1189.4531 L3191.5,1189.4531 A0,0 0 0 0 3191.5,1189.4531 " fill="#FBFB77" filter="url(#f1wbkthtz09v3u)" style="stroke:#A80036;stroke-width:1.0;"/><path d="M3282.5,1189.4531 L3282.5,1199.4531 L3292.5,1199.4531 L3282.5,1189.4531 " fill="#FBFB77" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="80" x="3197.5" y="1206.52">Métriques et</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="69" x="3197.5" y="1221.6528">monitoring</text><!--MD5=[de5dc476b5cd49b5a92d294ad2af7d70]
+entity redis--><rect fill="#FEFECE" filter="url(#f1wbkthtz09v3u)" height="36.2969" style="stroke:#000000;stroke-width:1.5;" width="59" x="261.5" y="490.4531"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="39" x="271.5" y="513.4482">Redis</text><path d="M213.5,646.9531 L213.5,687.2188 A0,0 0 0 0 213.5,687.2188 L360.5,687.2188 A0,0 0 0 0 360.5,687.2188 L360.5,656.9531 L350.5,646.9531 L295,646.9531 L291,526.6331 L287,646.9531 L213.5,646.9531 A0,0 0 0 0 213.5,646.9531 " fill="#FBFB77" filter="url(#f1wbkthtz09v3u)" style="stroke:#A80036;stroke-width:1.0;"/><path d="M350.5,646.9531 L350.5,656.9531 L360.5,656.9531 L350.5,646.9531 " fill="#FBFB77" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="62" x="219.5" y="664.02">Port 6379</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="126" x="219.5" y="679.1528">Cache performance</text><!--MD5=[0caf2e8fdb471e00a846ff3461e6a348]
+link user to app--><path d="M303,151.2831 C303,151.2831 303,324.6731 303,324.6731 " fill="none" id="user-to-app" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="303,329.6731,307,320.6731,303,324.6731,299,320.6731,303,329.6731" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="32" x="312" y="220.02">HTTP</text><!--MD5=[e19721bc72fe8e9bb291660f02042507]
+link admin to app--><path d="M417.81,133.4531 C402.9,133.4531 390.75,133.4531 390.75,133.4531 C390.75,133.4531 390.75,342.4531 390.75,342.4531 C390.75,342.4531 368.17,342.4531 368.17,342.4531 " fill="none" id="admin-to-app" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="363.17,342.4531,372.17,346.4531,368.17,342.4531,372.17,338.4531,363.17,342.4531" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="32" x="431" y="220.02">HTTP</text><!--MD5=[4da9ca34fbddec5943aa2036ce517479]
+link webclient to app--><path d="M207.62,133.4531 C224.75,133.4531 238,133.4531 238,133.4531 C238,133.4531 238,324.6631 238,324.6631 " fill="none" id="webclient-to-app" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="238,329.6631,242,320.6631,238,324.6631,234,320.6631,238,329.6631" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="32" x="186" y="220.02">HTTP</text><!--MD5=[fbc3d2b479cfe48ba481eb95dc86564a]
+link restclient to kong--><path d="M668.25,151.0831 C668.25,224.8331 668.25,498.4531 668.25,498.4531 C668.25,498.4531 2505.47,498.4531 2505.47,498.4531 " fill="none" id="restclient-to-kong" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="2510.47,498.4531,2501.47,494.4531,2505.47,498.4531,2501.47,502.4531,2510.47,498.4531" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="92" x="1616" y="352.52">HTTP/REST API</text><!--MD5=[e17bb607715331471b64951680eb78b1]
+link app to kong--><path d="M333.83,366.0231 C333.83,407.3931 333.83,505.4531 333.83,505.4531 C333.83,505.4531 2505.48,505.4531 2505.48,505.4531 " fill="none" id="app-to-kong" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="2510.48,505.4531,2501.48,501.4531,2505.48,505.4531,2501.48,509.4531,2510.48,505.4531" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="123" x="1424" y="413.02">HTTP clients dédiés</text><!--MD5=[2c745ace8a9ba7cbbe6569817f1cb25b]
+link kong to cat1--><path d="M2579.36,526.8031 C2579.36,581.1431 2579.36,737.4531 2579.36,737.4531 C2579.36,737.4531 3597,737.4531 3597,737.4531 C3597,737.4531 3597,790.8231 3597,790.8231 " fill="none" id="kong-to-cat1" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="3597,795.8231,3601,786.8231,3597,790.8231,3593,786.8231,3597,795.8231" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="131" x="3624" y="671.52">Route /api/catalogue</text><!--MD5=[3e1a7e33de50715ad4d60efc51976625]
+link kong to cat2--><path d="M2562.64,526.7231 C2562.64,584.9631 2562.64,762.4531 2562.64,762.4531 C2562.64,762.4531 3432,762.4531 3432,762.4531 C3432,762.4531 3432,790.9431 3432,790.9431 " fill="none" id="kong-to-cat2" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="3432,795.9431,3436,786.9431,3432,790.9431,3428,786.9431,3432,795.9431" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="96" x="3456" y="671.52">Load balancing</text><!--MD5=[81ba11b1a5a347b29937b6bdf689a316]
+link kong to cat3--><path d="M2596.07,526.5531 C2596.07,576.4831 2596.07,712.4531 2596.07,712.4531 C2596.07,712.4531 3814,712.4531 3814,712.4531 C3814,712.4531 3814,790.8031 3814,790.8031 " fill="none" id="kong-to-cat3" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="3814,795.8031,3818,786.8031,3814,790.8031,3810,786.8031,3814,795.8031" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="77" x="3827" y="671.52">Round-robin</text><!--MD5=[52ebe27f15f7f4456139ab9a312a68fe]
+link kong to inv--><path d="M2529.21,526.7631 C2529.21,591.9031 2529.21,808.4531 2529.21,808.4531 C2529.21,808.4531 2490.71,808.4531 2490.71,808.4531 " fill="none" id="kong-to-inv" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="2485.71,808.4531,2494.71,812.4531,2490.71,808.4531,2494.71,804.4531,2485.71,808.4531" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="131" x="2368" y="671.52">Route /api/inventaire</text><!--MD5=[8d91591ba83363ea746f3a279104a8b0]
+link kong to cmd--><path d="M2629.85,514.4531 C2644.22,514.4531 2655.5,514.4531 2655.5,514.4531 C2655.5,514.4531 2655.5,790.6731 2655.5,790.6731 " fill="none" id="kong-to-cmd" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="2655.5,795.6731,2659.5,786.6731,2655.5,790.6731,2651.5,786.6731,2655.5,795.6731" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="148" x="2571" y="671.52">Route /api/commandes</text><!--MD5=[d479e2ca1a808fb2d5860b4f6010cb6b]
+link kong to sup--><path d="M2510.25,512.4531 C2182.57,512.4531 618.25,512.4531 618.25,512.4531 C618.25,512.4531 618.25,643.9231 618.25,643.9231 " fill="none" id="kong-to-sup" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="618.25,648.9231,622.25,639.9231,618.25,643.9231,614.25,639.9231,618.25,648.9231" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="148" x="1198" y="589.02">Route /api/supply-chain</text><!--MD5=[ff4637b453071974d15a406886d579a7]
+link kong to eco--><path d="M2612.79,526.6531 C2612.79,565.7831 2612.79,654.4531 2612.79,654.4531 C2612.79,654.4531 3119.32,654.4531 3119.32,654.4531 " fill="none" id="kong-to-eco" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="3124.32,654.4531,3115.32,650.4531,3119.32,654.4531,3115.32,658.4531,3124.32,654.4531" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="145" x="2929" y="589.02">Route /api/ecommerce</text><!--MD5=[5f167e16b1e8a4fafb296e686cf0bb4a]
+link cmd to inv--><path d="M2650.85,820.4531 C2650.85,820.4531 2490.64,820.4531 2490.64,820.4531 " fill="none" id="cmd-to-inv" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="2485.64,820.4531,2494.64,824.4531,2490.64,820.4531,2494.64,816.4531,2485.64,820.4531" style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[6f5e0fccc4eb80633d0c7139be6a913f]
+link sup to inv--><path d="M626.61,664.4531 C984.85,664.4531 2415,664.4531 2415,664.4531 C2415,664.4531 2415,790.9231 2415,790.9231 " fill="none" id="sup-to-inv" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="2415,795.9231,2419,786.9231,2415,790.9231,2411,786.9231,2415,795.9231" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="147" x="2188" y="732.02">HTTP (transférer stock)</text><!--MD5=[e50c23730073a73aba025b0481e3e530]
+link eco to cat1--><path d="M3281.71,661.4531 C3409.75,661.4531 3649,661.4531 3649,661.4531 C3649,661.4531 3649,790.8631 3649,790.8631 " fill="none" id="eco-to-cat1" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="3649,795.8631,3653,786.8631,3649,790.8631,3645,786.8631,3649,795.8631" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="142" x="3455" y="732.02">HTTP (produits panier)</text><!--MD5=[eae0031f6a282fcedf6ff85916c20cea]
+link eco to cmd--><path d="M3124.14,675.4531 C3008.44,675.4531 2806.25,675.4531 2806.25,675.4531 C2806.25,675.4531 2806.25,790.8431 2806.25,790.8431 " fill="none" id="eco-to-cmd" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="2806.25,795.8431,2810.25,786.8431,2806.25,790.8431,2802.25,786.8431,2806.25,795.8431" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="156" x="2901" y="732.02">HTTP (créer commande)</text><!--MD5=[3175e85959dd211ca31044abd22f163e]
+link cat1 to db_prod--><path d="M3597,832.1331 C3597,849.6231 3597,873.4531 3597,873.4531 C3597,873.4531 3182.3125,873.4531 2767.625,873.4531 C2560.2813,873.4531 2352.9375,873.4531 2197.4297,873.4531 C2119.6758,873.4531 2054.8809,873.4531 2009.5244,873.4531 C2003.8549,873.4531 1998.489,873.4531 1993.4396,873.4531 C1992.1772,873.4531 1990.9346,873.4531 1989.712,873.4531 " fill="none" id="cat1-to-db_prod" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="1989.712,873.4531,1998.712,877.4531,1994.712,873.4531,1998.712,869.4531,1989.712,873.4531" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="108" x="3029" y="886.52">PostgreSQL ORM</text><!--MD5=[9c20817769c71dadd15620efda65ba5d]
+link cat2 to db_prod--><path d="M3432,832.1531 C3432,844.0731 3432,857.4531 3432,857.4531 C3432,857.4531 3055.53,857.4531 2679.06,857.4531 C2490.825,857.4531 2302.59,857.4531 2161.4138,857.4531 C2090.8256,857.4531 2032.0022,857.4531 1990.8258,857.4531 C1989.539,857.4531 1988.2695,857.4531 1987.0174,857.4531 " fill="none" id="cat2-to-db_prod" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="1987.0174,857.4531,1996.0174,861.4531,1992.0174,857.4531,1996.0174,853.4531,1987.0174,857.4531" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="108" x="2879" y="886.52">PostgreSQL ORM</text><!--MD5=[c8f4f168bdda0917b67caf486999f6a6]
+link cat3 to db_prod--><path d="M3788,832.2331 C3788,854.5731 3788,889.4531 3788,889.4531 C3788,889.4531 3328.595,889.4531 2869.19,889.4531 C2639.4875,889.4531 2409.785,889.4531 2237.5081,889.4531 C2151.3697,889.4531 2079.5877,889.4531 2029.3402,889.4531 C2016.7784,889.4531 2005.5624,889.4531 1995.8046,889.4531 C1993.3651,889.4531 1991.0168,889.4531 1988.7613,889.4531 " fill="none" id="cat3-to-db_prod" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="1988.7613,889.4531,1997.7613,893.4531,1993.7613,889.4531,1997.7613,885.4531,1988.7613,889.4531" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="108" x="3645" y="886.52">PostgreSQL ORM</text><!--MD5=[00642e793ece7db0e44e95d73c0e60bc]
+link inv to db_inv--><path d="M2344.21,826.4531 C2258.885,826.4531 2111.2075,826.4531 1984.8613,826.4531 C1921.6881,826.4531 1863.8478,826.4531 1821.8008,826.4531 C1816.5449,826.4531 1811.5358,826.4531 1806.7939,826.4531 C1806.2011,826.4531 1805.6126,826.4531 1805.0282,826.4531 " fill="none" id="inv-to-db_inv" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="1805.0282,826.4531,1814.0282,830.4531,1810.0282,826.4531,1814.0282,822.4531,1805.0282,826.4531" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="108" x="2053" y="886.52">PostgreSQL ORM</text><!--MD5=[742ddb8d091b9a7c98a64a8efbae1492]
+link cmd to db_cmd--><path d="M2660,795.7931 C2660,793.2331 2660,791.4531 2660,791.4531 C2660,791.4531 1555.5,791.4531 1555.5,791.4531 C1555.5,791.4531 1555.5,798.4544 1555.5,809.64 C1555.5,810.3391 1555.5,811.0545 1555.5,811.7857 C1555.5,812.1512 1555.5,812.5207 1555.5,812.894 C1555.5,813.0806 1555.5,813.2682 1555.5,813.4568 " fill="none" id="cmd-to-db_cmd" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="1555.5,813.4568,1559.5,804.4568,1555.5,808.4568,1551.5,804.4568,1555.5,813.4568" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="108" x="2203" y="886.52">PostgreSQL ORM</text><!--MD5=[8b306a2322d4652883d50eae4e872528]
+link sup to db_sup--><path d="M626.65,680.4531 C728.33,680.4531 890,680.4531 890,680.4531 C890,680.4531 890,731.7031 890,790.6606 C890,798.0303 890,805.5204 890,813.0459 " fill="none" id="sup-to-db_sup" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="890,813.0459,894,804.0459,890,808.0459,886,804.0459,890,813.0459" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="108" x="341" y="818.52">PostgreSQL ORM</text><!--MD5=[c3e0020d3e73924e6683b653cdc836b8]
+link eco to db_eco--><path d="M3124.39,670.4531 C2770.94,670.4531 1346,670.4531 1346,670.4531 C1346,670.4531 1346,723.9981 1346,785.3856 C1346,793.0591 1346,800.855 1346,808.6843 C1346,809.6629 1346,810.6421 1346,811.6216 C1346,812.1114 1346,812.6013 1346,813.0912 " fill="none" id="eco-to-db_eco" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="1346,813.0912,1350,804.0912,1346,808.0912,1342,804.0912,1346,813.0912" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="108" x="2138" y="818.52">PostgreSQL ORM</text><!--MD5=[32169ad763978e69ec6dbcc7ec1b355b]
+link kong to db_kong--><path d="M2510.26,519.4531 C2240.37,519.4531 1148,519.4531 1148,519.4531 C1148,519.4531 1148,605.9656 1148,702.7006 C1148,726.8844 1148,751.707 1148,775.9766 C1148,788.1113 1148,800.1078 1148,811.817 " fill="none" id="kong-to-db_kong" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="1148,811.817,1152,802.817,1148,806.817,1144,802.817,1148,811.817" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="117" x="2005" y="732.02">PostgreSQL config</text><!--MD5=[160d560c2808b87c0368500943009505]
+link app to db_main--><path d="M347.17,366.2431 C347.17,387.7231 347.17,420.4531 347.17,420.4531 C347.17,420.4531 729.75,420.4531 729.75,420.4531 C729.75,420.4531 729.75,529.0406 729.75,649.1869 C729.75,679.2234 729.75,709.9824 729.75,739.9478 C729.75,754.9304 729.75,769.7147 729.75,784.111 C729.75,791.3092 729.75,798.4104 729.75,805.3909 C729.75,807.136 729.75,808.8736 729.75,810.6033 C729.75,811.4681 729.75,812.331 729.75,813.1918 " fill="none" id="app-to-db_main" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="729.75,813.1918,733.75,804.1918,729.75,808.1918,725.75,804.1918,729.75,813.1918" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="108" x="69" y="671.52">PostgreSQL ORM</text><!--MD5=[32efba120b3006892fe0f5696ec44a3f]
+link app to redis--><path d="M291,366.0531 C291,366.0531 291,485.1731 291,485.1731 " fill="none" id="app-to-redis" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="291,490.1731,295,481.1731,291,485.1731,287,481.1731,291,490.1731" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="89" x="292" y="413.02">Cache Django</text><!--MD5=[7de353153bf59e9f51373aa47f7097af]
+link kong to prometheus--><path d="M2545.93,526.5431 C2545.93,604.2031 2545.93,905.4531 2545.93,905.4531 C2545.93,905.4531 3252.17,905.4531 3252.17,905.4531 C3252.17,905.4531 3252.17,941.4331 3252.17,941.4331 " fill="none" id="kong-to-prometheus" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="3252.17,946.4331,3256.17,937.4331,3252.17,941.4331,3248.17,937.4331,3252.17,946.4331" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="63" x="3350" y="732.02">Métriques</text><!--MD5=[84b83a33a6aca38773f4f0354eeb0cac]
+link cat1 to prometheus--><path d="M3649,832.1031 C3649,872.1331 3649,964.4531 3649,964.4531 C3649,964.4531 3302.82,964.4531 3302.82,964.4531 " fill="none" id="cat1-to-prometheus" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="3297.82,964.4531,3306.82,968.4531,3302.82,964.4531,3306.82,960.4531,3297.82,964.4531" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="90" x="3413" y="886.52">Health checks</text><!--MD5=[181b1897cefccf331ec35dda7c83063b]
+link inv to prometheus--><path d="M2438.5,832.1931 C2438.5,862.8631 2438.5,921.4531 2438.5,921.4531 C2438.5,921.4531 3222.33,921.4531 3222.33,921.4531 C3222.33,921.4531 3222.33,940.9631 3222.33,940.9631 " fill="none" id="inv-to-prometheus" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="3222.33,945.9631,3226.33,936.9631,3222.33,940.9631,3218.33,936.9631,3222.33,945.9631" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="90" x="2476" y="886.52">Health checks</text><!--MD5=[9b136b06ea196c6417f82b4ff22f683a]
+link cmd to prometheus--><path d="M2811.26,814.4531 C2861.15,814.4531 2915.83,814.4531 2915.83,814.4531 C2915.83,814.4531 2915.83,970.4531 2915.83,970.4531 C2915.83,970.4531 3187.48,970.4531 3187.48,970.4531 " fill="none" id="cmd-to-prometheus" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="3192.48,970.4531,3183.48,966.4531,3187.48,970.4531,3183.48,974.4531,3192.48,970.4531" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="90" x="3179" y="886.52">Health checks</text><!--MD5=[c53b9247bbcb15c2f023659286fea2d2]
+link sup to prometheus--><path d="M626.56,659.4531 C1052.24,659.4531 3020.17,659.4531 3020.17,659.4531 C3020.17,659.4531 3020.17,958.4531 3020.17,958.4531 C3020.17,958.4531 3187.29,958.4531 3187.29,958.4531 " fill="none" id="sup-to-prometheus" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="3192.29,958.4531,3183.29,954.4531,3187.29,958.4531,3183.29,962.4531,3192.29,958.4531" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="90" x="2882" y="818.52">Health checks</text><!--MD5=[664e44f20ae477199baa832ffee9c197]
+link eco to prometheus--><path d="M3281.74,673.4531 C3286.7,673.4531 3289.75,673.4531 3289.75,673.4531 C3289.75,673.4531 3289.75,941.2531 3289.75,941.2531 " fill="none" id="eco-to-prometheus" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="3289.75,946.2531,3293.75,937.2531,3289.75,941.2531,3285.75,937.2531,3289.75,946.2531" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="90" x="3044" y="818.52">Health checks</text><!--MD5=[c99996f3d76a1e2c6e62b222f69894a7]
+link prometheus to grafana--><path d="M3235,982.6531 C3235,982.6531 3235,1087.0231 3235,1087.0231 " fill="none" id="prometheus-to-grafana" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="3235,1092.0231,3239,1083.0231,3235,1087.0231,3231,1083.0231,3235,1092.0231" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="70" x="3227" y="1058.52">Dashboard</text><!--MD5=[a5887a16f74b8433e73af4258abae6e8]
+@startuml vue-deploiement
+skinparam linetype ortho
+skinparam componentStyle rectangle
+skinparam defaultTextAlignment center
+
+title Vue de Déploiement - Architecture Microservices DDD (Labo 5)
+
+node "Clients" {
+  node "Navigateur Web" as browser {
+    component "Employé Magasin" as user
+    component "Gestionnaire" as admin
+    component "Client E-commerce" as webclient
+  }
+  node "API Clients" as apiclient {
+    component "Client REST" as restclient
+  }
+}
+
+node "Docker Host - Architecture Microservices" as docker_host {
+  
+  node "Frontend Orchestrateur" as frontend {
+    component "Django Magasin" as app
+    note right: Clients HTTP vers\nmicroservices via Kong
+  }
+  
+  node "Kong API Gateway" as kong_cluster {
+    component "Kong Gateway" as kong
+    note right: Port 8080 (proxy)\nPort 8081 (admin)\nLoad Balancing\nRouting HTTP
+  }
+  
+  ' === MICROSERVICES DDD ===
+  
+  node "Service Catalogue (Load Balancé)" as catalogue_cluster {
+    component "catalogue-service-1" as cat1
+    component "catalogue-service-2" as cat2  
+    component "catalogue-service-3" as cat3
+    note bottom: Ports 8001, 8006, 8007\nRound-robin via Kong
+  }
+  
+  node "Service Inventaire" as inventaire {
+    component "inventaire-service" as inv
+    note bottom: Port 8002\nStocks centraux/locaux\nDemandes réappro
+  }
+  
+  node "Service Commandes" as commandes {
+    component "commandes-service" as cmd
+    note bottom: Port 8003\nVentes, rapports\nIndicateurs performance
+  }
+  
+  node "Service Supply Chain" as supply {
+    component "supply-chain-service" as sup
+    note bottom: Port 8004\nWorkflow validation\nTransferts stock
+  }
+  
+  node "Service E-commerce" as ecommerce {
+    component "ecommerce-service" as eco
+    note bottom: Port 8005\nClients, panier\nCheckout
+  }
+  
+  ' === BASES DE DONNÉES DÉDIÉES ===
+  
+  node "Bases PostgreSQL Dédiées" as databases {
+    database "produits_db" as db_prod {
+      port 5434
+    }
+    database "inventaire_db" as db_inv {
+      port 5435
+    }
+    database "commandes_db" as db_cmd {
+      port 5436
+    }
+    database "supply_chain_db" as db_sup {
+      port 5437
+    }
+    database "ecommerce_db" as db_eco {
+      port 5438
+    }
+    database "kong_data" as db_kong {
+      port 5433
+    }
+    database "lab4db" as db_main {
+      port 5432
+    }
+  }
+  
+  ' === INFRASTRUCTURE ===
+  
+  node "Observabilité" as monitoring {
+    component "Prometheus" as prometheus
+    component "Grafana" as grafana
+    note bottom: Métriques et\nmonitoring
+  }
+  
+  node "Cache" as cache {
+    component "Redis" as redis
+    note bottom: Port 6379\nCache performance
+  }
+}
+
+' === CONNEXIONS CLIENTS ===
+user - -> app : HTTP
+admin - -> app : HTTP
+webclient - -> app : HTTP
+restclient - -> kong : HTTP/REST API
+
+' === CONNEXIONS ORCHESTRATION ===
+app - -> kong : HTTP clients dédiés
+kong - -> cat1 : Route /api/catalogue
+kong - -> cat2 : Load balancing
+kong - -> cat3 : Round-robin
+kong - -> inv : Route /api/inventaire
+kong - -> cmd : Route /api/commandes
+kong - -> sup : Route /api/supply-chain
+kong - -> eco : Route /api/ecommerce
+
+' === COMMUNICATION INTER-SERVICES ===
+cmd - -> inv : HTTP (réduire stock)
+sup - -> inv : HTTP (transférer stock)
+eco - -> cat1 : HTTP (produits panier)
+eco - -> cmd : HTTP (créer commande)
+
+' === CONNEXIONS BASES DE DONNÉES ===
+cat1 - -> db_prod : PostgreSQL ORM
+cat2 - -> db_prod : PostgreSQL ORM
+cat3 - -> db_prod : PostgreSQL ORM
+inv - -> db_inv : PostgreSQL ORM
+cmd - -> db_cmd : PostgreSQL ORM
+sup - -> db_sup : PostgreSQL ORM
+eco - -> db_eco : PostgreSQL ORM
+kong - -> db_kong : PostgreSQL config
+app - -> db_main : PostgreSQL ORM
+
+' === CONNEXIONS INFRASTRUCTURE ===
+app - -> redis : Cache Django
+kong - -> prometheus : Métriques
+cat1 - -> prometheus : Health checks
+inv - -> prometheus : Health checks
+cmd - -> prometheus : Health checks
+sup - -> prometheus : Health checks
+eco - -> prometheus : Health checks
+prometheus - -> grafana : Dashboard
+
+@enduml
+
+@startuml vue-deploiement
+skinparam linetype ortho
+skinparam componentStyle rectangle
+skinparam defaultTextAlignment center
+
+title Vue de Déploiement - Architecture Microservices DDD (Labo 5)
+
+node "Clients" {
+  node "Navigateur Web" as browser {
+    component "Employé Magasin" as user
+    component "Gestionnaire" as admin
+    component "Client E-commerce" as webclient
+  }
+  node "API Clients" as apiclient {
+    component "Client REST" as restclient
+  }
+}
+
+node "Docker Host - Architecture Microservices" as docker_host {
+  
+  node "Frontend Orchestrateur" as frontend {
+    component "Django Magasin" as app
+    note right: Clients HTTP vers\nmicroservices via Kong
+  }
+  
+  node "Kong API Gateway" as kong_cluster {
+    component "Kong Gateway" as kong
+    note right: Port 8080 (proxy)\nPort 8081 (admin)\nLoad Balancing\nRouting HTTP
+  }
+  
+  
+  node "Service Catalogue (Load Balancé)" as catalogue_cluster {
+    component "catalogue-service-1" as cat1
+    component "catalogue-service-2" as cat2  
+    component "catalogue-service-3" as cat3
+    note bottom: Ports 8001, 8006, 8007\nRound-robin via Kong
+  }
+  
+  node "Service Inventaire" as inventaire {
+    component "inventaire-service" as inv
+    note bottom: Port 8002\nStocks centraux/locaux\nDemandes réappro
+  }
+  
+  node "Service Commandes" as commandes {
+    component "commandes-service" as cmd
+    note bottom: Port 8003\nVentes, rapports\nIndicateurs performance
+  }
+  
+  node "Service Supply Chain" as supply {
+    component "supply-chain-service" as sup
+    note bottom: Port 8004\nWorkflow validation\nTransferts stock
+  }
+  
+  node "Service E-commerce" as ecommerce {
+    component "ecommerce-service" as eco
+    note bottom: Port 8005\nClients, panier\nCheckout
+  }
+  
+  
+  node "Bases PostgreSQL Dédiées" as databases {
+    database "produits_db" as db_prod {
+      port 5434
+    }
+    database "inventaire_db" as db_inv {
+      port 5435
+    }
+    database "commandes_db" as db_cmd {
+      port 5436
+    }
+    database "supply_chain_db" as db_sup {
+      port 5437
+    }
+    database "ecommerce_db" as db_eco {
+      port 5438
+    }
+    database "kong_data" as db_kong {
+      port 5433
+    }
+    database "lab4db" as db_main {
+      port 5432
+    }
+  }
+  
+  
+  node "Observabilité" as monitoring {
+    component "Prometheus" as prometheus
+    component "Grafana" as grafana
+    note bottom: Métriques et\nmonitoring
+  }
+  
+  node "Cache" as cache {
+    component "Redis" as redis
+    note bottom: Port 6379\nCache performance
+  }
+}
+
+user - -> app : HTTP
+admin - -> app : HTTP
+webclient - -> app : HTTP
+restclient - -> kong : HTTP/REST API
+
+app - -> kong : HTTP clients dédiés
+kong - -> cat1 : Route /api/catalogue
+kong - -> cat2 : Load balancing
+kong - -> cat3 : Round-robin
+kong - -> inv : Route /api/inventaire
+kong - -> cmd : Route /api/commandes
+kong - -> sup : Route /api/supply-chain
+kong - -> eco : Route /api/ecommerce
+
+cmd - -> inv : HTTP (réduire stock)
+sup - -> inv : HTTP (transférer stock)
+eco - -> cat1 : HTTP (produits panier)
+eco - -> cmd : HTTP (créer commande)
+
+cat1 - -> db_prod : PostgreSQL ORM
+cat2 - -> db_prod : PostgreSQL ORM
+cat3 - -> db_prod : PostgreSQL ORM
+inv - -> db_inv : PostgreSQL ORM
+cmd - -> db_cmd : PostgreSQL ORM
+sup - -> db_sup : PostgreSQL ORM
+eco - -> db_eco : PostgreSQL ORM
+kong - -> db_kong : PostgreSQL config
+app - -> db_main : PostgreSQL ORM
+
+app - -> redis : Cache Django
+kong - -> prometheus : Métriques
+cat1 - -> prometheus : Health checks
+inv - -> prometheus : Health checks
+cmd - -> prometheus : Health checks
+sup - -> prometheus : Health checks
+eco - -> prometheus : Health checks
+prometheus - -> grafana : Dashboard
+
+@enduml
+
+PlantUML version 1.2021.00(Sun Jan 10 10:25:05 UTC 2021)
+(MIT source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>

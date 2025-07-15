@@ -1,46 +1,143 @@
 @startuml vue-deploiement
-' Vue de Déploiement - LOG430-Labo4 après Labo 4 (1 seule app Django)
 skinparam linetype ortho
 skinparam componentStyle rectangle
 skinparam defaultTextAlignment center
 
-title Vue de Déploiement - LOG430-Labo4 (Labo 4, 1 seule app Django)
+title Vue de Déploiement - Architecture Microservices DDD (Labo 5)
 
 node "Clients" {
   node "Navigateur Web" as browser {
-    component user as "Utilisateur Web"
+    component "Employé Magasin" as user
+    component "Gestionnaire" as admin
+    component "Client E-commerce" as webclient
+  }
+  node "API Clients" as apiclient {
+    component "Client REST" as restclient
   }
 }
 
-node "Serveur d'Application (Docker Host)" as docker_host {
-  node "Conteneur NGINX (Load Balancer)" as nginx {
-    component nginx_proxy as "NGINX"
+node "Docker Host - Architecture Microservices" as docker_host {
+  
+  node "Frontend Orchestrateur" as frontend {
+    component "Django Magasin" as app
+    note right: Clients HTTP vers\nmicroservices via Kong
   }
-
-  node "Conteneur Django App" as django_app {
-    component app as "Django App"
+  
+  node "Kong API Gateway" as kong_cluster {
+    component "Kong Gateway" as kong
+    note right: Port 8080 (proxy)\nPort 8081 (admin)\nLoad Balancing\nRouting HTTP
   }
-
-  node "Conteneur Redis (Cache)" as redis {
-    component redis_srv as "Redis"
+  
+  ' === MICROSERVICES DDD ===
+  
+  node "Service Catalogue (Load Balancé)" as catalogue_cluster {
+    component "catalogue-service-1" as cat1
+    component "catalogue-service-2" as cat2  
+    component "catalogue-service-3" as cat3
+    note bottom: Ports 8001, 8006, 8007\nRound-robin via Kong
   }
-  node "Conteneur PostgreSQL (DB)" as pg {
-    component db_postgres as "PostgreSQL"
+  
+  node "Service Inventaire" as inventaire {
+    component "inventaire-service" as inv
+    note bottom: Port 8002\nStocks centraux/locaux\nDemandes réappro
   }
-  node "Conteneur Prometheus" as prometheus {
-    component prometheus_srv as "Prometheus"
+  
+  node "Service Commandes" as commandes {
+    component "commandes-service" as cmd
+    note bottom: Port 8003\nVentes, rapports\nIndicateurs performance
   }
-  node "Conteneur Grafana" as grafana {
-    component grafana_srv as "Grafana"
+  
+  node "Service Supply Chain" as supply {
+    component "supply-chain-service" as sup
+    note bottom: Port 8004\nWorkflow validation\nTransferts stock
   }
-
-  ' Liens réseau
-  user -right-> nginx_proxy : HTTP
-  nginx_proxy -down-> app : HTTP
-  app -down-> redis_srv : TCP (cache)
-  app -down-> db_postgres : TCP (ORM)
-  prometheus_srv -down-> app : scrape /metrics
-  grafana_srv -down-> prometheus_srv : requêtes dashboards
+  
+  node "Service E-commerce" as ecommerce {
+    component "ecommerce-service" as eco
+    note bottom: Port 8005\nClients, panier\nCheckout
+  }
+  
+  ' === BASES DE DONNÉES DÉDIÉES ===
+  
+  node "Bases PostgreSQL Dédiées" as databases {
+    database "produits_db" as db_prod {
+      port 5434
+    }
+    database "inventaire_db" as db_inv {
+      port 5435
+    }
+    database "commandes_db" as db_cmd {
+      port 5436
+    }
+    database "supply_chain_db" as db_sup {
+      port 5437
+    }
+    database "ecommerce_db" as db_eco {
+      port 5438
+    }
+    database "kong_data" as db_kong {
+      port 5433
+    }
+    database "lab4db" as db_main {
+      port 5432
+    }
+  }
+  
+  ' === INFRASTRUCTURE ===
+  
+  node "Observabilité" as monitoring {
+    component "Prometheus" as prometheus
+    component "Grafana" as grafana
+    note bottom: Métriques et\nmonitoring
+  }
+  
+  node "Cache" as cache {
+    component "Redis" as redis
+    note bottom: Port 6379\nCache performance
+  }
 }
+
+' === CONNEXIONS CLIENTS ===
+user --> app : HTTP
+admin --> app : HTTP
+webclient --> app : HTTP
+restclient --> kong : HTTP/REST API
+
+' === CONNEXIONS ORCHESTRATION ===
+app --> kong : HTTP clients dédiés
+kong --> cat1 : Route /api/catalogue
+kong --> cat2 : Load balancing
+kong --> cat3 : Round-robin
+kong --> inv : Route /api/inventaire
+kong --> cmd : Route /api/commandes
+kong --> sup : Route /api/supply-chain
+kong --> eco : Route /api/ecommerce
+
+' === COMMUNICATION INTER-SERVICES ===
+cmd --> inv : HTTP (réduire stock)
+sup --> inv : HTTP (transférer stock)
+eco --> cat1 : HTTP (produits panier)
+eco --> cmd : HTTP (créer commande)
+
+' === CONNEXIONS BASES DE DONNÉES ===
+cat1 --> db_prod : PostgreSQL ORM
+cat2 --> db_prod : PostgreSQL ORM
+cat3 --> db_prod : PostgreSQL ORM
+inv --> db_inv : PostgreSQL ORM
+cmd --> db_cmd : PostgreSQL ORM
+sup --> db_sup : PostgreSQL ORM
+eco --> db_eco : PostgreSQL ORM
+kong --> db_kong : PostgreSQL config
+app --> db_main : PostgreSQL ORM
+
+' === CONNEXIONS INFRASTRUCTURE ===
+app --> redis : Cache Django
+kong --> prometheus : Métriques
+cat1 --> prometheus : Health checks
+inv --> prometheus : Health checks
+cmd --> prometheus : Health checks
+sup --> prometheus : Health checks
+eco --> prometheus : Health checks
+prometheus --> grafana : Dashboard
 
 @enduml
