@@ -9,7 +9,7 @@ from typing import Dict, List, Optional, Any
 
 logger = logging.getLogger(__name__)
 
-BASE_URL = "http://log430-labo5-kong-1:8000/api/ecommerce"
+BASE_URL = "http://kong:8000/api/ecommerce"
 
 
 class EcommerceClient:

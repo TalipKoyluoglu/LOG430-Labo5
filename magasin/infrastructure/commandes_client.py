@@ -10,7 +10,7 @@ import uuid
 
 logger = logging.getLogger(__name__)
 
-BASE_URL = "http://log430-labo5-kong-1:8000/api/commandes"
+BASE_URL = "http://kong:8000/api/commandes"
 
 
 class CommandesClient:
