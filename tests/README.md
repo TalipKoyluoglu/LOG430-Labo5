@@ -286,17 +286,4 @@ Les tests sont intégrés dans `.github/workflows/ci.yml` :
 
 **Temps total pipeline** : ~15-20 minutes
 
-## 🤝 Contribution
 
-Pour ajouter de nouveaux tests :
-
-1. **Tests d'intégration** : Ajouter dans `tests/integration/`
-2. **Tests E2E** : Ajouter dans `tests/e2e/`
-3. **Markers** : Utiliser `@pytest.mark.integration` ou `@pytest.mark.e2e`
-4. **Documentation** : Mettre à jour ce README
-
----
-
-**Auteur** : Talip Koyluoglu  
-**Projet** : LOG430 Labo 5 - Architecture Microservices DDD  
-**Date** : Janvier 2025 
