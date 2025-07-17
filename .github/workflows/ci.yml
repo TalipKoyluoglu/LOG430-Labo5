@@ -12,35 +12,18 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      # Base de données principale pour le frontend Django
-      postgres:
-        image: postgres:15
-        env:
-          POSTGRES_DB: lab4db
-          POSTGRES_USER: labuser
-          POSTGRES_PASSWORD: labpass
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd="pg_isready -U labuser -d lab4db"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
-      
+      # Redis pour le cache Django (gardé pour les sessions)
       redis:
         image: redis:7.2-alpine
         ports:
           - 6379:6379
 
     env:
-      POSTGRES_DB: lab4db
-      POSTGRES_USER: labuser
-      POSTGRES_PASSWORD: labpass
-      DB_HOST: localhost
-      DB_PORT: 5432
       DJANGO_SETTINGS_MODULE: config.settings
       PYTHONPATH: .
       REDIS_URL: redis://localhost:6379/1
+      # Configuration pour base SQLite en test (au lieu de PostgreSQL)
+      DATABASE_URL: sqlite:///test_db.sqlite3
 
     steps:
       - name:  Checkout repo
@@ -57,14 +40,12 @@ jobs:
           pip install -r requirements.txt
           pip install pytest pytest-django pytest-cov requests
 
-      - name:  Wait for PostgreSQL to be ready
+      - name:  Wait for Redis to be ready
         run: |
-          echo "Waiting for PostgreSQL..."
-          until pg_isready -h localhost -p 5432 -U $POSTGRES_USER; do sleep 1; done
           echo "Waiting for Redis..."
           until nc -z localhost 6379; do sleep 1; done
 
-      - name:  Run migrations
+      - name:  Run migrations (SQLite pour tests)
         run: |
           python manage.py migrate
 

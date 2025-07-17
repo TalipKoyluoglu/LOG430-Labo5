@@ -63,6 +63,7 @@ class SupplyChainClient:
         Returns:
             Dict avec le résultat de la validation (workflow 3 étapes)
         """
+        logger.info("✅ Client API: Validation demande supply-chain %s", demande_id)
         try:
             response = self.session.post(
                 f"{self.base_url}/api/ddd/supply-chain/valider-demande/{demande_id}/"
@@ -93,6 +94,7 @@ class SupplyChainClient:
         Returns:
             Dict avec le résultat du rejet
         """
+        logger.info("❌ Client API: Rejet demande supply-chain %s", demande_id)
         try:
             data = {"motif": motif}
 

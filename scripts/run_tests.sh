@@ -78,12 +78,11 @@ run_unit_tests() {
     log_info "=== TESTS UNITAIRES ==="
     log_info "Tests Django frontend (magasin/tests/test_unitaires.py)"
     
-    # Vérifier que PostgreSQL est disponible pour Django
-    if ! nc -z localhost 5432; then
-        log_error "PostgreSQL n'est pas disponible sur le port 5432"
-        log_info "Démarrage PostgreSQL via Docker..."
-        docker-compose up -d db redis
-        sleep 10
+    # Vérifier que Redis est disponible pour le cache Django
+    if ! nc -z localhost 6379; then
+        log_info "Démarrage Redis pour le cache Django..."
+        docker-compose up -d redis
+        sleep 5
     fi
     
     # Exécuter migrations
@@ -99,11 +98,11 @@ run_e2e_tests() {
     log_info "=== TESTS END-TO-END ==="
     log_info "Tests via interface Django (mocking des microservices)"
     
-    # Assurer PostgreSQL + Redis pour Django
-    if ! nc -z localhost 5432; then
-        log_info "Démarrage PostgreSQL + Redis..."
-        docker-compose up -d db redis
-        sleep 10
+    # Assurer Redis pour le cache Django
+    if ! nc -z localhost 6379; then
+        log_info "Démarrage Redis pour le cache Django..."
+        docker-compose up -d redis
+        sleep 5
     fi
     
     # Migrations Django

@@ -19,27 +19,10 @@ services:
     environment:
       PYTHONPATH: /app
       DJANGO_SETTINGS_MODULE: config.settings
-    depends_on:
-      db:
-        condition: service_healthy
+      # Forcer l'utilisation de SQLite au lieu de PostgreSQL
+      DATABASE_URL: sqlite:///db.sqlite3
     volumes:
       - .:/app
-
-  db:
-    image: postgres:15
-    environment:
-      POSTGRES_DB: lab4db
-      POSTGRES_USER: labuser
-      POSTGRES_PASSWORD: labpass
-    ports:
-      - "5432:5432"
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD", "pg_isready", "-U", "labuser", "-d", "lab4db"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
 
   prometheus:
     image: prom/prometheus:v2.45.0
@@ -399,7 +382,6 @@ services:
     restart: "no"
 
 volumes:
-  pgdata:
   prometheus_data:
   grafana_data:
   redis_data:

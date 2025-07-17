@@ -21,6 +21,7 @@ def rapport_ventes(request):
     Vue principale pour le rapport consolidé des ventes
     Utilise l'API DDD du service-commandes : GenererRapportConsolideUseCase
     """
+    logger.info("📊 Génération rapport consolidé des ventes demandée")
     try:
         # Initialisation du client HTTP
         commandes_client = CommandesClient()
@@ -107,6 +108,7 @@ def afficher_formulaire_vente(request):
     Affiche le formulaire pour enregistrer une nouvelle vente
     Récupère les données nécessaires via les APIs DDD
     """
+    logger.info("📝 Affichage formulaire de nouvelle vente")
     try:
         # Récupérer la liste des magasins via le service-commandes
         commandes_client = CommandesClient()
@@ -205,7 +207,9 @@ def enregistrer_vente(request):
     Enregistre une nouvelle vente via l'API DDD du service-commandes
     Utilise le Use Case: EnregistrerVenteUseCase
     """
+    logger.info("💰 Enregistrement d'une nouvelle vente")
     if request.method == "GET":
+        logger.error("❌ Accès direct interdit pour enregistrer vente")
         messages.error(
             request, "Accès direct interdit. Veuillez utiliser le formulaire."
         )

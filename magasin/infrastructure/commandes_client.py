@@ -46,6 +46,7 @@ class CommandesClient:
         Returns:
             Dict avec le résultat de l'enregistrement de la vente
         """
+        logger.info("💰 Client API: Enregistrement vente P%s (Qté: %s)", produit_id, quantite)
         try:
             data = {
                 "magasin_id": magasin_id,
@@ -173,6 +174,7 @@ class CommandesClient:
         Returns:
             Dict avec le rapport consolidé tous magasins
         """
+        logger.info("📊 Client API: Génération rapport consolidé")
         try:
             response = self.session.get(f"{self.base_url}/api/v1/rapport-consolide/")
             response.raise_for_status()

@@ -129,6 +129,7 @@ class InventaireClient:
         GET /api/ddd/inventaire/stocks-centraux/
         Liste tous les stocks centraux
         """
+        logger.info("🏪 Client API: Récupération stocks centraux")
         try:
             response = self.session.get(
                 f"{self.base_url}/api/ddd/inventaire/stocks-centraux/"
@@ -187,6 +188,7 @@ class InventaireClient:
         POST /api/ddd/inventaire/demandes/
         Crée une nouvelle demande de réapprovisionnement
         """
+        logger.info("🔄 Client API: Création demande réapprovisionnement P%s M%s", produit_id, magasin_id)
         try:
             data = {
                 "produit_id": produit_id,

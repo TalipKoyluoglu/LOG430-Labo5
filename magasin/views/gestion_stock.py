@@ -19,6 +19,7 @@ def uc2_stock(request):
     Affiche l'état des stocks centraux et permet de gérer les réapprovisionnements
     Utilise l'API DDD du service-inventaire : ConsulterStocksCentralUseCase
     """
+    logger.info("🏪 Consultation des stocks centraux demandée")
     try:
         # Initialisation du client HTTP
         inventaire_client = InventaireClient()
@@ -28,6 +29,7 @@ def uc2_stock(request):
 
         if not stocks_data.get("success", False):
             # En cas d'erreur API, afficher un message et des données vides
+            logger.error("❌ Échec récupération stocks: %s", stocks_data.get('error', 'Erreur inconnue'))
             messages.error(
                 request,
                 f"Erreur lors de la récupération des stocks: {stocks_data.get('error', 'Erreur inconnue')}",
@@ -106,7 +108,9 @@ def uc2_reapprovisionner(request):
     Crée une demande de réapprovisionnement via l'API DDD du service-inventaire
     Utilise le Use Case: CreerDemandeReapprovisionnementUseCase
     """
+    logger.info("🔄 Demande de réapprovisionnement initiée")
     if request.method != "POST":
+        logger.error("❌ Méthode non autorisée pour réapprovisionnement")
         messages.error(request, "Méthode non autorisée")
         return redirect("gestion_stocks")
 

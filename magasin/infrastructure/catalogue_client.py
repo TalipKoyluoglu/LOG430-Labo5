@@ -57,6 +57,7 @@ class CatalogueClient:
         GET /api/ddd/catalogue/rechercher/
         Use Case: RechercherProduitsUseCase
         """
+        logger.info("🔍 Client API: Recherche produits avec critères")
         try:
             params = {}
 
@@ -97,6 +98,7 @@ class CatalogueClient:
         POST /api/ddd/catalogue/ajouter/
         Use Case: AjouterProduitUseCase
         """
+        logger.info("➕ Client API: Ajout nouveau produit '%s'", nom)
         try:
             data = {
                 "nom": nom,
@@ -123,6 +125,7 @@ class CatalogueClient:
         GET /api/ddd/catalogue/produits/<uuid>/
         Récupère les détails d'un produit spécifique par son ID
         """
+        logger.info("📦 Client API: Récupération produit ID %s", produit_id)
         try:
             response = self.session.get(
                 f"{self.base_url}/api/ddd/catalogue/produits/{produit_id}/"

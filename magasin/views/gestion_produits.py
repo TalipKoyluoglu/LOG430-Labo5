@@ -18,6 +18,7 @@ def uc4_modifier_produit(request, produit_id):
     Modifie un produit via l'API DDD du service-catalogue
     Récupère d'abord le produit, puis le modifie si c'est un POST
     """
+    logger.info(f"[TEST LOG] Modification produit demandée - ID: {produit_id}")
     try:
         # Initialisation du client HTTP
         catalogue_client = CatalogueClient()
@@ -85,6 +86,7 @@ def uc4_lister_produits(request):
     Liste tous les produits via l'API DDD du service-catalogue
     Utilise le Use Case: RechercherProduitsUseCase
     """
+    logger.info("📦 Listing de tous les produits demandé")
     try:
         # Initialisation du client HTTP
         catalogue_client = CatalogueClient()
@@ -156,6 +158,7 @@ def rechercher_produits(request):
     Recherche de produits avec critères via l'API DDD du service-catalogue
     Utilise le Use Case: RechercherProduitsUseCase
     """
+    logger.info("🔍 Recherche de produits avec critères")
     try:
         # Extraction des critères de recherche
         nom = request.GET.get("nom", "")
@@ -230,6 +233,7 @@ def uc4_ajouter_produit(request):
     """
     Ajoute un nouveau produit via l'API DDD du service-catalogue
     """
+    logger.info("➕ Ajout d'un nouveau produit")
     try:
         if request.method == "POST":
             nom = request.POST.get("nom")

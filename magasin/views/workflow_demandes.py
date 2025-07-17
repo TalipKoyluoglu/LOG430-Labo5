@@ -18,6 +18,7 @@ def uc6_demandes(request):
     Affiche la liste des demandes en attente de validation
     Utilise l'API DDD du service-supply-chain : ListerDemandesUseCase
     """
+    logger.info("📋 Consultation workflow des demandes supply-chain")
     try:
         # Initialisation du client HTTP
         supply_chain_client = SupplyChainClient()
@@ -27,6 +28,7 @@ def uc6_demandes(request):
 
         if not demandes_data.get("success", False):
             # En cas d'erreur API, afficher un message explicite pour l'utilisateur
+            logger.error("❌ Échec récupération demandes supply-chain: %s", demandes_data.get('error', 'Erreur inconnue'))
             messages.info(
                 request,
                 "Aucune demande en attente ou service temporairement indisponible.",
@@ -92,6 +94,7 @@ def uc6_valider(request, demande_id):
     Valide une demande de réapprovisionnement via l'API DDD du service-supply-chain
     Utilise le Use Case: ValiderDemandeUseCase
     """
+    logger.info("✅ Validation demande supply-chain ID: %s", demande_id)
     try:
         # Initialisation du client HTTP
         supply_chain_client = SupplyChainClient()
@@ -100,6 +103,7 @@ def uc6_valider(request, demande_id):
         validation_result = supply_chain_client.valider_demande(demande_id)
 
         if validation_result.get("success", False):
+            logger.info("✅ Demande ID %s validée avec succès", demande_id)
             messages.success(
                 request,
                 f"Demande {demande_id} approuvée et stock transféré avec succès",
@@ -143,6 +147,7 @@ def uc6_rejeter(request, demande_id):
     Rejette une demande de réapprovisionnement via l'API DDD du service-supply-chain
     Utilise le Use Case: RejeterDemandeUseCase
     """
+    logger.info("❌ Rejet demande supply-chain ID: %s", demande_id)
     try:
         # Initialisation du client HTTP
         supply_chain_client = SupplyChainClient()

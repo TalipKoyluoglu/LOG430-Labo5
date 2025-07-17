@@ -18,6 +18,7 @@ def uc3_dashboard(request):
     Dashboard principal avec indicateurs de performance par magasin
     Utilise l'API DDD du service-commandes : GenererIndicateursUseCase
     """
+    logger.info("📈 Accès au dashboard des indicateurs de performance")
     try:
         # Initialisation du client HTTP
         commandes_client = CommandesClient()

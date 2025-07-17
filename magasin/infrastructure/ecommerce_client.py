@@ -47,6 +47,7 @@ class EcommerceClient:
         POST /api/clients/
         Use Case: CreerCompteClientUseCase
         """
+        logger.info("👤 Client API: Création compte client '%s %s'", prenom, nom)
         try:
             data = {
                 "prenom": prenom,
@@ -186,6 +187,7 @@ class EcommerceClient:
         POST /api/commandes/clients/<client_id>/checkout/
         Use Case: CheckoutEcommerceUseCase
         """
+        logger.info("🛒 Client API: Checkout e-commerce client %s", client_id)
         try:
             data = {}
             if adresse_livraison:
