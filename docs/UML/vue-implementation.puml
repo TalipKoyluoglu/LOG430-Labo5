@@ -1,4 +1,5 @@
 @startuml vue-implementation
+left to right direction
 allowmixing
 title Vue d'Implémentation - Architecture Microservices DDD
 
@@ -157,15 +158,6 @@ package "Service E-commerce - Port 8005" <<Microservice>> {
   }
 }
 
-' === BASES DE DONNÉES ===
-package "Bases PostgreSQL Dédiées" <<Infrastructure>> {
-  database "produits_db" as ProdDB
-  database "inventaire_db" as InvDB
-  database "commandes_db" as CmdDB
-  database "supply_chain_db" as SupDB
-  database "ecommerce_db" as EcoDB
-}
-
 ' === CONNEXIONS FRONTEND ===
 RapportConsolideView --> CommandesClient
 GestionStockView --> InventaireClient
@@ -203,12 +195,5 @@ DDDValiderDemandeAPI --> ValiderDemandeUseCase
 ValiderDemandeUseCase --> WorkflowValidation
 DDDClientAPI --> CreerCompteClientUseCase
 CreerCompteClientUseCase --> Client
-
-' === CONNEXIONS REPOSITORIES ===
-DjangoProduitRepository --> ProdDB
-DjangoStockRepository --> InvDB
-DjangoVenteRepository --> CmdDB
-HttpDemandeRepository --> SupDB
-DjangoClientRepository --> EcoDB
 
 @enduml

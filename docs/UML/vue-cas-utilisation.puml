@@ -1,96 +1,95 @@
-@startuml VueCasUtilisation
-skinparam backgroundColor #FFFFFF
-title Vue des Cas d'Utilisation - Architecture Microservices DDD Multi-Magasins
+@startuml scenarios
+
+title Vue Cas d'Utilisation - Architecture Microservices DDD
 
 left to right direction
-skinparam packageStyle rectangle
-skinparam actorStyle awesome
 
-actor "Employé magasin" as Employe
-actor "Gestionnaire" as Admin  
-actor "Client e-commerce" as ClientWeb
-actor "API Client externe" as ApiClient
+' Acteurs principaux
+actor "Client Web" as WebClient
+actor "Employe Magasin" as StoreEmployee
+actor "Gestionnaire" as Admin
 
-package "Système Microservices DDD" {
+' Héritage des rôles
+Admin --|> StoreEmployee : extends
+
+' Domaine Catalogue (service-catalogue)
+package "Domaine Catalogue" {
+    usecase "Rechercher produits" as UC01
+    usecase "Consulter details produit" as UC02
+    usecase "Gerer catalogue" as UC03
     
-    package "Bounded Context: Catalogue Management" <<service-catalogue:8001>> {
-        usecase "UC-CAT1: Rechercher produits" as UCAT1
-        usecase "UC-CAT2: Ajouter produit" as UCAT2
-        usecase "UC-CAT3: Modifier prix" as UCAT3
-    }
-    
-    package "Bounded Context: Inventory Management" <<service-inventaire:8002>> {
-        usecase "UC-INV1: Consulter stocks centraux" as UINV1
-        usecase "UC-INV2: Consulter stocks locaux" as UINV2
-        usecase "UC-INV3: Créer demande réappro" as UINV3
-        usecase "UC-INV4: Transférer stock" as UINV4
-    }
-    
-    package "Bounded Context: Sales Management" <<service-commandes:8003>> {
-        usecase "UC-CMD1: Enregistrer vente" as UCMD1
-        usecase "UC-CMD2: Générer rapport consolidé" as UCMD2
-        usecase "UC-CMD3: Générer indicateurs" as UCMD3
-        usecase "UC-CMD4: Annuler vente" as UCMD4
-    }
-    
-    package "Bounded Context: Supply Chain Management" <<service-supply-chain:8004>> {
-        usecase "UC-SUP1: Lister demandes en attente" as USUP1
-        usecase "UC-SUP2: Valider demande (workflow)" as USUP2
-        usecase "UC-SUP3: Rejeter demande" as USUP3
-    }
-    
-    package "Bounded Context: E-commerce Management" <<service-ecommerce:8005>> {
-        usecase "UC-ECO1: Créer compte client" as UECO1
-        usecase "UC-ECO2: Ajouter produit panier" as UECO2
-        usecase "UC-ECO3: Checkout e-commerce" as UECO3
-        usecase "UC-ECO4: Valider client" as UECO4
-    }
-    
-    package "Infrastructure" {
-        usecase "Kong Gateway Load Balancing" as GATEWAY
-        usecase "Frontend Orchestration" as FRONTEND
-    }
+    UC01 ..> UC02 : includes
+    UC03 ..> UC01 : includes
 }
 
-' Relations Employé Magasin
-Employe --> UCMD1 : Enregistrer vente
-Employe --> UINV1 : Consulter stocks
-Employe --> UINV2 : Vérifier stock local
-Employe --> UINV3 : Demander réappro
+' Domaine Inventaire (service-inventaire)
+package "Domaine Inventaire" {
+    usecase "Consulter stocks" as UC04
+    usecase "Creer demande reappro" as UC05
+    usecase "Transferer stock" as UC06
+    usecase "Gerer alertes stock" as UC07
+    
+    UC04 ..> UC07 : includes
+    UC05 ..> UC06 : includes
+}
 
-' Relations Gestionnaire 
-Admin --> UCMD2 : Rapport des ventes
-Admin --> UCMD3 : Dashboard performance
-Admin --> UCAT2 : Ajouter produits
-Admin --> UCAT3 : Modifier prix
-Admin --> USUP1 : Lister demandes
-Admin --> USUP2 : Valider demandes
-Admin --> USUP3 : Rejeter demandes
+' Domaine Commandes (service-commandes)
+package "Domaine Commandes" {
+    usecase "Enregistrer vente" as UC08
+    usecase "Traiter paiement" as UC09
+    usecase "Generer rapports" as UC10
+    usecase "Analyser performances" as UC11
+    usecase "Annuler commande" as UC20
+    UC08 ..> UC09 : includes
+    UC10 ..> UC11 : includes
+}
 
-' Relations Client E-commerce
-ClientWeb --> UECO1 : Créer compte
-ClientWeb --> UECO2 : Ajouter au panier
-ClientWeb --> UECO3 : Commander en ligne
-ClientWeb --> UCAT1 : Rechercher produits
+' Domaine Supply Chain (service-supply-chain)
+package "Domaine Supply Chain" {
+    usecase "Valider demandes reappro" as UC12
+    usecase "Gerer workflow validation" as UC14
+    usecase "Rejeter demandes reappro" as UC19
+    UC14 ..> UC19 : includes
+    UC14 ..> UC12 : includes
+}
 
-' Relations API Client externe
-ApiClient --> UCAT1 : API Recherche
-ApiClient --> UCMD2 : API Rapports
-ApiClient --> UINV1 : API Stocks
-ApiClient --> UECO1 : API Clients
+' Domaine E-commerce (service-ecommerce)
+package "Domaine E-commerce" {
+    usecase "Creer compte client" as UC15
+    usecase "Ajouter au panier" as UC16
+    usecase "Finaliser commande" as UC17
+    usecase "Gerer profil client" as UC18
+    
+    UC15 ..> UC18 : includes
+    UC16 ..> UC17 : includes
+    UC18 ..> UC15 : includes
+}
 
-' Communication inter-services (extends)
-UCMD1 ..> UINV4 : <<HTTP>> Réduire stock
-USUP2 ..> UINV4 : <<HTTP>> Transférer stock
-UECO3 ..> UCAT1 : <<HTTP>> Valider produits
-UECO3 ..> UCMD1 : <<HTTP>> Créer commande
+' Relations acteurs - cas d'utilisation
 
-' Infrastructure
-FRONTEND --> GATEWAY : Orchestration HTTP
-GATEWAY --> UCAT1 : Route /api/catalogue
-GATEWAY --> UINV1 : Route /api/inventaire  
-GATEWAY --> UCMD1 : Route /api/commandes
-GATEWAY --> USUP1 : Route /api/supply-chain
-GATEWAY --> UECO1 : Route /api/ecommerce
+' Client Web (E-commerce)
+WebClient --> UC15
+WebClient --> UC16
+WebClient --> UC17
 
+' Employe Magasin (droits de base)
+StoreEmployee --> UC04
+StoreEmployee --> UC05
+StoreEmployee --> UC08
+StoreEmployee --> UC20
+
+' Gestionnaire/Admin (hérite des droits employé + droits supplémentaires)
+Admin --> UC03
+Admin --> UC10
+Admin --> UC11
+Admin --> UC14
+
+' Relations inter-domaines critiques (communication HTTP)
+UC08 ..> UC04 : Reduction stock
+UC17 ..> UC04 : Verification stock
+UC17 ..> UC08 : Creation commande
+UC12 ..> UC06 : Execution transfert
+UC10 ..> UC08 : Donnees ventes
+UC11 ..> UC01 : Donnees produits
+UC20 ..> UC06 : Remet le stock 
 @enduml
