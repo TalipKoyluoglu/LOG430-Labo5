@@ -188,7 +188,11 @@ class InventaireClient:
         POST /api/ddd/inventaire/demandes/
         Crée une nouvelle demande de réapprovisionnement
         """
-        logger.info("🔄 Client API: Création demande réapprovisionnement P%s M%s", produit_id, magasin_id)
+        logger.info(
+            "🔄 Client API: Création demande réapprovisionnement P%s M%s",
+            produit_id,
+            magasin_id,
+        )
         try:
             data = {
                 "produit_id": produit_id,

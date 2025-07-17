@@ -46,7 +46,9 @@ class CommandesClient:
         Returns:
             Dict avec le résultat de l'enregistrement de la vente
         """
-        logger.info("💰 Client API: Enregistrement vente P%s (Qté: %s)", produit_id, quantite)
+        logger.info(
+            "💰 Client API: Enregistrement vente P%s (Qté: %s)", produit_id, quantite
+        )
         try:
             data = {
                 "magasin_id": magasin_id,

@@ -29,7 +29,10 @@ def uc2_stock(request):
 
         if not stocks_data.get("success", False):
             # En cas d'erreur API, afficher un message et des données vides
-            logger.error("❌ Échec récupération stocks: %s", stocks_data.get('error', 'Erreur inconnue'))
+            logger.error(
+                "❌ Échec récupération stocks: %s",
+                stocks_data.get("error", "Erreur inconnue"),
+            )
             messages.error(
                 request,
                 f"Erreur lors de la récupération des stocks: {stocks_data.get('error', 'Erreur inconnue')}",

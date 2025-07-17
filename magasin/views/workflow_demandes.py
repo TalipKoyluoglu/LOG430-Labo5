@@ -28,7 +28,10 @@ def uc6_demandes(request):
 
         if not demandes_data.get("success", False):
             # En cas d'erreur API, afficher un message explicite pour l'utilisateur
-            logger.error("❌ Échec récupération demandes supply-chain: %s", demandes_data.get('error', 'Erreur inconnue'))
+            logger.error(
+                "❌ Échec récupération demandes supply-chain: %s",
+                demandes_data.get("error", "Erreur inconnue"),
+            )
             messages.info(
                 request,
                 "Aucune demande en attente ou service temporairement indisponible.",
