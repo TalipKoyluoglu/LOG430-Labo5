@@ -29,7 +29,7 @@
     <tr>
       <td style="border: 1px solid #dee2e6; padding: 10px;">{{ stock.nom_produit }}</td>
       <td style="border: 1px solid #dee2e6; padding: 10px;">{{ stock.quantite }}</td>
-      <form method="post" action="{% url 'uc2_reapprovisionner' %}">
+      <form method="post" action="{% url 'reapprovisionner' %}">
         {% csrf_token %}
         <td style="border: 1px solid #dee2e6; padding: 10px;">
           <select name="magasin_id" required>

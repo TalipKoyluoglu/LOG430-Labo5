@@ -3,6 +3,12 @@ Configuration pytest pour tests d'intégration microservices DDD
 Tests via Kong Gateway - Environnement Docker
 """
 
+import os
+
+# Force SQLite usage for integration tests to avoid PostgreSQL connection issues
+# MUST be set before Django imports
+os.environ.setdefault("DATABASE_URL", "sqlite:///test_db.sqlite3")
+
 import pytest
 import requests
 import time

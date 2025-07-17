@@ -25,7 +25,7 @@ urlpatterns = [
     path("ventes/enregistrer/", enregistrer_vente, name="enregistrer_vente"),
     # Gestion des stocks et réapprovisionnement (ex-UC2)
     path("stocks/", uc2_stock, name="gestion_stocks"),
-    path("stocks/reapprovisionner/", uc2_reapprovisionner, name="uc2_reapprovisionner"),
+    path("stocks/reapprovisionner/", uc2_reapprovisionner, name="reapprovisionner"),
     # Indicateurs de performance (ex-UC3)
     path("indicateurs/", uc3_dashboard, name="indicateurs_performance"),
     # Gestion des produits (ex-UC4)
